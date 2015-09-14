@@ -1,0 +1,2 @@
+c:\users\matias\documents\visual studio 2012\Projects\AerolineaFrba\AerolineaFrba\bin\Debug\AerolineaFrba.exe.config
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\bin\Debug\AerolineaFrba.exe.config
