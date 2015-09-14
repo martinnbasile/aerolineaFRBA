@@ -145,6 +145,7 @@
             this.button4.TabIndex = 21;
             this.button4.Text = "Volver";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
@@ -155,7 +156,7 @@
             this.button3.Text = "Crear Rol";
             this.button3.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // crearRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -173,7 +174,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Name = "Form1";
+            this.Name = "crearRol";
             this.Text = "CREAR ROL";
             this.ResumeLayout(false);
             this.PerformLayout();

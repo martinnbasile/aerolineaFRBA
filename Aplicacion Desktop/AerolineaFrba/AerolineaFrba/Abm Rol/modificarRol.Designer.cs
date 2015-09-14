@@ -59,6 +59,7 @@
             this.button4.TabIndex = 33;
             this.button4.Text = "Volver";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // textBox2
             // 
@@ -66,6 +67,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(171, 20);
             this.textBox2.TabIndex = 32;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label2
             // 
@@ -164,6 +166,7 @@
             this.Controls.Add(this.label3);
             this.Name = "modificarRol";
             this.Text = "MODIFICAR ROL";
+            this.Load += new System.EventHandler(this.modificarRol_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

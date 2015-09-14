@@ -16,5 +16,10 @@ namespace AerolineaFrba.Abm_Rol
         {
             InitializeComponent();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            new buscarRol().Show();
+        }
     }
 }

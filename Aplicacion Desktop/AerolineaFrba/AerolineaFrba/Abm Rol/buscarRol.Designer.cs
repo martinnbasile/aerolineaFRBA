@@ -62,6 +62,7 @@
             this.button3.TabIndex = 10;
             this.button3.Text = "Eliminar";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button2
             // 
@@ -71,6 +72,7 @@
             this.button2.TabIndex = 9;
             this.button2.Text = "Modificar";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // listBox1
             // 
@@ -88,6 +90,7 @@
             this.button1.TabIndex = 14;
             this.button1.Text = "Crear Nuevo Rol";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // buscarRol
             // 
@@ -102,6 +105,7 @@
             this.Controls.Add(this.listBox1);
             this.Name = "buscarRol";
             this.Text = "buscarRol";
+            this.Load += new System.EventHandler(this.buscarRol_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
