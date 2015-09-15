@@ -20,13 +20,15 @@ namespace AerolineaFrba.Abm_Rol
 
         private void elegirRol_Load(object sender, EventArgs e)
         {
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select descri from roles");
-            while (reader.Read())
-            {
-                comboBox1.Items.Add(reader.GetSqlString(0));
-            }
-            this.Show();
-            reader.Dispose();
+            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
+            
+        }
+
+        private void button1_Click(object sender, EventArgs e) //BOTON OK
+        {
+          
         }
     }
 }
