@@ -16,7 +16,11 @@ namespace AerolineaFrba
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            new AerolineaFrba.Abm_Rol.elegirRol().Show();
+            if (MessageBox.Show("¿ES UN TERMINAL KIOSCO?", "INICIO", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                MessageBox.Show("TERMINAL KIOSCO");
+            }
+            else MessageBox.Show("NO ES KIOSCO");
             Application.Run();
         }
     }

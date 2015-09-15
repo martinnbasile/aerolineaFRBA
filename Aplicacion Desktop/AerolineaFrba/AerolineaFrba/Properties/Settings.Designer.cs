@@ -46,7 +46,7 @@ namespace AerolineaFrba.Properties
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         //Cuando tengamos la base posta, cambiar Initial Catalog=GD2C2015
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost\\SQLSERVER2012;Initial Catalog=Pruebas;Integrated Security=" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost\\SQLSERVER2012;Initial Catalog=Pruebas;Integrated Security="+
             "False;User ID=gd;Password=gd2015")]
         
         public string GD1C2015ConnectionString
