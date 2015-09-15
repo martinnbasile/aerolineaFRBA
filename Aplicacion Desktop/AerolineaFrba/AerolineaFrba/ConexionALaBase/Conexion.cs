@@ -10,26 +10,36 @@ namespace AerolineaFrba.ConexionALaBase
 {
     class Conexion
     {
-        static System.Data.SqlClient.SqlConnection con = conectarBase();
-        static SqlCommand com = comando();
+        static SqlConnection conexxxxx = conectarBase();
+        private static SqlCommand comandoo = conseguirComando(); 
 
         public static SqlConnection conectarBase()
         {
-            //string fechaDelSistema = Properties.Settings.Default.fechaDelSistema;
             SqlConnection cone = new SqlConnection(AerolineaFrba.Properties.Settings.Default.GD1C2015ConnectionString);
             cone.Open();
             return cone;
         }
         public static SqlCommand getComando()
         {
-            return com;
+            return comandoo;
         }
-        public static SqlCommand comando()
+        public static SqlCommand conseguirComando()
         {
             SqlCommand comand = new SqlCommand();
-            comand.Connection = con;
+            comand.Connection = conexxxxx;
             return comand;
         }
-        
+
+        public static SqlDataReader consultarBase(String unaQuery){
+            comandoo.CommandText = unaQuery;
+            return comandoo.ExecuteReader();
+        }
+
+        public static void ejecutarQuery(String unaQuery)
+        {
+            comandoo.CommandText = unaQuery;
+            comandoo.ExecuteNonQuery();
+        }
+
     }
 }

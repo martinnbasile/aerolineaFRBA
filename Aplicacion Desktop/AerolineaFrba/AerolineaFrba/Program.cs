@@ -16,7 +16,7 @@ namespace AerolineaFrba
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            new AerolineaFrba.Abm_Rol.buscarRol().Show();
+            new AerolineaFrba.Abm_Rol.elegirRol().Show();
             Application.Run();
         }
     }
