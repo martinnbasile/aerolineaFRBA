@@ -45,7 +45,7 @@ namespace AerolineaFrba.Properties
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost\\SQLSERVER2012;Initial Catalog=GD1C2015;Integrated Security=" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost\\SQLSERVER2012;Initial Catalog=GD2C2015;Integrated Security=" +
             "False;User ID=gd;Password=gd2015")]
         
         public string GD1C2015ConnectionString
