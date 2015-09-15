@@ -35,17 +35,20 @@ namespace AerolineaFrba.Login
             pass = textBox2.Text;
             string contraseniaEncriptada = Encriptar.SHA256(pass);
             Console.WriteLine(contraseniaEncriptada);
-            MessageBox.Show("TODO OK");
             ConexionALaBase.Conexion.ejecutarNonQuery("insert into Logins values('"+ nombre + "','" + contraseniaEncriptada + "','" + pass+"')");
+            MessageBox.Show("TODO OK");
+            //ESTO ES UNA SIMPLIFICACION, VER LA IMPLE POSTA
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {   //Caso recuperar contraseña
+        
+        private void linkLabel1_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            //Caso recuperar contraseña
+            new RecuperarContraseña1().Show();
+            this.Close();
+
         }
 
 
-
-
-        //////
     }
 }
