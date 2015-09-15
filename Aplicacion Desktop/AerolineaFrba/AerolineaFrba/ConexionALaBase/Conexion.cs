@@ -35,10 +35,11 @@ namespace AerolineaFrba.ConexionALaBase
             return comandoo.ExecuteReader();
         }
 
-        public static void ejecutarQuery(String unaQuery)
+        public static void ejecutarNonQuery(String unaQuery)
         {
             comandoo.CommandText = unaQuery;
             comandoo.ExecuteNonQuery();
+            return;
         }
 
     }

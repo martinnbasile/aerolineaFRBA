@@ -20,7 +20,7 @@ namespace AerolineaFrba
             {
                 MessageBox.Show("TERMINAL KIOSCO");
             }
-            else MessageBox.Show("NO ES KIOSCO");
+            else new Login.Login().Show();
             Application.Run();
         }
     }
