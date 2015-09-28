@@ -155,6 +155,7 @@
             this.button3.TabIndex = 22;
             this.button3.Text = "Crear Rol";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // crearRol
             // 
