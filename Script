@@ -1,0 +1,78 @@
+create Table Ciudades(
+Id int identity(1,1) primary key,
+Descripcion varchar(70) not null unique)
+go
+create Table Fabricantes(
+Id int identity(1,1) primary key,
+Descripcion varchar(70) not null unique)
+go
+create Table Tipos_Servicio(
+Id int identity(1,1) primary key,
+Descripcion varchar (70) not null unique,
+Porcentaje float not null)
+go
+create Table Funcionalidades(
+Id int identity(1,1) primary key,
+Descripcion varchar(70) not null unique)
+go
+create Table Roles(
+Id int identity(1,1) primary key,
+Descripcion varchar(70) not null unique,
+Funcionalidad int)
+go
+Alter table Roles 
+add constraint FK_Funcionalidad FOREIGN KEY (Funcionalidad) references Funcionalidades(Id) 
+go
+create Table Usuarios(
+Id int identity(1,1) primary key,
+Username varchar(50) not null unique,
+Password varchar(50) not null,
+Rol int)
+go
+Alter table Usuarios
+add constraint FK_Rol FOREIGN KEY (Rol) references Roles(Id)
+go
+create Table Intentos_Fallidos(
+Id_User int,
+cantidad int)
+go
+Alter table Intentos_fallidos
+add constraint FK_User FOREIGN KEY (Id_User) references Usuarios(Id) 
+go
+create Table Inhabilitados(
+Id_User int)
+go
+Alter table Inhabilitados
+add constraint FK_User_Inahilitado FOREIGN KEY (Id_User) references Usuarios(Id)
+go
+Create Table Clientes(
+Id int identity(1,1) primary key,
+DNI numeric(20) unique not null,
+Nombre varchar(40) not null,
+Apellido varchar(40) not null,
+Direccion varchar(60) not null,
+Telefono numeric(30) not null,
+Mail varchar(50) unique not null,
+Fecha_Nacimiento smalldatetime not null,
+Usuario int)
+go
+Alter table Clientes
+add constraint FK_User_Cliente FOREIGN KEY (Usuario) references Usuarios(Id)
+go
+Create Table Rutas_Aereas(
+Id int identity(1,1) primary key,
+Ciudad_Destino int,
+Ciudad_Origen int,
+Tipo_Servicio int,
+Precio_Base float not null,
+Precio_Kg float not null)
+go
+Alter Table Rutas_Aereas
+add constraint FK_Ciudad_Origen FOREIGN KEY (Ciudad_Origen) references Ciudades(Id)
+go
+Alter Table Rutas_Aereas
+add constraint FK_Ciudad_Destino FOREIGN KEY (Ciudad_Destino) references Ciudades(Id)
+go
+Alter Table Rutas_Aereas
+add constraint FK_Tipo_Servicio FOREIGN KEY (Tipo_Servicio) references Tipos_Servicio(Id)
+go
