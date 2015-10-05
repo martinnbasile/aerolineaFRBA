@@ -1,0 +1,15 @@
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\bin\Release\AerolineaFrba.exe.config
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\bin\Release\AerolineaFrba.exe
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\bin\Release\AerolineaFrba.pdb
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Rol.buscarRol.resources
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Rol.crearRol.resources
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Rol.elegirRol.resources
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Rol.modificarRol.resources
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.Login.Login.resources
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.Login.RecuperarContraseña1.resources
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.Login.RecuperarContraseña2.resources
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.Properties.Resources.resources
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.csproj.GenerateResource.Cache
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.exe
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.pdb
+C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Release\AerolineaFrba.csprojResolveAssemblyReference.cache

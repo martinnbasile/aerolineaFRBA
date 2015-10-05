@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
+using AerolineaFrba.Validaciones;
 
 namespace AerolineaFrba.Abm_Rol
 {
@@ -25,9 +25,20 @@ namespace AerolineaFrba.Abm_Rol
 
         private void button3_Click(object sender, EventArgs e)
         {
-            SqlCommand unComando=ConexionALaBase.Conexion.getComando();
-            unComando.CommandText = "insert into roles values (3,'masterr')";
-            unComando.ExecuteNonQuery();
+            Validaciones.Validaciones.validarTextBox(textBox2, "Complete el nombre del rol");
+            if (comboBox2.SelectedIndex == -1) { MessageBox.Show("Complete el username"); return; }
+
+        }
+
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

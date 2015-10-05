@@ -163,6 +163,7 @@
     <Compile Include="Registro Llegada Destino\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Validaciones\Validaciones.cs" />
     <EmbeddedResource Include="Abm Rol\buscarRol.resx">
       <DependentUpon>buscarRol.cs</DependentUpon>
     </EmbeddedResource>

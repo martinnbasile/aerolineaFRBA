@@ -19,8 +19,21 @@ namespace AerolineaFrba.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            new RecuperarContraseña2(textBox1.Text).Show(); //textBox1 es el user
-            this.Close();    
+            if (textBox1.Text.Length != 0)
+            {
+                new RecuperarContraseña2(textBox1.Text).Show(); //textBox1 es el user
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Ingrese un username");
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new Login().Show();
+            this.Close();
         }
     }
 }

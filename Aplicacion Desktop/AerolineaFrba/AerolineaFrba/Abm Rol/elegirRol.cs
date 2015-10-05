@@ -28,7 +28,18 @@ namespace AerolineaFrba.Abm_Rol
 
         private void button1_Click(object sender, EventArgs e) //BOTON OK
         {
-          
+            if (comboBox1.SelectedIndex == -1) { MessageBox.Show("Seleccione un rol"); return; }
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

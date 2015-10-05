@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AerolineaFrba.Abm_Rol;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -37,6 +38,8 @@ namespace AerolineaFrba.Login
             Console.WriteLine(contraseniaEncriptada);
             ConexionALaBase.Conexion.ejecutarNonQuery("insert into Logins values('"+ nombre + "','" + contraseniaEncriptada + "','" + pass+"')");
             MessageBox.Show("TODO OK");
+            new elegirRol().Show();
+            this.Close();
             //ESTO ES UNA SIMPLIFICACION, VER LA IMPLE POSTA
         }
 
