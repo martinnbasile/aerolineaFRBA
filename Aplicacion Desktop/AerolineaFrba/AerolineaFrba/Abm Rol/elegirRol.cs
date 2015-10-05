@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using AerolineaFrba.Funcionalidades;
 
 namespace AerolineaFrba.Abm_Rol
 {
@@ -28,8 +29,13 @@ namespace AerolineaFrba.Abm_Rol
 
         private void button1_Click(object sender, EventArgs e) //BOTON OK
         {
-            if (comboBox1.SelectedIndex == -1) { MessageBox.Show("Seleccione un rol"); return; }
+            if (Validaciones.Validaciones.validarComboBox(comboBox1, "Seleccione un Rol"))
+            {
+                new Funcionalidades.Funcionalidades().Show();
+                this.Close();
+            }
 
+            
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)

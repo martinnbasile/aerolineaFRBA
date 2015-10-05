@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AerolineaFrba.Validaciones;
 
 namespace AerolineaFrba.Login
 {
@@ -19,15 +20,12 @@ namespace AerolineaFrba.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text.Length != 0)
+            if (Validaciones.Validaciones.validarTextBox(textBox1, "Ingrese un username"))
             {
-                new RecuperarContraseña2(textBox1.Text).Show(); //textBox1 es el user
+                new RecuperarContraseña2(textBox1.Text).Show();
                 this.Close();
             }
-            else
-            {
-                MessageBox.Show("Ingrese un username");
-            }
+           
         }
 
         private void button2_Click(object sender, EventArgs e)
