@@ -22,4 +22,12 @@ Create table usuarios (
 	preguntaSecreta varchar(40),
 )
 
-insert into usuarios values('martin','quien es puma?');
+insert into usuarios values('martin','quien es puma?')
+
+create table ABM (
+	id int identity(1,1) primary key,
+	nombre varchar(30),
+)
+
+insert into ABM values('Rol');
+

@@ -46,7 +46,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(300, 65);
+            this.button1.Location = new System.Drawing.Point(342, 65);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 8;
@@ -66,22 +66,24 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(166, 32);
+            this.comboBox1.Location = new System.Drawing.Point(157, 32);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(209, 21);
-            this.comboBox1.TabIndex = 5;
+            this.comboBox1.Size = new System.Drawing.Size(260, 21);
+            this.comboBox1.TabIndex = 10;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
             // 
             // Funcionalidades
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(385, 99);
+            this.ClientSize = new System.Drawing.Size(433, 98);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.comboBox1);
             this.Name = "Funcionalidades";
             this.Text = "FuncionalidadesAdmin";
+            this.Load += new System.EventHandler(this.Funcionalidades_Load_1);
             this.ResumeLayout(false);
             this.PerformLayout();
 

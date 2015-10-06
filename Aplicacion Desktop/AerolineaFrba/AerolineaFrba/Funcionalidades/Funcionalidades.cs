@@ -8,7 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AerolineaFrba.Abm_Rol;
-
+using AerolineaFrba.ConexionALaBase;
+using System.Data.SqlClient;
 namespace AerolineaFrba.Funcionalidades
 {
     public partial class Funcionalidades : Form
@@ -16,6 +17,14 @@ namespace AerolineaFrba.Funcionalidades
         public Funcionalidades()
         {
             InitializeComponent();
+            
+        }
+
+        private void Funcionalidades_Load_1(object sender, EventArgs e)
+        {
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select nombre from ABM");
+            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -32,5 +41,13 @@ namespace AerolineaFrba.Funcionalidades
             new elegirRol().Show();
             this.Close();
         }
+
+       
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+     
     }
 }
