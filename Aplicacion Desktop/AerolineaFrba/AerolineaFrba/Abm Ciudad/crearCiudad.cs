@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace AerolineaFrba.Abm_Ciudad
 {
-    public partial class Form1 : Form
+    public partial class crearCiudad : Form
     {
-        public Form1()
+        public crearCiudad()
         {
             InitializeComponent();
         }

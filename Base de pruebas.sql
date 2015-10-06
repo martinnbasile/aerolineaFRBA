@@ -31,3 +31,10 @@ create table ABM (
 
 insert into ABM values('Rol');
 
+create table ciudades (
+	id int identity(1,1) primary key,
+	nombre varchar(30),
+)
+
+insert into ciudades values('Rosario');
+

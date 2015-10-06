@@ -28,5 +28,14 @@ namespace AerolineaFrba.Validaciones
             }
             return true;
         }
+        public static bool validarListBox(ListBox unListBox, String unMensajeDeAlerta)
+        {    
+            if(unListBox.SelectedIndex <0 )
+            {
+                MessageBox.Show(unMensajeDeAlerta);
+                return false;
+            }
+            return true;
+        }
     }
 }

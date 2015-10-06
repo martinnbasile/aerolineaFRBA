@@ -41,6 +41,7 @@ namespace AerolineaFrba.Login
             new elegirRol().Show();
             this.Close();
             //ESTO ES UNA SIMPLIFICACION, VER LA IMPLE POSTA
+            //ACA HAY QUE IMPLEMENTAR EL TEMA DEL NUMERO DE LOGINS FALLIDOS. HAY QUE GUARDAR ESE DATO EN LA BASE POR CADA USUARIO E INICIALIZARLO EN CERO.
         }
 
         
