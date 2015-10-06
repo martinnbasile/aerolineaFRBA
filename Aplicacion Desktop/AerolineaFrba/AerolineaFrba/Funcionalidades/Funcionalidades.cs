@@ -31,8 +31,14 @@ namespace AerolineaFrba.Funcionalidades
         {
             if (Validaciones.Validaciones.validarComboBox(comboBox1, "Seleccione una funcionalidad"))
             {
-               // new RecuperarContraseña2(textBox1.Text).Show();
-               // this.Close();
+                String abmSeleccionada = comboBox1.Text;
+                switch (abmSeleccionada)
+                {
+                    case "Rol":
+                        new buscarRol().Show();
+                        this.Close();
+                        break;
+                }
             }
         }
 
