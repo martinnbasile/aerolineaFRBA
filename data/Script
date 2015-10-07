@@ -1,5 +1,3 @@
-use Pruebas
-
 create Table Ciudades(
 Id int identity(1,1) primary key,
 Descripcion varchar(70) not null unique)
@@ -22,11 +20,9 @@ Id int identity(1,1) primary key,
 Descripcion varchar(70) not null unique,
 Funcionalidad int)
 go
-
 Alter table Roles 
 add constraint FK_Funcionalidad FOREIGN KEY (Funcionalidad) references Funcionalidades(Id) 
 go
-
 create Table Usuarios(
 Id int identity(1,1) primary key,
 Username varchar(50) not null unique,
@@ -36,7 +32,6 @@ go
 Alter table Usuarios
 add constraint FK_Rol FOREIGN KEY (Rol) references Roles(Id)
 go
-
 create Table Intentos_Fallidos(
 Id_User int,
 cantidad int)
@@ -85,7 +80,7 @@ alter table Usuarios
 add Pregunta_Secreta varchar(50) not null
 go
 alter table Usuarios
-add Respuesta varchar(50) not null
+add Respuesta varchar(256) not null
 go
 create table Aeronaves(
 matricula varchar(10) primary key,
@@ -222,20 +217,3 @@ go
 alter table Tarjetas_Credito
 add constraint Cliente_Tarjetero foreign key(Cliente) references Clientes(Id)
 go
-
-
-insert into funcionalidades
-values ('Ser un dios')
-
-insert into Roles
-values ('Administrador',1)
-
-insert into usuarios
-values ('martinnb','62c66a7a5dd70c3146618063c344e531e6d4b59e379808443ce962b3abd63c5a',1,'Sos dios','no')
-
--- 62c66a7a5dd70c3146618063c344e531e6d4b59e379808443ce962b3abd63c5a es la m encriptada
-
-Create view RolesPorUsuario as
-Select f.Descripcion from usuarios u	join roles r on (u.rol=r.id)
-						join funcionalidades f on (r.Funcionalidad=f.Id)
-
