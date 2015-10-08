@@ -1,4 +1,7 @@
-use Pruebas
+DROP DATABASE Pruebas
+CREATE DATABASE Pruebas
+
+Use Pruebas
 
 create Table Ciudades(
 Id int identity(1,1) primary key,
@@ -235,7 +238,11 @@ values ('martinnb','62c66a7a5dd70c3146618063c344e531e6d4b59e379808443ce962b3abd6
 
 -- 62c66a7a5dd70c3146618063c344e531e6d4b59e379808443ce962b3abd63c5a es la m encriptada
 
+go
+
 Create view RolesPorUsuario as
 Select f.Descripcion from usuarios u	join roles r on (u.rol=r.id)
 						join funcionalidades f on (r.Funcionalidad=f.Id)
+go
+
 
