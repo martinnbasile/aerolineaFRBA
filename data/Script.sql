@@ -259,3 +259,43 @@ go
 alter table Roles_Funcionalidades
 add constraint FK_Roles FOREIGN KEY(Rol) references Roles
 go
+alter table Productos_Milla
+drop column Descripcion
+go
+alter table Productos_Milla
+add Descripcion varchar(100) not null
+go
+insert into Productos_Milla (Descripcion,Cantidad,Millas_Necesarias)
+values ('Auto de Juguete',100,20)
+go
+insert into Productos_Milla (Descripcion,Cantidad,Millas_Necesarias)
+values ('Moto de Juguete',100,15)
+go
+insert into Productos_Milla (Descripcion,Cantidad,Millas_Necesarias)
+values ('Avion de Juguete',100,25)
+go
+insert into Productos_Milla (Descripcion,Cantidad,Millas_Necesarias)
+values ('Set de perfumes',100,200)
+go
+insert into Funcionalidades(Descripcion) values ('ABM ROL')
+go
+insert into Funcionalidades(Descripcion) values ('ABM LOGIN')
+go
+insert into Funcionalidades(Descripcion) values ('ABM CIUDADES')
+go
+insert into Funcionalidades(Descripcion) values ('ABM RUTAS')
+go
+insert into Funcionalidades(Descripcion) values ('ABM AERONAVES')
+go
+insert into Funcionalidades(Descripcion) values ('ABM GENERAR VIAJES')
+go
+insert into Funcionalidades(Descripcion) values ('ABM COMPRAS')
+go
+insert into Funcionalidades(Descripcion) values ('ABM CANCELAR')
+go
+insert into Funcionalidades(Descripcion) values ('ABM CONSULTAR MILLAS')
+go
+insert into Funcionalidades(Descripcion) values ('ABM CANJEAR')
+go
+insert into Funcionalidades(Descripcion) values ('ABM LISTADO ESTADISTICO')
+go
