@@ -299,3 +299,7 @@ insert into Funcionalidades(Descripcion) values ('ABM CANJEAR')
 go
 insert into Funcionalidades(Descripcion) values ('ABM LISTADO ESTADISTICO')
 go
+insert into Roles(Descripcion) values ('Administrador')
+go
+insert into Roles(Descripcion) values ('Cliente')
+go
