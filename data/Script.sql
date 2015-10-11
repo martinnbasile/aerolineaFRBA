@@ -219,3 +219,27 @@ go
 alter table Tarjetas_Credito
 add constraint Cliente_Tarjetero foreign key(Cliente) references Clientes(Id)
 go
+drop table Butacas
+go
+create table Butacas(
+Viaje int not null,
+Nro int not null,
+Ubicacion varchar(30))
+go
+insert into Fabricantes (Descripcion)
+select distinct Aeronave_Fabricante from gd_esquema.Maestra
+go
+insert into Tipos_Servicio(Descripcion,Porcentaje) values ('Común',0)
+go
+insert into Tipos_Servicio(Descripcion,Porcentaje) values ('Ejecutivo',5)
+go
+insert into Tipos_Servicio(Descripcion,Porcentaje) values ('Cama',10)
+go
+insert into Tipos_Servicio(Descripcion,Porcentaje) values ('Semi-Cama',15)
+go
+insert into Tipos_Servicio(Descripcion,Porcentaje) values ('Premium',25)
+go
+insert into Ciudades(Descripcion)
+select distinct Ruta_Ciudad_Destino from gd_esquema.Maestra union
+select distinct Ruta_Ciudad_Origen from gd_esquema.Maestra
+go
