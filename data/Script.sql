@@ -243,3 +243,19 @@ insert into Ciudades(Descripcion)
 select distinct Ruta_Ciudad_Destino from gd_esquema.Maestra union
 select distinct Ruta_Ciudad_Origen from gd_esquema.Maestra
 go
+create table Roles_Funcionalidades(
+Funcionalidad int,
+Rol int)
+go
+alter table Roles
+drop constraint FK_Funcionalidad
+go
+alter table Roles_funcionalidades
+add constraint FK_Funcionalidad FOREIGN KEY(Funcionalidad) references Funcionalidades
+go
+alter table Roles
+drop column Funcionalidad
+go
+alter table Roles_Funcionalidades
+add constraint FK_Roles FOREIGN KEY(Rol) references Roles
+go
