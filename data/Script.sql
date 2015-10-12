@@ -303,3 +303,32 @@ insert into Roles(Descripcion) values ('Administrador')
 go
 insert into Roles(Descripcion) values ('Cliente')
 go
+alter table Clientes
+drop constraint UQ__Clientes__2724B2D1B1E33E98
+go
+begin transaction
+Declare cursorCliente Cursor for
+select distinct Cli_Nombre,Cli_Apellido,Cli_Dni,Cli_Dir,
+Cli_Telefono,Cli_Mail,Cli_Fecha_Nac
+from gd_esquema.Maestra
+Declare @nombre varchar(30)
+Declare @apellido varchar(30)
+Declare @Dni int
+Declare @Dir varchar(100) 
+Declare @telefono numeric(12)
+Declare @mail varchar(50)
+Declare @fnac date
+open cursorCliente
+fetch next from cursorCliente into @nombre,@apellido,@Dni,@Dir,
+@telefono,@mail,@fnac
+while @@FETCH_STATUS=0
+begin
+Insert into Usuarios(Username,Password,Rol,Pregunta_Secreta,Respuesta) values(@Dni,'Algo a ver',1,'Sos Dios?','Algo a ver')
+Insert into Clientes(Usuario,Nombre,Apellido,DNI,Mail,Telefono,Direccion,Fecha_nacimiento) values((Select MAX(Id)from Usuarios),@nombre,@apellido,@Dni,@mail,@telefono,@Dir,@fnac)
+fetch next from cursorCliente into @nombre,@apellido,@Dni,@Dir,
+@telefono,@mail,@fnac
+end
+close cursorCliente
+deallocate cursorCliente
+commit
+go
