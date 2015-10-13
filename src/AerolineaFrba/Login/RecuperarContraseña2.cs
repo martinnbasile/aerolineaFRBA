@@ -34,10 +34,28 @@ namespace AerolineaFrba.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (Validaciones.Validaciones.validarTextBox(textBox1, "Ingrese una respuesta secreta"))
+            if (Validaciones.Validaciones.validarTextBox(textBox2, "Ingrese una respuesta secreta"))
             {
+                String respuesta="";                
                 SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Respuesta from Usuarios where username='" + userName + "'");
-                //TODO falta definir si se inserta una nueva contraseña o si se informa con un MessageBox la contraseña vieja
+                if (reader.Read())
+                       respuesta = reader.GetString(0);
+                        MessageBox.Show(respuesta);
+                  reader.Dispose();
+                  if (textBox2.Text == respuesta)
+                  {
+                      MessageBox.Show("Coinci");
+                      //ABRIR FORM REESTABLECER
+                      this.Close();
+                  }
+
+                  else
+                  {
+                      MessageBox.Show("Respuesta incorrecta");
+                      new RecuperarContraseña2(userName).Show();
+                      this.Close();
+                  }
+
             }
         }
     }
