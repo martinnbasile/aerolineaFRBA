@@ -22,8 +22,10 @@ namespace AerolineaFrba.Abm_Rol
         private void elegirRol_Load(object sender, EventArgs e)
         {
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select * from RolesPorUsuario where usuario");
+            //MOMENTANEAMENTE HAGO SELECT * FROM ROLES, HASTA QUE LE AGREGUEN A LA BASE LA TABLA RolesPorUsuario
+             SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Descripcion from Roles"); 
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
+   
             
         }
 

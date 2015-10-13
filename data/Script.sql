@@ -1,4 +1,4 @@
-Use GD2C2015
+﻿Use GD2C2015
 
 create Table Ciudades(
 Id int identity(1,1) primary key,
@@ -323,7 +323,8 @@ fetch next from cursorCliente into @nombre,@apellido,@Dni,@Dir,
 @telefono,@mail,@fnac
 while @@FETCH_STATUS=0
 begin
-Insert into Usuarios(Username,Password,Rol,Pregunta_Secreta,Respuesta) values(@Dni,'Algo a ver',1,'Sos Dios?','Algo a ver')
+Insert into Usuarios(Username,Password,Rol,Pregunta_Secreta,Respuesta) values(@Dni,'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'Sos Dios?','Algo a ver')
+insert into usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'Sos Dios?','Algo a ver')
 Insert into Clientes(Usuario,Nombre,Apellido,DNI,Mail,Telefono,Direccion,Fecha_nacimiento) values((Select MAX(Id)from Usuarios),@nombre,@apellido,@Dni,@mail,@telefono,@Dir,@fnac)
 fetch next from cursorCliente into @nombre,@apellido,@Dni,@Dir,
 @telefono,@mail,@fnac
