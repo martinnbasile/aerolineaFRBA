@@ -22,7 +22,14 @@ namespace AerolineaFrba.Login
         {
             if (Validaciones.Validaciones.validarTextBox(textBox1, "Ingrese un username"))
             {
-                new RecuperarContraseña2(textBox1.Text).Show();
+                String usernameIngresado = textBox1.Text;
+                try {Validaciones.Validaciones.validarUsername(usernameIngresado); }
+                catch (Exception)
+                {
+                    MessageBox.Show("No existe el username");
+                    return;
+                }
+                new RecuperarContraseña2(usernameIngresado).Show();
                 this.Close();
             }
            
