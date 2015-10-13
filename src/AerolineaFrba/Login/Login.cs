@@ -46,7 +46,7 @@ namespace AerolineaFrba.Login
             this.validarContraseña();
         }
 
-        private void validarContraseña()
+        public void validarContraseña()
         {
             SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Password from usuarios where Username='" + nombre + "'");
             reader.Read();
@@ -67,7 +67,7 @@ namespace AerolineaFrba.Login
             }
         }
 
-        private String validarUsername()
+        public String validarUsername()
         {
             SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select count (*) from usuarios where Username='" + nombre + "'");
             reader.Read();
