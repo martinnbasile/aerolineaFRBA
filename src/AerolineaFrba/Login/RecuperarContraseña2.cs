@@ -45,7 +45,7 @@ namespace AerolineaFrba.Login
                   if (textBox2.Text == respuesta)
                   {
                       MessageBox.Show("Coinci");
-                      //ABRIR FORM REESTABLECER
+                      new ReestablecerPass(userName).Show();
                       this.Close();
                   }
 
