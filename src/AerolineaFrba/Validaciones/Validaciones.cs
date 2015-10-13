@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace AerolineaFrba.Validaciones
 {
@@ -36,6 +37,18 @@ namespace AerolineaFrba.Validaciones
                 return false;
             }
             return true;
+        }
+
+        public static String validarUsername(String unUsername)
+        {
+            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select count (*) from usuarios where Username='" + unUsername + "'");
+            reader.Read();
+            Int32 vecesQueAparece = reader.GetInt32(0);
+            if (vecesQueAparece == 1) { return unUsername; }
+            else
+            {
+                throw new Exception();
+            }
         }
     }
 }

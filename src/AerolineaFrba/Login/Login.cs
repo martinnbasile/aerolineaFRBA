@@ -36,7 +36,7 @@ namespace AerolineaFrba.Login
             nombre = textBox1.Text;
             pass = textBox2.Text;
             pass = Encriptar.SHA256(pass);
-            try { nombre = this.validarUsername(); }
+            try {Validaciones.Validaciones.validarUsername(nombre); }
             catch (Exception)
             {
                 MessageBox.Show("No existe el username");
@@ -64,18 +64,6 @@ namespace AerolineaFrba.Login
                 //asentar login incorrecto
                 MessageBox.Show("Contraseña incorrecta");
                 this.reCargar();
-            }
-        }
-
-        private String validarUsername()
-        {
-            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select count (*) from usuarios where Username='" + nombre + "'");
-            reader.Read();
-            Int32 vecesQueAparece = reader.GetInt32(0);
-            if (vecesQueAparece == 1) { return nombre; }
-            else
-            {
-                throw new Exception();
             }
         }
 

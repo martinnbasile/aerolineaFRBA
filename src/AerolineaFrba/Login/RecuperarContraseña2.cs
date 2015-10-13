@@ -13,26 +13,32 @@ namespace AerolineaFrba.Login
 {
     public partial class RecuperarContraseña2 : Form
     {
-        public RecuperarContraseña2(String userName)
+
+        String userName;
+    
+        public RecuperarContraseña2(String unUserName)
         {
             InitializeComponent();
-            MessageBox.Show(userName);
-            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select preguntaSecreta from Usuarios where username='" + userName + "'");
+            userName = unUserName;
+            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Pregunta_Secreta from Usuarios where username='" + unUserName + "'");
             if (reader.Read())
                 textBox1.Text = reader.GetString(0);
-            else
-            //si no hay pregunta secreta para el usuario, es porque no existe
-            {
-                MessageBox.Show("Usuario es incorrecto");
-                this.Close();
-            }
-            reader.Dispose();
+           reader.Dispose();
             
         }
 
         private void RecuperarContraseña2_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (Validaciones.Validaciones.validarTextBox(textBox1, "Ingrese una respuesta secreta"))
+            {
+                SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Respuesta from Usuarios where username='" + userName + "'");
+                //TODO falta definir si se inserta una nueva contraseña o si se informa con un MessageBox la contraseña vieja
+            }
         }
     }
 }

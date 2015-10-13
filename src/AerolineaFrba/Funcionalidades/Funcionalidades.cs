@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using AerolineaFrba.Abm_Rol;
 using AerolineaFrba.ConexionALaBase;
 using System.Data.SqlClient;
+using AerolineaFrba.Abm_Ciudad;
 namespace AerolineaFrba.Funcionalidades
 {
     public partial class Funcionalidades : Form
@@ -35,9 +36,16 @@ namespace AerolineaFrba.Funcionalidades
                 String abmSeleccionada = comboBox1.Text;
                 switch (abmSeleccionada)
                 {
-                    case "Rol":
+                    case "ABM ROL":
                         new buscarRol().Show();
                         this.Close();
+                        break;
+                    case "ABM CIUDADES":
+                        new buscarCiudad().Show();
+                        this.Close();
+                        break;
+                    default:
+                        MessageBox.Show("Funcionalidad aun no disponible");
                         break;
                 }
             }
