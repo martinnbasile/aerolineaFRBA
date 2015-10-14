@@ -81,6 +81,7 @@
             this.button2.TabIndex = 16;
             this.button2.Text = "Modificar";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // listBox1
             // 
@@ -89,6 +90,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(417, 147);
             this.listBox1.TabIndex = 15;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // buscarCiudad
             // 
@@ -103,6 +105,7 @@
             this.Controls.Add(this.listBox1);
             this.Name = "buscarCiudad";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.buscarCiudad_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

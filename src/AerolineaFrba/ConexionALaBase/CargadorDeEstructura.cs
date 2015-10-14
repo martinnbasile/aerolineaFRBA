@@ -19,5 +19,13 @@ namespace AerolineaFrba.ConexionALaBase
             }
             reader.Dispose();
         }
+        public static void cargarListBox(ListBox unListBox, SqlDataReader reader)
+        {
+            while (reader.Read())
+            {
+                unListBox.Items.Add(reader.GetSqlString(0));
+            }
+            reader.Dispose();
+        }
     }
 }
