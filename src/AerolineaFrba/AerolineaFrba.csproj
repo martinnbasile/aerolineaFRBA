@@ -98,6 +98,18 @@
     <Compile Include="Abm Ruta\ABM_RUTA.Designer.cs">
       <DependentUpon>ABM_RUTA.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Ruta\modificarRuta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Ruta\modificarRuta.Designer.cs">
+      <DependentUpon>modificarRuta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Abm Ruta\NuevaRuta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Ruta\NuevaRuta.Designer.cs">
+      <DependentUpon>NuevaRuta.cs</DependentUpon>
+    </Compile>
     <Compile Include="Canje Millas\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,6 +223,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Ruta\ABM_RUTA.resx">
       <DependentUpon>ABM_RUTA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Ruta\modificarRuta.resx">
+      <DependentUpon>modificarRuta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Ruta\NuevaRuta.resx">
+      <DependentUpon>NuevaRuta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Funcionalidades\Funcionalidades.resx">
       <DependentUpon>Funcionalidades.cs</DependentUpon>

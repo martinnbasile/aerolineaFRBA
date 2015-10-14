@@ -10,17 +10,11 @@ using System.Windows.Forms;
 
 namespace AerolineaFrba.Abm_Ruta
 {
-    public partial class ABM_RUTA : Form
+    public partial class modificarRuta : Form
     {
-        public ABM_RUTA()
+        public modificarRuta()
         {
             InitializeComponent();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            new NuevaRuta().Show();
-            this.Close();
         }
     }
 }
