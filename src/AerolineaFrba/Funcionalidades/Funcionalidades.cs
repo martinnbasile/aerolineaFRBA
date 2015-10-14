@@ -46,7 +46,7 @@ namespace AerolineaFrba.Funcionalidades
                         this.Close();
                         break;
                     case "ABM RUTAS":
-                        new Abm_Ruta.Form1().Show();
+                        new Abm_Ruta.ABM_RUTA().Show();
                         this.Close();
                         break;
                     default:

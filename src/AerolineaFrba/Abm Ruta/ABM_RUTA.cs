@@ -10,11 +10,20 @@ using System.Windows.Forms;
 
 namespace AerolineaFrba.Abm_Ruta
 {
-    public partial class Form1 : Form
+    public partial class ABM_RUTA : Form
     {
-        public Form1()
+        public ABM_RUTA()
         {
             InitializeComponent();
+            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from ciudades");
+            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
+            reader.Dispose();
+            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from ciudades");
+            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, reader);
+            reader.Dispose();
+            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from Tipos_Servicio");
+            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, reader);
+            reader.Dispose();                               
         }
 
         private void button2_Click(object sender, EventArgs e)
