@@ -5,12 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace AerolineaFrba.ConexionALaBase
 {
     class CargadorDeEstructuras
     {
-       
+        public static void cargarDataGrid(DataGridView unDataGrid ,String unaQuery){
+            DataTable dataTable = new DataTable();
+            SqlCommand command = new SqlCommand(unaQuery, Conexion.conexxxxx);
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            adapter.Fill(dataTable);
+            unDataGrid.DataSource = dataTable;
+        }
+
         public static void cargarComboBox(ComboBox unCombo,SqlDataReader reader)
         {
             while (reader.Read())

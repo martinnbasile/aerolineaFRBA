@@ -15,6 +15,12 @@ namespace AerolineaFrba.Abm_Ruta
         public modificarRuta()
         {
             InitializeComponent();
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "select * from Vista_rutas_aereas");
+        }
+
+        private void modificarRuta_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
