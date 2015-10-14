@@ -92,11 +92,11 @@
     <Compile Include="Abm Rol\modificarRol.Designer.cs">
       <DependentUpon>modificarRol.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Ruta\Form1.cs">
+    <Compile Include="Abm Ruta\ABM_RUTA.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm Ruta\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Abm Ruta\ABM_RUTA.Designer.cs">
+      <DependentUpon>ABM_RUTA.cs</DependentUpon>
     </Compile>
     <Compile Include="Canje Millas\Form1.cs">
       <SubType>Form</SubType>
@@ -208,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Rol\modificarRol.resx">
       <DependentUpon>modificarRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Ruta\ABM_RUTA.resx">
+      <DependentUpon>ABM_RUTA.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Funcionalidades\Funcionalidades.resx">
       <DependentUpon>Funcionalidades.cs</DependentUpon>

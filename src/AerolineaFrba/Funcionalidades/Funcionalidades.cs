@@ -45,6 +45,10 @@ namespace AerolineaFrba.Funcionalidades
                         new buscarCiudad().Show();
                         this.Close();
                         break;
+                    case "ABM RUTAS":
+                        new Abm_Ruta.Form1().Show();
+                        this.Close();
+                        break;
                     default:
                         MessageBox.Show("Funcionalidad aun no disponible");
                         break;
