@@ -32,15 +32,13 @@ namespace AerolineaFrba.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (Validaciones.Validaciones.validarTextBox(textBox1,"Ingrese nueva contraseña"){
-                if (Validaciones.Validaciones.validarTextBox(textBox2,"Repita la contraseña"){
-                    if (textBox1.Text==textBox2.Text)
+            if (Validaciones.Validaciones.validarTextBox(textBox1,"Ingrese nueva contraseña")){
+                if (Validaciones.Validaciones.validarTextBox(textBox2,"Repita la contraseña")){
+                    if (textBox1.Text==textBox2.Text){
                         //EJECUTAR NONQUERY DE UPDATE WHERE USER
                     }
-
-
-
-                
+                }
+            }
         }
     }
 }
