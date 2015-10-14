@@ -71,3 +71,4 @@ C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Log
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Login.RecuperarContraseña2.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Properties.Resources.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.csproj.GenerateResource.Cache
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Login.ReestablecerPass.resources
