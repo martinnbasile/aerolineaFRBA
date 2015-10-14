@@ -44,6 +44,7 @@
             this.button3.TabIndex = 30;
             this.button3.Text = "Modificar nombre";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 

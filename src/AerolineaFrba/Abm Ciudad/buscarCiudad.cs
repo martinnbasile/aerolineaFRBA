@@ -34,13 +34,34 @@ namespace AerolineaFrba.Abm_Ciudad
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if(Validaciones.Validaciones.validarListBox(listBox1,"Selecciona una ciudad a modificar"))
+            if (Validaciones.Validaciones.validarListBox(listBox1, "Selecciona una ciudad a modificar"))
             {
-                String ciudadSeleccionada=listBox1.Text;
+                String ciudadSeleccionada = listBox1.Text;
                 new modificarCiudad(ciudadSeleccionada).Show();
                 this.Close();
             }
-            
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (Validaciones.Validaciones.validarListBox(listBox1, "Selecciona una ciudad a eliminar"))
+            {
+                String ciudadSeleccionada = listBox1.Text;
+                if (MessageBox.Show("¿Está seguro que desea borrar la ciudad "+ ciudadSeleccionada +"?", "Confirmar operación", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    ConexionALaBase.Conexion.ejecutarNonQuery("delete Ciudades where Descripcion='" + ciudadSeleccionada + "'");
+                    MessageBox.Show("La ciudad "+ ciudadSeleccionada +" a sido eliminada");
+                    new buscarCiudad().Show();
+                    this.Close();
+                }
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            new Funcionalidades.Funcionalidades(Program.rol).Show();
+            this.Close();
         }
     }
 }
