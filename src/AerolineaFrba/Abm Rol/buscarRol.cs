@@ -19,7 +19,7 @@ namespace AerolineaFrba.Abm_Rol
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)//nuevo
         {
             new crearRol().Show();
 
@@ -36,7 +36,7 @@ namespace AerolineaFrba.Abm_Rol
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)//eliminar
         {
             if (Validaciones.Validaciones.validarListBox(listBox1, "Seleccione un rol"))
             {
@@ -63,7 +63,7 @@ namespace AerolineaFrba.Abm_Rol
 
         private void button4_Click(object sender, EventArgs e)
         {
-            new Funcionalidades.Funcionalidades().Show();
+            new Funcionalidades.Funcionalidades(Program.rol).Show();
             this.Close();
         }
     }

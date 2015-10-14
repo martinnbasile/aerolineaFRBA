@@ -33,7 +33,8 @@ namespace AerolineaFrba.Abm_Rol
         {
             if (Validaciones.Validaciones.validarComboBox(comboBox1, "Seleccione un Rol"))
             {
-                new Funcionalidades.Funcionalidades().Show();
+                Program.rol = comboBox1.SelectedItem.ToString();
+                new Funcionalidades.Funcionalidades(comboBox1.SelectedItem.ToString()).Show();
                 this.Close();
             }
 
@@ -48,6 +49,13 @@ namespace AerolineaFrba.Abm_Rol
         private void button2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            new Login.Login().Show();
+            this.Close();
+            return;
         }
     }
 }

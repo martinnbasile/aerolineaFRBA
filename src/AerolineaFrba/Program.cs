@@ -11,6 +11,8 @@ namespace AerolineaFrba
         /// <summary>
         /// Punto de entrada principal para la aplicación.
         /// </summary>
+        /// 
+        public static String rol;
         public static String username;
         public static String password;
         [STAThread]

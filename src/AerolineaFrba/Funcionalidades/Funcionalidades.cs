@@ -15,18 +15,19 @@ namespace AerolineaFrba.Funcionalidades
 {
     public partial class Funcionalidades : Form
     {
-        public Funcionalidades()
+        public Funcionalidades(String rolElegido)
         {
             InitializeComponent();
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            //TODO cambiar el select cuando se cree e inicialice la tabla Rol_Funcionalidades
+            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("select Descripcion from Funcionalidades");
+            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
             
         }
 
         private void Funcionalidades_Load_1(object sender, EventArgs e)
         {
-            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            //TODO cambiar el select cuando se cree e inicialice la tabla Rol_Funcionalidades
-            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("select Descripcion from Funcionalidades");
-            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
