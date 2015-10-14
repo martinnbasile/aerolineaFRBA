@@ -40,11 +40,11 @@ namespace AerolineaFrba.Login
                 SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Respuesta from Usuarios where username='" + userName + "'");
                 if (reader.Read())
                        respuesta = reader.GetString(0);
-                        MessageBox.Show(respuesta);
+                        
                   reader.Dispose();
                   if (textBox2.Text == respuesta)
                   {
-                      MessageBox.Show("Coinci");
+                      
                       new ReestablecerPass(userName).Show();
                       this.Close();
                   }
@@ -57,6 +57,13 @@ namespace AerolineaFrba.Login
                   }
 
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new Login().Show();
+            this.Close();
+            return;
         }
     }
 }

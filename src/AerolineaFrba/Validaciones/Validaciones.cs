@@ -42,14 +42,9 @@ namespace AerolineaFrba.Validaciones
 
         public static String validarUsername(String unUsername)
         {
-            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select count (*) from usuarios where Username='" + unUsername + "'");
+            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select username from usuarios where Username='" + unUsername + "'");
             reader.Read();
-            Int32 vecesQueAparece = reader.GetInt32(0);
-            if (vecesQueAparece == 1) { return unUsername; }
-            else
-            {
-                throw new Exception();
-            }
+            return reader.GetString(0);
         }
     }
 }

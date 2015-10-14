@@ -149,6 +149,12 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\Encriptar.cs" />
+    <Compile Include="Login\ReestablecerPass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\ReestablecerPass.Designer.cs">
+      <DependentUpon>ReestablecerPass.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,12 +172,6 @@
     </Compile>
     <Compile Include="Login\RecuperarContraseña2.Designer.cs">
       <DependentUpon>RecuperarContraseña2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Login\ReestablecerPass.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Login\ReestablecerPass.Designer.cs">
-      <DependentUpon>ReestablecerPass.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -220,6 +220,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Login\RecuperarContraseña2.resx">
       <DependentUpon>RecuperarContraseña2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\ReestablecerPass.resx">
+      <DependentUpon>ReestablecerPass.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

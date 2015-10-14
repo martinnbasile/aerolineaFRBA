@@ -27,6 +27,8 @@ namespace AerolineaFrba.Login
                 catch (Exception)
                 {
                     MessageBox.Show("No existe el username");
+                    new RecuperarContraseña1().Show();
+                    this.Close();
                     return;
                 }
                 new RecuperarContraseña2(usernameIngresado).Show();

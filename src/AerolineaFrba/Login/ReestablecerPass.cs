@@ -12,11 +12,11 @@ namespace AerolineaFrba.Login
 {
     public partial class ReestablecerPass : Form
     {
-        
+
         String user;
         public ReestablecerPass(String userName)
         {
-            user=userName;
+            user = userName;
             InitializeComponent();
         }
 
@@ -32,13 +32,30 @@ namespace AerolineaFrba.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (Validaciones.Validaciones.validarTextBox(textBox1,"Ingrese nueva contraseña")){
-                if (Validaciones.Validaciones.validarTextBox(textBox2,"Repita la contraseña")){
-                    if (textBox1.Text==textBox2.Text){
-                        //EJECUTAR NONQUERY DE UPDATE WHERE USER
+            String nuevaPassword = "";
+            if (Validaciones.Validaciones.validarTextBox(textBox1, "Ingrese nueva contraseña"))
+            {
+                if (Validaciones.Validaciones.validarTextBox(textBox2, "Repita la contraseña"))
+                {
+                    if (textBox1.Text == textBox2.Text)
+                    {
+                        nuevaPassword = Encriptar.SHA256(textBox1.Text);
+                        ConexionALaBase.Conexion.ejecutarNonQuery("update usuarios set Password='" + nuevaPassword + "' where username='" + user + "'");
+                        MessageBox.Show("Su contraseña ha sido actualizada");
+                        new Login().Show();
+                        this.Close();
+                        return;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Las contraseñas no coinciden");
+                        new ReestablecerPass(user).Show();
+                        this.Close();
+                        return;
                     }
                 }
             }
         }
     }
+
 }
