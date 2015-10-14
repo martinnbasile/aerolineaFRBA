@@ -42,6 +42,7 @@
             this.button3.TabIndex = 26;
             this.button3.Text = "Crear ciudad";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
@@ -51,6 +52,7 @@
             this.button4.TabIndex = 25;
             this.button4.Text = "Volver atrás";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // textBox2
             // 
@@ -58,6 +60,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(201, 20);
             this.textBox2.TabIndex = 24;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label2
             // 

@@ -63,5 +63,11 @@ namespace AerolineaFrba.Abm_Ciudad
             new Funcionalidades.Funcionalidades(Program.rol).Show();
             this.Close();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            new crearCiudad().Show();
+            this.Close();
+        }
     }
 }

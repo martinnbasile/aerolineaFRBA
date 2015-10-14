@@ -72,4 +72,6 @@ C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Log
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Properties.Resources.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.csproj.GenerateResource.Cache
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Login.ReestablecerPass.resources
-C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Ruta.Form1.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Ruta.ABM_RUTA.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Ruta.modificarRuta.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Ruta.NuevaRuta.resources

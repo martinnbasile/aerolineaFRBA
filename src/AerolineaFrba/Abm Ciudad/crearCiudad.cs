@@ -16,5 +16,28 @@ namespace AerolineaFrba.Abm_Ciudad
         {
             InitializeComponent();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            new buscarCiudad().Show();
+            this.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (Validaciones.Validaciones.validarTextBox(textBox2, "Ingrese un nombre para la ciudad a crear"))
+            {   
+                String nombreNuevaCiudad = textBox2.Text;
+                ConexionALaBase.Conexion.ejecutarNonQuery("insert into ciudades values ('" + nombreNuevaCiudad + "')");
+                MessageBox.Show("Creada la ciudad " + nombreNuevaCiudad + "");
+                new buscarCiudad().Show();
+                this.Close();
+            }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
