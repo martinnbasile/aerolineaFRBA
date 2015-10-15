@@ -15,8 +15,9 @@ namespace AerolineaFrba.Funcionalidades
 {
     public partial class Funcionalidades : Form
     {
-        public Funcionalidades(String rolElegido)
+        public Funcionalidades()
         {
+            String rolElegido = Program.rol;
             InitializeComponent();
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             //TODO cambiar el select cuando se cree e inicialice la tabla Rol_Funcionalidades

@@ -60,7 +60,7 @@ namespace AerolineaFrba.Abm_Ciudad
 
         private void button4_Click(object sender, EventArgs e)
         {
-            new Funcionalidades.Funcionalidades(Program.rol).Show();
+            new Funcionalidades.Funcionalidades().Show();
             this.Close();
         }
 

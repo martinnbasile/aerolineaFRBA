@@ -59,7 +59,9 @@ namespace AerolineaFrba.Abm_Ruta
             
             if (intencion == 1)
             {//vino a modificar
-                MessageBox.Show("Quiere modificar");
+                new ModificarRuta(rutaElegida).Show();
+                this.Close();
+                return;
             }
             else
             { //vino a borrar

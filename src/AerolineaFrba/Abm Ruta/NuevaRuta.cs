@@ -61,7 +61,7 @@ namespace AerolineaFrba.Abm_Ruta
                 String precioBaseEncomienda;
 
                 MessageBox.Show("Falta implementar la insercion en la base");
-                MessageBox.Show("Operacion exitosa";
+                MessageBox.Show("Operacion exitosa");
                 new ABM_RUTA().Show();
                 this.Close();
             }

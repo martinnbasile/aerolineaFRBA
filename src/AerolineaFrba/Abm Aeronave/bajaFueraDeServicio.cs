@@ -33,7 +33,7 @@ namespace AerolineaFrba.Abm_Aeronave
    
         private void button3_Click(object sender, EventArgs e)
         {
-            new calendario(this).Show();
+           // new calendario(this).Show();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

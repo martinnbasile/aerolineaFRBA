@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace AerolineaFrba.Abm_Ruta
 {
     
-    class Ruta
+    public class Ruta
     {
         int id;
         String origen;
@@ -24,6 +24,10 @@ namespace AerolineaFrba.Abm_Ruta
             precioBase = unaFila.Cells["Precio base"].Value.ToString();
             precioBaseEncomienda = unaFila.Cells["Precio base encomienda"].Value.ToString();            
         }
-    
+
+        public string getOrigen()
+        {
+            return origen;
+        }
     }
 }
