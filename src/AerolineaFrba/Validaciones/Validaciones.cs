@@ -20,6 +20,17 @@ namespace AerolineaFrba.Validaciones
             return true;
         }
 
+        public static bool validarMaskedTextBox(MaskedTextBox unMaskedTextBox, String unMensajeDeAlerta)
+        {
+            if (unMaskedTextBox.Text.Length == 0)
+            {
+                MessageBox.Show(unMensajeDeAlerta);
+                return false;
+            }
+            return true;
+        }
+
+
         public static bool validarComboBox(ComboBox unComboBox, String unMensajeDeAlerta)
         {
             if (unComboBox.SelectedIndex == -1)

@@ -77,6 +77,7 @@
             this.button1.TabIndex = 5;
             this.button1.Text = "Confirmar";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
@@ -136,9 +137,7 @@
             // maskedTextBox1
             // 
             this.maskedTextBox1.Location = new System.Drawing.Point(162, 95);
-            this.maskedTextBox1.Mask = "000000000000000000000000000000000000000000000000000000000000000000000000000000000" +
-    "00000000000000000000000000000000000000000000000000000000000000000000000000000000" +
-    "00000000000000000000000000";
+            this.maskedTextBox1.Mask = "9999999999999999999999999999999999999999999999999999999999999999999";
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(255, 20);
             this.maskedTextBox1.TabIndex = 12;
@@ -146,13 +145,13 @@
             // maskedTextBox2
             // 
             this.maskedTextBox2.Location = new System.Drawing.Point(162, 121);
-            this.maskedTextBox2.Mask = "000000000000000000000000000000000000000000000000000000000000000000000000000000000" +
-    "0000000000000000000000000000000000000000";
+            this.maskedTextBox2.Mask = "999999999999999999999999999999999999999999999999999999999999999999999999999999999" +
+    "99999999999999999999999999999999";
             this.maskedTextBox2.Name = "maskedTextBox2";
             this.maskedTextBox2.Size = new System.Drawing.Size(255, 20);
             this.maskedTextBox2.TabIndex = 13;
             // 
-            // ABM_RUTA
+            // NuevaRuta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -169,7 +168,7 @@
             this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.comboBox1);
-            this.Name = "ABM_RUTA";
+            this.Name = "NuevaRuta";
             this.Text = "ABM Ruta Aerea";
             this.ResumeLayout(false);
             this.PerformLayout();

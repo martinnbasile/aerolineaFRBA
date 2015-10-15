@@ -333,3 +333,10 @@ close cursorCliente
 deallocate cursorCliente
 commit
 go
+
+create view vista_rutas_aereas as
+select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
+from Rutas_Aereas r join Ciudades c1 on (r.Ciudad_Origen=c1.Id)
+					join Ciudades c2 on (r.Ciudad_Destino=c2.Id)
+					join Tipos_Servicio t on (r.Tipo_Servicio=t.Id)
+go

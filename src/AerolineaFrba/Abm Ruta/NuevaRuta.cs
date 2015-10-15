@@ -22,15 +22,52 @@ namespace AerolineaFrba.Abm_Ruta
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, reader);
             reader.Dispose();
             reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from Tipos_Servicio");
-            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, reader);
+            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox3, reader);
             reader.Dispose();                               
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            new Funcionalidades.Funcionalidades(Program.rol).Show();
+            new Abm_Ruta.ABM_RUTA().Show();
             this.Close();
             return;
+        }
+
+        private bool estaCompleto(){
+            if (Validaciones.Validaciones.validarComboBox(comboBox2,"Completar ciudad de destino")){
+                if (Validaciones.Validaciones.validarComboBox(comboBox1,"Completar ciudad de Origen")){
+                    if (Validaciones.Validaciones.validarComboBox(comboBox3,"Completar el tipo de servicio")){
+                        if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1,"Completar precio base")){
+                            if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox2,"Completar precio base de encomienda")){
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+
+        private void button1_Click(object sender, EventArgs e) //BOTON CONFIRMAR
+        {
+            //Falta implementar la insercion en la base
+            if (this.estaCompleto())
+            {
+                String ciudadDestino;
+                String ciudadOrigen;
+                String servicio;
+                String precioBase;
+                String precioBaseEncomienda;
+
+                MessageBox.Show("Falta implementar la insercion en la base");
+                MessageBox.Show("Operacion exitosa";
+                new ABM_RUTA().Show();
+                this.Close();
+            }
+
+            
+           
         }
     }
 }
