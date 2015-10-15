@@ -94,6 +94,7 @@
             this.Controls.Add(this.listBox1);
             this.Name = "buscarAeronave";
             this.Text = "buscarAeronave";
+            this.Load += new System.EventHandler(this.buscarAeronave_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

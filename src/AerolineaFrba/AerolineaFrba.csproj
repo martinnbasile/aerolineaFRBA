@@ -44,11 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abm Aeronave\Form1.cs">
+    <Compile Include="Abm Aeronave\bajaFueraDeServicio.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm Aeronave\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Abm Aeronave\bajaFueraDeServicio.Designer.cs">
+      <DependentUpon>bajaFueraDeServicio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Abm Aeronave\buscarAeronave.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Aeronave\buscarAeronave.Designer.cs">
+      <DependentUpon>buscarAeronave.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Ciudad\buscarCiudad.cs">
       <SubType>Form</SubType>
@@ -200,6 +206,12 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Validaciones\Validaciones.cs" />
+    <EmbeddedResource Include="Abm Aeronave\bajaFueraDeServicio.resx">
+      <DependentUpon>bajaFueraDeServicio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Aeronave\buscarAeronave.resx">
+      <DependentUpon>buscarAeronave.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Abm Ciudad\buscarCiudad.resx">
       <DependentUpon>buscarCiudad.cs</DependentUpon>
     </EmbeddedResource>

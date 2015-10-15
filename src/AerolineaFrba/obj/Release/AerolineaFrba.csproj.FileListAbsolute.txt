@@ -75,3 +75,5 @@ C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Log
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Ruta.ABM_RUTA.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Ruta.modificarRuta.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Ruta.NuevaRuta.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Aeronave.bajaFueraDeServicio.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Aeronave.buscarAeronave.resources

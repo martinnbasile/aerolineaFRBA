@@ -34,7 +34,15 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             if (Validaciones.Validaciones.validarListBox(listBox1, "Selecciona una Aeronave a dar de baja por Fuera de Servicio"))
             {
+                String aeronaveSeleccionada = listBox1.Text;
+                new bajaFueraDeServicio(aeronaveSeleccionada).Show();
+                this.Close();
             }
+        }
+
+        private void buscarAeronave_Load(object sender, EventArgs e)
+        {
+            //ConexionALaBase.Conexion.consultarBase("select 
         }
     }
 }
