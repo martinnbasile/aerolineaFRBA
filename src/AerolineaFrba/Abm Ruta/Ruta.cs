@@ -29,5 +29,24 @@ namespace AerolineaFrba.Abm_Ruta
         {
             return origen;
         }
+
+        public string getDestino()
+        {
+            return destino;
+        }
+
+        public string getServicio()
+        {
+            return servicio;
+        }
+
+        public string getPrecioBase()
+        {
+            return precioBase;
+        }
+        public string getPrecioEncomienda()
+        {
+            return precioBaseEncomienda;
+        }
     }
 }
