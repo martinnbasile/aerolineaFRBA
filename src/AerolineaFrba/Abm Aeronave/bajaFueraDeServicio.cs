@@ -19,32 +19,24 @@ namespace AerolineaFrba.Abm_Aeronave
             InitializeComponent();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void bajaFueraDeServicio_Load(object sender, EventArgs e)
         {
 
         }
 
-        private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        public void recibirFecha(DateTime unaFecha)
+        {
+            String fechaReinicioDeServicio = unaFecha.ToShortDateString();
+            textBox1.Text = fechaReinicioDeServicio;
+        }
+
+   
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new calendario(this).Show();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }

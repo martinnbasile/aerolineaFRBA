@@ -34,29 +34,31 @@
             // 
             // button1
             // 
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(113, 180);
+            this.button1.Location = new System.Drawing.Point(42, 180);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(122, 23);
+            this.button1.Size = new System.Drawing.Size(164, 23);
             this.button1.TabIndex = 3;
-            this.button1.Text = "Confirmar fecha";
+            this.button1.Text = "Confirmar";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // monthCalendar1
             // 
-            this.monthCalendar1.Location = new System.Drawing.Point(8, 8);
+            this.monthCalendar1.Location = new System.Drawing.Point(8, 6);
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 2;
+            this.monthCalendar1.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar1_DateChanged);
             // 
             // calendario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(243, 209);
+            this.ClientSize = new System.Drawing.Size(243, 213);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.monthCalendar1);
             this.Name = "calendario";
-            this.Text = "Calendario";
+            this.Text = "calendario";
+            this.Load += new System.EventHandler(this.calendario_Load);
             this.ResumeLayout(false);
 
         }

@@ -46,5 +46,10 @@ namespace AerolineaFrba.Validaciones
             reader.Read();
             return reader.GetString(0);
         }
+        public static bool validarCalendario(MonthCalendar unCalendario)
+        {
+            // unCalendario.SelectionRange.Start
+            return true;
+        }        
     }
 }

@@ -49,6 +49,10 @@ namespace AerolineaFrba.Funcionalidades
                         new Abm_Ruta.ABM_RUTA().Show();
                         this.Close();
                         break;
+                    case "ABM AERONAVES":
+                        new Abm_Aeronave.buscarAeronave().Show();
+                        this.Close();
+                        break;
                     default:
                         MessageBox.Show("Funcionalidad aun no disponible");
                         break;

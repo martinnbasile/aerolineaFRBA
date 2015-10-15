@@ -77,3 +77,4 @@ C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Ruta.NuevaRuta.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Aeronave.bajaFueraDeServicio.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Aeronave.buscarAeronave.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Release\AerolineaFrba.Abm_Aeronave.calendario.resources

@@ -42,7 +42,12 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void buscarAeronave_Load(object sender, EventArgs e)
         {
-            //ConexionALaBase.Conexion.consultarBase("select 
+            ConexionALaBase.CargadorDeEstructuras.cargarListBox(listBox1,ConexionALaBase.Conexion.consultarBase("select matricula from Aeronaves"));
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
