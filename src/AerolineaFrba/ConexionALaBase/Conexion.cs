@@ -10,7 +10,7 @@ namespace AerolineaFrba.ConexionALaBase
 {
     class Conexion
     {
-        SqlConnection conexxxxx = conectarBase();
+        public static SqlConnection conexxxxx = conectarBase();
        
 
         public static SqlConnection conectarBase()

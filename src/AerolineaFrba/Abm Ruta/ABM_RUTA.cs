@@ -22,5 +22,12 @@ namespace AerolineaFrba.Abm_Ruta
             new NuevaRuta().Show();
             this.Close();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new modificarRuta().Show();
+            this.Close();
+            return;
+        }
     }
 }
