@@ -277,9 +277,8 @@ go
 insert into Productos_Milla (Descripcion,Cantidad,Millas_Necesarias)
 values ('Set de perfumes',100,200)
 go
+
 insert into Funcionalidades(Descripcion) values ('ABM ROL')
-go
-insert into Funcionalidades(Descripcion) values ('ABM LOGIN')
 go
 insert into Funcionalidades(Descripcion) values ('ABM CIUDADES')
 go
@@ -287,17 +286,19 @@ insert into Funcionalidades(Descripcion) values ('ABM RUTAS')
 go
 insert into Funcionalidades(Descripcion) values ('ABM AERONAVES')
 go
-insert into Funcionalidades(Descripcion) values ('ABM GENERAR VIAJES')
+insert into Funcionalidades(Descripcion) values ('GENERAR VIAJE')
 go
-insert into Funcionalidades(Descripcion) values ('ABM COMPRAS')
+insert into Funcionalidades(Descripcion) values ('COMPRAS')
 go
-insert into Funcionalidades(Descripcion) values ('ABM CANCELAR')
+insert into Funcionalidades(Descripcion) values ('DEVOLUCIONES Y CANCELACIONES')
 go
-insert into Funcionalidades(Descripcion) values ('ABM CONSULTAR MILLAS')
+insert into Funcionalidades(Descripcion) values ('CONSULTAR MILLAS')
 go
-insert into Funcionalidades(Descripcion) values ('ABM CANJEAR')
+insert into Funcionalidades(Descripcion) values ('CANJEAR MILLAS')
 go
-insert into Funcionalidades(Descripcion) values ('ABM LISTADO ESTADISTICO')
+insert into Funcionalidades(Descripcion) values ('LISTADO ESTADISTICO')
+go
+insert into Funcionalidades(Descripcion) values ('REGISTRAR LLEGADA A DESTINO')
 go
 insert into Roles(Descripcion) values ('Administrador')
 go

@@ -42,6 +42,10 @@ namespace AerolineaFrba.Funcionalidades
                         new buscarRol().Show();
                         this.Close();
                         break;
+                    case "ABM CONSULTAR MILLAS":
+                        new Canje_Millas.ConsultaMillas().Show();
+                        this.Close();
+                        break;
                     case "ABM CIUDADES":
                         new buscarCiudad().Show();
                         this.Close();
