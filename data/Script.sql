@@ -341,3 +341,10 @@ from Rutas_Aereas r join Ciudades c1 on (r.Ciudad_Origen=c1.Id)
 					join Ciudades c2 on (r.Ciudad_Destino=c2.Id)
 					join Tipos_Servicio t on (r.Tipo_Servicio=t.Id)
 go
+
+
+create view funcionalidadPorRol as
+select f.descripcion as 'Descripcion', r.Descripcion as 'Rol'
+from funcionalidades f join Roles_Funcionalidades rf on (f.Id=rf.Funcionalidad) 
+					   join Roles r on (r.Id=rf.Rol)
+go

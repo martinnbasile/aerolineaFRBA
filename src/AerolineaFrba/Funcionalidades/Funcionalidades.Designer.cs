@@ -82,7 +82,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Name = "Funcionalidades";
-            this.Text = "FuncionalidadesAdmin";
+            this.Text = "Funcionalidades";
             this.Load += new System.EventHandler(this.Funcionalidades_Load_1);
             this.ResumeLayout(false);
             this.PerformLayout();

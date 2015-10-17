@@ -23,7 +23,10 @@ namespace AerolineaFrba
             Application.SetCompatibleTextRenderingDefault(false);
             if (MessageBox.Show("¿ES UN TERMINAL KIOSCO?", "INICIO", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                MessageBox.Show("TERMINAL KIOSCO");
+                rol = "Cliente";
+                username = "";
+                password = "";
+                new Funcionalidades.Funcionalidades().Show();
             }
             else new Login.Login().Show();
             Application.Run();
