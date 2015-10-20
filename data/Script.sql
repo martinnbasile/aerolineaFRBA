@@ -334,6 +334,123 @@ close cursorCliente
 deallocate cursorCliente
 commit
 go
+alter table Rutas_Aereas
+drop column Fecha_Salida
+go
+alter table Rutas_Aereas
+drop column Fecha_Estimada
+go
+alter table Rutas_Aereas
+drop column Fecha_llegada
+go
+alter table Rutas_Aereas
+add Estado int not null 
+go
+alter table Viajes
+add Fecha_Salida date not null
+go
+alter table Viajes
+add Fecha_Estimada_llegada date not null
+go
+alter table Viajes
+add Fecha_llegada date
+go 
+create table KG(
+Viaje int not null,
+Kg int not null)
+go
+alter table KG
+add constraint FK_Viajes FOREIGN KEY (Viaje) references Viajes(Id)
+go
+alter table Butacas
+add constraint FK_Viajes_2 FOREIGN KEY (Viaje) references Viajes(Id)
+go
+insert into Aeronaves
+select distinct Aeronave_Matricula,'1999-01-01',Aeronave_Modelo, 
+case 
+	when Aeronave_Fabricante='Airbus' then 1
+	when Aeronave_Fabricante='Bombardier' then 2
+	when Aeronave_Fabricante='Embraer' then 3
+	when Aeronave_Fabricante='Boeing' then 1
+	end,
+case
+	when Tipo_Servicio='Cama' then 3
+	when Tipo_Servicio='Común' then 1
+	when Tipo_Servicio='Ejecutivo' then 2 
+	when Tipo_Servicio='Semi-Cama' then 4
+	when Tipo_Servicio='Premium' then 5
+	end,
+	'NO','NO',NULL,NULL,NULL,1250,
+	Aeronave_KG_Disponibles 
+from gd_esquema.Maestra
+order by Aeronave_Matricula
+go
+Create table Intentos_login(
+	Id_login int identity(1,1) primary key,
+	Codigo_usuario int not null,
+	Es_correcto bit not null,
+	foreign key (Codigo_usuario) references Usuarios(Id)
+)
+go
+alter table Intentos_Fallidos
+drop constraint FK_User
+go
+drop table Intentos_Fallidos
+go
+Create table Intentos_fallidos(
+	Id_fallido int identity(1,1) primary key,
+	Cod_login int not null,
+	foreign key (Cod_login) references Intentos_login(Id_login)
+)
+go
+alter table Inhabilitados
+add fecha datetime not null
+go
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 create view vista_rutas_aereas as
 select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
