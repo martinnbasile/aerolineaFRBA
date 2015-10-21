@@ -1,5 +1,6 @@
-﻿Use GD2C2015
+Use GD2C2015
 
+/*
 Create Procedure limpiarBase as
 Drop table Butacas
 Drop table Cambios_Millas
@@ -25,6 +26,7 @@ Drop table tipos_Servicio
 go
 
 exec limpiarBase
+*/
 
 create Table Ciudades(
 Id int identity(1,1) primary key,
@@ -80,7 +82,7 @@ Nombre varchar(40) not null,
 Apellido varchar(40) not null,
 Direccion varchar(60) not null,
 Telefono numeric(30) not null,
-Mail varchar(50) unique not null,
+Mail varchar(50) not null,
 Fecha_Nacimiento smalldatetime not null,
 Usuario int)
 go
@@ -330,9 +332,6 @@ insert into Roles(Descripcion) values ('Administrador')
 go
 insert into Roles(Descripcion) values ('Cliente')
 go
-alter table Clientes
-drop constraint UQ__Clientes__2724B2D1B1E33E98
-go
 begin transaction
 Declare cursorCliente Cursor for
 select distinct Cli_Nombre,Cli_Apellido,Cli_Dni,Cli_Dir,
@@ -351,7 +350,6 @@ fetch next from cursorCliente into @nombre,@apellido,@Dni,@Dir,
 while @@FETCH_STATUS=0
 begin
 Insert into Usuarios(Username,Password,Rol,Pregunta_Secreta,Respuesta) values(@Dni,'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'Sos Dios?','Algo a ver')
-insert into usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'Sos Dios?','Algo a ver')
 Insert into Clientes(Usuario,Nombre,Apellido,DNI,Mail,Telefono,Direccion,Fecha_nacimiento) values((Select MAX(Id)from Usuarios),@nombre,@apellido,@Dni,@mail,@telefono,@Dir,@fnac)
 fetch next from cursorCliente into @nombre,@apellido,@Dni,@Dir,
 @telefono,@mail,@fnac
@@ -359,6 +357,8 @@ end
 close cursorCliente
 deallocate cursorCliente
 commit
+go
+insert into usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'Sos Dios?','Algo a ver')
 go
 alter table Rutas_Aereas
 drop column Fecha_Salida
