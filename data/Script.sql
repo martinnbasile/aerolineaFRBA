@@ -1,5 +1,31 @@
 ﻿Use GD2C2015
 
+Create Procedure limpiarBase as
+Drop table Butacas
+Drop table Cambios_Millas
+Drop table Cancelaciones
+Drop table Intentos_Fallidos
+Drop table Inhabilitados
+Drop table Millas
+Drop table Paquetes
+Drop table Pasajes
+Drop table Viajes
+Drop table Rutas_Aereas
+Drop table Roles_Funcionalidades
+Drop table Tarjetas_Credito
+Drop table Productos_Milla
+Drop table Aeronaves
+Drop table Fabricantes
+Drop table Funcionalidades
+Drop table Usuarios
+Drop table Roles
+Drop table Ciudades
+Drop table Clientes
+Drop table tipos_Servicio
+go
+
+exec limpiarBase
+
 create Table Ciudades(
 Id int identity(1,1) primary key,
 Descripcion varchar(70) not null unique)
@@ -407,51 +433,6 @@ alter table Inhabilitados
 add fecha datetime not null
 go
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 create view vista_rutas_aereas as
 select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
 from Rutas_Aereas r join Ciudades c1 on (r.Ciudad_Origen=c1.Id)
@@ -465,3 +446,9 @@ select f.descripcion as 'Descripcion', r.Descripcion as 'Rol'
 from funcionalidades f join Roles_Funcionalidades rf on (f.Id=rf.Funcionalidad) 
 					   join Roles r on (r.Id=rf.Rol)
 go
+
+
+insert into Usuarios
+values ('martinnb','62c66a7a5dd70c3146618063c344e531e6d4b59e379808443ce962b3abd63c5a',1,'Sos dios?','no')
+go
+
