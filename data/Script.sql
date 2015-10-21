@@ -432,6 +432,93 @@ go
 alter table Inhabilitados
 add fecha datetime not null
 go
+alter table Viajes
+drop column Fecha_Salida
+go
+alter table Viajes
+drop column Fecha_Estimada_llegada
+go
+alter table Viajes
+drop column Fecha_llegada
+go
+alter table Viajes
+add Fecha_salida datetime not null
+go
+alter table Viajes
+add Fecha_Estimada_llegada datetime not null
+go
+alter table Viajes
+add Fecha_llegada datetime
+go
+Create FUNCTION devuelveIDD
+(
+    @descrip varchar(100)
+)
+RETURNS int
+AS
+BEGIN
+    Declare @id int;
+    SELECT @id =  id from Ciudades 
+    where Descripcion = @descrip
+
+    RETURN  @id
+
+END
+GO
+insert into Rutas_Aereas
+select dbo.devuelveIDD( A.Ruta_Ciudad_Destino),dbo.devuelveIDD( a.Ruta_Ciudad_Origen),
+case
+when a.Tipo_Servicio='Cama' then 3
+	when a.Tipo_Servicio='Común' then 1
+	when a.Tipo_Servicio='Ejecutivo' then 2 
+	when a.Tipo_Servicio='Semi-Cama' then 4
+	when a.Tipo_Servicio='Premium' then 5
+	end
+	AS Tipo
+	,b.Ruta_Precio_BasePasaje,A.Ruta_Precio_BaseKG,1
+from 
+(select distinct Ruta_Ciudad_Destino,Ruta_Ciudad_Origen, Tipo_Servicio,Ruta_Precio_BaseKG
+from gd_esquema.Maestra 
+where Ruta_Precio_BaseKG != 0.00
+group by Ruta_Ciudad_Destino,Ruta_Ciudad_Origen, Tipo_Servicio,Ruta_Precio_BaseKG
+)A
+inner join
+(select distinct Ruta_Ciudad_Destino,Ruta_Ciudad_Origen, Tipo_Servicio,Ruta_Precio_BasePasaje
+from gd_esquema.Maestra 
+where Ruta_Precio_BasePasaje != 0.00
+group by Ruta_Ciudad_Destino,Ruta_Ciudad_Origen, Tipo_Servicio,Ruta_Precio_BasePasaje)B
+on a.Ruta_Ciudad_Destino=b.Ruta_Ciudad_Destino
+and
+a.Ruta_Ciudad_Origen=b.Ruta_Ciudad_Origen
+and 
+a.Tipo_Servicio=b.Tipo_Servicio
+go
+create FUNCTION devuelveRutaa
+(
+	@ciudad_origen int,
+	@ciudad_destino int
+)
+RETURNS int
+AS
+Begin
+	Declare @id int
+	select @id = Id from Rutas_Aereas A
+	where	@ciudad_origen=A.Ciudad_Origen and
+			@ciudad_destino=A.Ciudad_Destino
+
+			RETURN @id
+
+END
+go
+insert into Viajes
+select Aeronave_Matricula,dbo.devuelveRutaa(dbo.devuelveIDD(Ruta_Ciudad_Origen),
+dbo.devuelveIDD(Ruta_Ciudad_Destino)),
+FechaSalida,Fecha_LLegada_Estimada,Fecha_LLegada_Estimada
+from gd_esquema.Maestra
+group by Aeronave_Matricula,Ruta_Ciudad_Destino,Ruta_Ciudad_Origen,
+FechaSalida,FechaLLegada,Fecha_LLegada_Estimada
+go
+
 
 create view vista_rutas_aereas as
 select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
