@@ -397,7 +397,7 @@ case
 	when Aeronave_Fabricante='Airbus' then 1
 	when Aeronave_Fabricante='Bombardier' then 2
 	when Aeronave_Fabricante='Embraer' then 3
-	when Aeronave_Fabricante='Boeing' then 1
+	when Aeronave_Fabricante='Boeing' then 4
 	end,
 case
 	when Tipo_Servicio='Cama' then 3
