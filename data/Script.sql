@@ -1,6 +1,7 @@
 Use GD2C2015
 
-/*
+drop procedure limpiarBase
+
 Create Procedure limpiarBase as
 Drop table Butacas
 Drop table Cambios_Millas
@@ -10,23 +11,27 @@ Drop table Inhabilitados
 Drop table Millas
 Drop table Paquetes
 Drop table Pasajes
-Drop table Viajes
-Drop table Rutas_Aereas
 Drop table Roles_Funcionalidades
 Drop table Tarjetas_Credito
 Drop table Productos_Milla
-Drop table Aeronaves
-Drop table Fabricantes
 Drop table Funcionalidades
-Drop table Usuarios
-Drop table Roles
-Drop table Ciudades
-Drop table Clientes
-Drop table tipos_Servicio
+Drop table Intentos_login
+Drop table KG
+Drop table Usuario_rol
+Drop table Viajes
+Drop table Rutas_Aereas
+Drop table Aeronaves 
+Drop table Tipos_Servicio 
+Drop table Fabricantes 
+Drop table Ciudades 
+Drop table tarjetas_Credito
+Drop table Clientes 
+Drop table Usuarios 
+Drop table Roles 
 go
 
 exec limpiarBase
-*/
+
 
 create Table Ciudades(
 Id int identity(1,1) primary key,
@@ -509,6 +514,18 @@ from gd_esquema.Maestra
 group by Aeronave_Matricula,Ruta_Ciudad_Destino,Ruta_Ciudad_Origen,
 FechaSalida,FechaLLegada,Fecha_LLegada_Estimada
 go
+
+alter table KG
+add Fecha_Compra datetime not null 
+go
+alter table KG 
+add Cliente int not null
+go
+alter table KG
+add constraint Cliente_Paquetero foreign key(Cliente) references Clientes(Id)
+go
+
+
 
 
 create view vista_rutas_aereas as
