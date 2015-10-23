@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,6 +22,9 @@ namespace AerolineaFrba
             
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            ConexionALaBase.Conexion.verificarConexion();
+            //ConexionALaBase.Conexion.ejecutarNonQuery("exec actualizarFecha(" + System.DateTime.Today.ToShortDateString() + ")");
+            /* Ale lo va a crear y hace el convert adentro */
             if (MessageBox.Show("¿ES UN TERMINAL KIOSCO?", "INICIO", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 rol = "Cliente";

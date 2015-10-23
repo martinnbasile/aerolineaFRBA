@@ -21,7 +21,8 @@ namespace AerolineaFrba.Funcionalidades
             InitializeComponent();
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             //TODO cambiar el select cuando se cree e inicialice la tabla Rol_Funcionalidades
-            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("select Descripcion from funcionalidadPorRol where Rol='"+rolElegido+"'");
+            //SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("select Descripcion from funcionalidadPorRol where Rol='"+rolElegido+"'");
+            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("select Descripcion from funcionalidades");
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
             
         }
@@ -42,7 +43,25 @@ namespace AerolineaFrba.Funcionalidades
                         new buscarRol().Show();
                         this.Close();
                         break;
-                    case "ABM CONSULTAR MILLAS":
+                    case "CANJEAR MILLAS":
+                        MessageBox.Show("Todavia no implementado");
+                        break;
+                    case "COMPRAS":
+                        MessageBox.Show("Todavia no implementado");
+                        break;
+                    case "DEVOLUCIONES Y CANCELACIONES":
+                        MessageBox.Show("Todavia no implementado");
+                        break;
+                    case "GENERAR VIAJE":
+                        MessageBox.Show("Todavia no implementado");
+                        break;
+                    case "LISTADO ESTADISTICO":
+                        MessageBox.Show("Todavia no implementado");
+                        break;
+                    case "REGISTRAR LLEGADA A DESTINO":
+                        MessageBox.Show("Todavia no implementado");
+                        break;
+                    case "CONSULTAR MILLAS":
                         new Canje_Millas.ConsultaMillas().Show();
                         this.Close();
                         break;
