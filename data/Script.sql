@@ -255,6 +255,15 @@ Viaje int not null,
 Nro int not null,
 Ubicacion varchar(30))
 go
+create table Usuario_rol(
+
+cod_usuario int not null foreign key references Usuarios,
+cod_rol int not null foreign key references Roles
+
+
+)
+go
+
 insert into Fabricantes (Descripcion)
 select distinct Aeronave_Fabricante from gd_esquema.Maestra
 go
@@ -345,13 +354,16 @@ Declare @Dir varchar(100)
 Declare @telefono numeric(12)
 Declare @mail varchar(50)
 Declare @fnac date
+Declare @temp int
 open cursorCliente
 fetch next from cursorCliente into @nombre,@apellido,@Dni,@Dir,
 @telefono,@mail,@fnac
 while @@FETCH_STATUS=0
 begin
-Insert into Usuarios(Username,Password,Rol,Pregunta_Secreta,Respuesta) values(@Dni,'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'Sos Dios?','Algo a ver')
-Insert into Clientes(Usuario,Nombre,Apellido,DNI,Mail,Telefono,Direccion,Fecha_nacimiento) values((Select MAX(Id)from Usuarios),@nombre,@apellido,@Dni,@mail,@telefono,@Dir,@fnac)
+Insert into Usuarios(Username,Password,Pregunta_Secreta,Respuesta) values(@Dni,'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7','Sos Dios?','Algo a ver')
+set @temp=(Select MAX(Id)from Usuarios)
+Insert into Usuario_rol values(@temp,1)
+Insert into Clientes(Usuario,Nombre,Apellido,DNI,Mail,Telefono,Direccion,Fecha_nacimiento) values(@temp,@nombre,@apellido,@Dni,@mail,@telefono,@Dir,@fnac)
 fetch next from cursorCliente into @nombre,@apellido,@Dni,@Dir,
 @telefono,@mail,@fnac
 end
