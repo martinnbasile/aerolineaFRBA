@@ -57,7 +57,8 @@ create Table Usuarios(
 Id int identity(1,1) primary key,
 Username varchar(50) not null unique,
 Password varchar(256) not null,
-Rol int)
+Rol int,
+Estado varchar(10))
 go
 Alter table Usuarios
 add constraint FK_Rol FOREIGN KEY (Rol) references Roles(Id)
@@ -539,3 +540,93 @@ insert into Usuarios
 values ('martinnb','62c66a7a5dd70c3146618063c344e531e6d4b59e379808443ce962b3abd63c5a',1,'Sos dios?','no')
 go
 
+Create  trigger CuaandoSeIngresanLoginsIncorrectos
+on Intentos_login
+for  insert
+as
+Begin transaction
+Declare @num_login int
+Declare @Correcto bit 
+select Id_login,Es_Correcto into #tablaIncorrectos  from inserted
+where Es_Correcto=0
+
+if ((select count(*) from #tablaIncorrectos
+)>0)
+begin
+Declare cursorDeIncorrectos Cursor
+for select * from #tablaIncorrectos
+open cursorDeIncorrectos
+fetch next from cursorDeIncorrectos into @num_login,@Correcto
+while(@@FETCH_STATUS=0)
+begin
+Insert into Intentos_fallidos (Cod_login)values (@num_login)
+fetch next from cursorDeIncorrectos into @num_login,@Correcto
+end
+
+close cursorDeIncorrectos
+deallocate cursorDeIncorrectos
+end
+drop table #tablaIncorrectos
+commit;
+go
+
+
+Create trigger CuandoSeIngresanLoginsCorrectos
+on Intentos_login
+for  insert
+as
+Begin transaction
+Declare @num_login int
+Declare @Correcto bit 
+Declare @cantidad int
+declare @cod_usuario int
+
+select Id_login,Es_Correcto,Codigo_usuario into #tablaCorrectos  from inserted
+where Es_Correcto=1
+
+if ((select count(*) from #tablaCorrectos
+)>0)
+begin
+Declare cursorDeIncorrectos Cursor
+for select * from #tablaCorrectos
+open cursorDeIncorrectos
+fetch next from cursorDeIncorrectos into @num_login,@Correcto,@cod_usuario
+while(@@FETCH_STATUS=0)
+begin
+Delete from Intentos_fallidos where @cod_usuario=(select codigo_usuario from intentos_login i where i.id_login=cod_login)   
+fetch next from cursorDeIncorrectos into @num_login,@Correcto,@cod_usuario
+end
+close cursorDeIncorrectos
+deallocate cursorDeIncorrectos
+end
+drop table #tablaCorrectos
+
+commit;
+go
+
+
+Create trigger CuandoSeIngresaUnTercerLoginFallidoSEInhabilita
+on Intentos_fallidos
+for  insert
+as
+Begin transaction
+Declare @num_fallido int
+Declare @Cod_login int
+Declare cursorDeFallidos Cursor
+for select * from inserted
+open cursorDeFallidos
+fetch next from cursorDeFallidos into @num_fallido,@Cod_login
+while(@@FETCH_STATUS=0)
+begin
+if ((select count(*) from Intentos_fallidos,Usuario,Intentos_login
+where Intentos_fallidos.Cod_login=Intentos_login.Id_login and Intentos_login.Codigo_usuario=Usuario.Id_usuario and id_usuario=(Select Codigo_usuario from Intentos_login where Id_login=@Cod_login))>2)
+update Usuario
+set Estado='inhabilitado'
+where Id_usuario = (Select Codigo_usuario from Intentos_login where Id_login=@Cod_login)
+fetch next from cursorDeFallidos into @num_fallido,@Cod_login
+
+end
+close cursorDeFallidos
+deallocate cursorDeFallidos
+commit;
+go	
