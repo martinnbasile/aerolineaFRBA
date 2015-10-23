@@ -537,6 +537,18 @@ group by Aeronave_Matricula,Ruta_Ciudad_Destino,Ruta_Ciudad_Origen,
 FechaSalida,FechaLLegada,Fecha_LLegada_Estimada
 go
 
+alter table KG
+add Fecha_Compra datetime not null 
+go
+alter table KG 
+add Cliente int not null
+go
+alter table KG
+add constraint Cliente_Paquetero foreign key(Cliente) references Clientes(Id)
+go
+
+
+
 
 create view vista_rutas_aereas as
 select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
