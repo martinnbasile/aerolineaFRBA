@@ -85,7 +85,7 @@ Direccion varchar(60) not null,
 Telefono numeric(30) not null,
 Mail varchar(50) not null,
 Fecha_Nacimiento smalldatetime not null,
-Usuario int)
+)
 go
 Alter table Clientes
 add constraint FK_User_Cliente FOREIGN KEY (Usuario) references Usuarios(Id)
@@ -342,35 +342,13 @@ insert into Roles(Descripcion) values ('Administrador')
 go
 insert into Roles(Descripcion) values ('Cliente')
 go
-begin transaction
-Declare cursorCliente Cursor for
-select distinct Cli_Nombre,Cli_Apellido,Cli_Dni,Cli_Dir,
-Cli_Telefono,Cli_Mail,Cli_Fecha_Nac
-from gd_esquema.Maestra
-Declare @nombre varchar(30)
-Declare @apellido varchar(30)
-Declare @Dni int
-Declare @Dir varchar(100) 
-Declare @telefono numeric(12)
-Declare @mail varchar(50)
-Declare @fnac date
-Declare @temp int
-open cursorCliente
-fetch next from cursorCliente into @nombre,@apellido,@Dni,@Dir,
-@telefono,@mail,@fnac
-while @@FETCH_STATUS=0
-begin
-Insert into Usuarios(Username,Password,Pregunta_Secreta,Respuesta) values(@Dni,'e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7','Sos Dios?','Algo a ver')
-set @temp=(Select MAX(Id)from Usuarios)
-Insert into Usuario_rol values(@temp,1)
-Insert into Clientes(Usuario,Nombre,Apellido,DNI,Mail,Telefono,Direccion,Fecha_nacimiento) values(@temp,@nombre,@apellido,@Dni,@mail,@telefono,@Dir,@fnac)
-fetch next from cursorCliente into @nombre,@apellido,@Dni,@Dir,
-@telefono,@mail,@fnac
-end
-close cursorCliente
-deallocate cursorCliente
-commit
+alter table Clientes add Unique(DNI)
 go
+insert into Clientes(DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_Nacimiento) 
+(select distinct
+Cli_Dni,Cli_Nombre,Cli_Apellido,Cli_Dir,Cli_Telefono,Cli_Mail,Cli_Fecha_Nac from gd_esquema.Maestra)
+go
+
 insert into usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'Sos Dios?','Algo a ver')
 go
 alter table Rutas_Aereas
