@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 
 
 namespace AerolineaFrba.ConexionALaBase
@@ -44,6 +45,16 @@ namespace AerolineaFrba.ConexionALaBase
             comandoo.CommandText = unaQuery;
             comandoo.ExecuteNonQuery();
             return;
+        }
+
+        public static void verificarConexion()
+        {
+            try { ConexionALaBase.Conexion.consultarBase("Select 10"); }
+            catch (SqlException exc)
+            {
+                MessageBox.Show("Error de conexion"); //verifica la contraseña del user gd
+                MessageBox.Show(exc.Message);
+            }
         }
 
     }
