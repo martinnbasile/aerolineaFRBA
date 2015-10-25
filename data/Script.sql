@@ -596,6 +596,7 @@ select distinct dbo.devuelveViaje3(dbo.devuelveRutaaa(dbo.devuelveIDD(Ruta_Ciuda
 dbo.devuelveIDD(Ruta_Ciudad_Destino),dbo.devuelveTipoServicio(Tipo_Servicio)),Aeronave_Matricula,
 FechaSalida,Fecha_Llegada_Estimada,FechaLlegada),Butaca_Nro,Paquete_FechaCompra,dbo.devuelveNumeroCliente(Cli_dni) 
 from gd_esquema.maestra
+where Pasaje_codigo !=0
 group by Ruta_Ciudad_Origen,Ruta_Ciudad_Destino,Tipo_servicio,Aeronave_Matricula,FechaSalida,
 Fecha_llegada_Estimada,Fechallegada,Butaca_Nro,Paquete_fechaCompra,Cli_Dni
 
