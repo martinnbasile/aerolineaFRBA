@@ -489,10 +489,12 @@ a.Ruta_Ciudad_Origen=b.Ruta_Ciudad_Origen
 and 
 a.Tipo_Servicio=b.Tipo_Servicio
 go
-create FUNCTION devuelveRutaa
+
+create FUNCTION devuelveRutaaa
 (
 	@ciudad_origen int,
-	@ciudad_destino int
+	@ciudad_destino int,
+	@Tipo_Servicio int
 )
 RETURNS int
 AS
@@ -500,31 +502,102 @@ Begin
 	Declare @id int
 	select @id = Id from Rutas_Aereas A
 	where	@ciudad_origen=A.Ciudad_Origen and
-			@ciudad_destino=A.Ciudad_Destino
+			@ciudad_destino=A.Ciudad_Destino and
+			@Tipo_Servicio=A.Tipo_Servicio
 
 			RETURN @id
 
 END
 go
+create FUNCTION devuelveTipoServicio(
+	@Servicio varchar(50)
+	)
+RETURNS int
+AS
+Begin
+	Declare @id int
+	select @id = ID from Tipos_Servicio
+	where @Servicio=Descripcion
+
+	RETURN @id
+
+END
+go
 insert into Viajes
-select Aeronave_Matricula,dbo.devuelveRutaa(dbo.devuelveIDD(Ruta_Ciudad_Origen),
-dbo.devuelveIDD(Ruta_Ciudad_Destino)),
-FechaSalida,Fecha_LLegada_Estimada,Fecha_LLegada_Estimada
+select Aeronave_Matricula,dbo.devuelveRutaaa(dbo.devuelveIDD(Ruta_Ciudad_Origen),
+dbo.devuelveIDD(Ruta_Ciudad_Destino),dbo.devuelveTipoServicio(Tipo_Servicio)),
+FechaSalida,Fecha_LLegada_Estimada,FechaLlegada
 from gd_esquema.Maestra
 group by Aeronave_Matricula,Ruta_Ciudad_Destino,Ruta_Ciudad_Origen,
-FechaSalida,FechaLLegada,Fecha_LLegada_Estimada
+FechaSalida,FechaLLegada,Fecha_LLegada_Estimada,Tipo_Servicio
 go
+Create FUNCTION devuelveNumeroCliente
+(
+    @DNI numeric(20)
+)
+RETURNS int
+AS
+BEGIN
+    Declare @id int;
+    SELECT @id =  Id from Clientes 
+    where DNI = @DNI
 
-alter table KG
-add Fecha_Compra datetime not null 
-go
-alter table KG 
-add Cliente int not null
-go
-alter table KG
-add constraint Cliente_Paquetero foreign key(Cliente) references Clientes(Id)
-go
+    RETURN  @id
 
+END
+GO
+Create FUNCTION devuelveViaje3
+(
+    @ruta int,
+	@Matricula varchar(10),
+	@FechaSalida varchar(100),
+	@FechaEstimada varchar(100),
+	@FechaLlegada varchar(100)
+)
+RETURNS int
+AS
+BEGIN
+    Declare @id int;
+    SELECT @id =  Id from Viajes 
+    where @Matricula=Matricula and
+	@ruta=Ruta and @FechaSalida=Fecha_salida
+	and @FechaEstimada=Fecha_Estimada_llegada and
+	@Fechallegada=Fecha_llegada 
+
+    RETURN  @id
+
+END
+GO
+insert into Paquetes
+select dbo.devuelveViaje3(dbo.devuelveRutaaa(dbo.devuelveIDD(Ruta_Ciudad_Origen),
+dbo.devuelveIDD(Ruta_Ciudad_Destino),dbo.devuelveTipoServicio(Tipo_Servicio)),Aeronave_Matricula,
+FechaSalida,Fecha_Llegada_Estimada,FechaLlegada),Paquete_Kg,Paquete_FechaCompra,dbo.devuelveNumeroCliente(Cli_Dni)
+from gd_esquema.maestra
+where Paquete_KG != 0
+group by Tipo_Servicio,Fecha_llegada_estimada,Cli_Dni,Paquete_KG,Paquete_FechaCompra
+,Ruta_Ciudad_Origen,Ruta_Ciudad_Destino,Aeronave_Matricula,FechaSalida,FechaLlegada
+go
+drop table KG
+go
+Alter table Butacas
+add Estado varchar(50) not null
+go
+insert into Butacas
+select distinct dbo.devuelveViaje3(dbo.devuelveRutaaa(dbo.devuelveIDD(Ruta_Ciudad_Origen),
+dbo.devuelveIDD(Ruta_Ciudad_Destino),dbo.devuelveTipoServicio(Tipo_Servicio)),Aeronave_Matricula,
+FechaSalida,Fecha_Llegada_Estimada,FechaLlegada),Butaca_Nro,Butaca_Tipo,'Vendida' 
+from gd_esquema.maestra
+where Pasaje_codigo !=0
+group by Ruta_ciudad_origen,Ruta_Ciudad_destino,Tipo_Servicio,Aeronave_matricula,FechaSalida,
+Fecha_llegada_estimada,FechaLlegada,Butaca_Nro,Butaca_tipo
+go
+insert into Pasajes
+select distinct dbo.devuelveViaje3(dbo.devuelveRutaaa(dbo.devuelveIDD(Ruta_Ciudad_Origen),
+dbo.devuelveIDD(Ruta_Ciudad_Destino),dbo.devuelveTipoServicio(Tipo_Servicio)),Aeronave_Matricula,
+FechaSalida,Fecha_Llegada_Estimada,FechaLlegada),Butaca_Nro,Paquete_FechaCompra,dbo.devuelveNumeroCliente(Cli_dni) 
+from gd_esquema.maestra
+group by Ruta_Ciudad_Origen,Ruta_Ciudad_Destino,Tipo_servicio,Aeronave_Matricula,FechaSalida,
+Fecha_llegada_Estimada,Fechallegada,Butaca_Nro,Paquete_fechaCompra,Cli_Dni
 
 
 
