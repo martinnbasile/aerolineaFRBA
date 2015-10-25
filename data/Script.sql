@@ -1,7 +1,7 @@
 Use GD2C2015
-
+go
 drop procedure limpiarBase
-
+go
 Create Procedure limpiarBase as
 Drop table Butacas
 Drop table Cambios_Millas
@@ -31,7 +31,7 @@ Drop table Roles
 go
 
 exec limpiarBase
-
+go
 
 create Table Ciudades(
 Id int identity(1,1) primary key,
@@ -91,9 +91,6 @@ Telefono numeric(30) not null,
 Mail varchar(50) not null,
 Fecha_Nacimiento smalldatetime not null,
 )
-go
-Alter table Clientes
-add constraint FK_User_Cliente FOREIGN KEY (Usuario) references Usuarios(Id)
 go
 Create Table Rutas_Aereas(
 Id int identity(1,1) primary key,
@@ -354,7 +351,7 @@ insert into Clientes(DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_Nacimient
 Cli_Dni,Cli_Nombre,Cli_Apellido,Cli_Dir,Cli_Telefono,Cli_Mail,Cli_Fecha_Nac from gd_esquema.Maestra)
 go
 
-insert into usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'Sos Dios?','Algo a ver')
+insert into usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','Algo a ver')
 go
 alter table Rutas_Aereas
 drop column Fecha_Salida
@@ -600,7 +597,7 @@ where Pasaje_codigo !=0
 group by Ruta_Ciudad_Origen,Ruta_Ciudad_Destino,Tipo_servicio,Aeronave_Matricula,FechaSalida,
 Fecha_llegada_Estimada,Fechallegada,Butaca_Nro,Paquete_fechaCompra,Cli_Dni
 
-
+go
 
 create view vista_rutas_aereas as
 select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
@@ -618,7 +615,7 @@ go
 
 
 insert into Usuarios
-values ('martinnb','62c66a7a5dd70c3146618063c344e531e6d4b59e379808443ce962b3abd63c5a',1,'Sos dios?','no')
+values ('martinnb','62c66a7a5dd70c3146618063c344e531e6d4b59e379808443ce962b3abd63c5a',1,'OK','Sos dios?','no')
 go
 
 Create  trigger CuaandoSeIngresanLoginsIncorrectos
