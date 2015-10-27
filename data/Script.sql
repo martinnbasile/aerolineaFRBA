@@ -708,3 +708,42 @@ close cursorDeFallidos
 deallocate cursorDeFallidos
 commit;
 go	
+create table Fecha(
+fecha date
+)
+go
+create function fechaDeHoy()
+returns date
+as begin
+
+return (select max(fecha) from Fecha)
+end
+go
+
+
+create function cantidadMillas(@cliente int)
+returns int
+as
+begin
+return(
+select sum(Cantidad) from Millas
+where Cliente=@cliente
+and Fecha_Canje<dateadd(year,-1,fechaDeHoy())
+)
+end
+go
+
+create function movimientosMillas(@cliente int)
+returns @tablita table(
+fecha date,
+cantidad int
+)
+as
+begin
+insert into @tablita
+
+select Fecha_Canje,Cantidad from Millas
+where Cliente=@cliente
+and Fecha_Canje<dateadd(year,-1,fechaDeHoy())
+return
+end
