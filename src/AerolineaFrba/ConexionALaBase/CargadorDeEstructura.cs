@@ -17,6 +17,7 @@ namespace AerolineaFrba.ConexionALaBase
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             adapter.Fill(dataTable);
             unDataGrid.DataSource = dataTable;
+            unDataGrid.AllowUserToAddRows = false;
         }
 
         public static void cargarComboBox(ComboBox unCombo,SqlDataReader reader)
