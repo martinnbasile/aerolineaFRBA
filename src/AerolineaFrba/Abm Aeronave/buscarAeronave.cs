@@ -15,6 +15,7 @@ namespace AerolineaFrba.Abm_Aeronave
         public buscarAeronave()
         {
             InitializeComponent();
+            
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -25,26 +26,27 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button2_Click(object sender, EventArgs e)
         {
-          // if (Validaciones.Validaciones.validarListBox(listBox1, "Selecciona una Aeronave a dar de baja por Vida Util"))
-          //  {
-          //  }
+           if (Validaciones.Validaciones.validarDataGridView(dataGridView1, "Selecciona una Aeronave a dar de baja por Vida Util"))
+            {
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-           // if (Validaciones.Validaciones.validarListBox(listBox1, "Selecciona una Aeronave a dar de baja por Fuera de Servicio"))
-           // {
-           //     String aeronaveSeleccionada = listBox1.Text;
-           //     new bajaFueraDeServicio(aeronaveSeleccionada).Show();
-           //     this.Close();
-            // }
+           if (Validaciones.Validaciones.validarDataGridView(dataGridView1, "Selecciona una Aeronave a dar de baja por Fuera de Servicio"))
+            {   
+                DataGridViewRow aeronaveSeleccionada = this.dataGridView1.SelectedRows[0];
+                String matriculaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Matrícula"].Value.ToString();
+                new bajaFueraDeServicio(matriculaAeronaveSeleccionada).Show();
+                this.Close();
+                
+            }
         }
 
         private void buscarAeronave_Load(object sender, EventArgs e)
         {
-            
             ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "select * from vista_aeronaves");
-            
+          
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
