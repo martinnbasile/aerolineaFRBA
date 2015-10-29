@@ -7,12 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Data.SqlClient;
+using AerolineaFrba.ConexionALaBase;
 
 namespace AerolineaFrba.Abm_Aeronave
 {
     public partial class bajaFueraDeServicio : Form
     {
         String matriculaAeronave;
+        String fechaReinicioDeServicio;
         public bajaFueraDeServicio(String unaMatricula)
         {
             matriculaAeronave = unaMatricula;
@@ -26,7 +30,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         public void recibirFecha(DateTime unaFecha)
         {
-            String fechaReinicioDeServicio = unaFecha.ToShortDateString();
+            fechaReinicioDeServicio = unaFecha.ToString("yyyy-MM-dd");
             textBox1.Text = fechaReinicioDeServicio;
         }
 
@@ -45,7 +49,16 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             if(Validaciones.Validaciones.validarTextBox(textBox1,"Seleccione una fecha"))
             {
-              /*TODO Aca hay que validar si hay pasajes/encomiendas en el rango de fechas seleccionado
+                String fechaActual = DateTime.Now.ToString("yyyy-MM-dd");
+                SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("SELECT * FROM Viajes WHERE Fecha_salida BETWEEN '" + fechaActual + "'  AND '" + fechaReinicioDeServicio + "' AND Matricula='" + matriculaAeronave + "' ");
+                if (consulta.HasRows)
+                {
+                    new cancelarOReemplazar().Show();
+                    
+                    
+
+                }
+                /*TODO Aca hay que validar si hay pasajes/encomiendas en el rango de fechas seleccionado
               ;si hay aparece un messageBox en el que elije si quiere cancelar los pasajes/encomiendas
               existentes o si quiere buscarle un reemplazo; si le da cancelar aparece un messageBox 
               avisando que se cancelaron los pasajes y se hace lo correspondiente en la base para cancelarlos;

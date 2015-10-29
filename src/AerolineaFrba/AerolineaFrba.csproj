@@ -62,6 +62,12 @@
     <Compile Include="Abm Aeronave\calendario.Designer.cs">
       <DependentUpon>calendario.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Aeronave\cancelarOReemplazar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Aeronave\cancelarOReemplazar.Designer.cs">
+      <DependentUpon>cancelarOReemplazar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Ciudad\buscarCiudad.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -233,6 +239,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Aeronave\Calendario.resx">
       <DependentUpon>calendario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Aeronave\cancelarOReemplazar.resx">
+      <DependentUpon>cancelarOReemplazar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Ciudad\buscarCiudad.resx">
       <DependentUpon>buscarCiudad.cs</DependentUpon>

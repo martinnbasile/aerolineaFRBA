@@ -18,6 +18,8 @@ namespace AerolineaFrba.ConexionALaBase
             adapter.Fill(dataTable);
             unDataGrid.DataSource = dataTable;
             unDataGrid.AllowUserToAddRows = false;
+            unDataGrid.ReadOnly = true;
+            unDataGrid.SelectionMode=DataGridViewSelectionMode.FullRowSelect;
         }
 
         public static void cargarComboBox(ComboBox unCombo,SqlDataReader reader)
