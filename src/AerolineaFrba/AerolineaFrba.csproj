@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abm Aeronave\Aeronave.cs" />
     <Compile Include="Abm Aeronave\bajaFueraDeServicio.cs">
       <SubType>Form</SubType>
     </Compile>
