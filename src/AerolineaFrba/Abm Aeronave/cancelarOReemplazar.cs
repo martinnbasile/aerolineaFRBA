@@ -36,6 +36,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button1_Click(object sender, EventArgs e)
         {
+            
             String queryConsulta = "DELETE from Viajes WHERE Id IN (SELECT v.Id FROM Viajes v WHERE v.Fecha_salida BETWEEN '" + aeronaveAfectada.getFechaBajaFueraServicio() + "'  AND '" + aeronaveAfectada.getFechaAltaFueraServicio() + "' AND v.Matricula='" + aeronaveAfectada.getMatricula() +"')";
             //Console.Write(queryConsulta);
             //ConexionALaBase.Conexion.ejecutarNonQuery(queryConsulta); Comentado hasta que se desarrolle el trigger necesario, sin el trigger rompe al ejecutarse.
@@ -63,7 +64,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button3_Click(object sender, EventArgs e)
         {
-            new buscarAeronave().Show();
+            new bajaFueraDeServicio(aeronaveAfectada.getMatricula()).Show();
             this.Close();
         }
     }

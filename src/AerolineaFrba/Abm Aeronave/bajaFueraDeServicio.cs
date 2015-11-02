@@ -59,6 +59,7 @@ namespace AerolineaFrba.Abm_Aeronave
                     unaAeronave.setFechaBajaFueraServicio(fechaActual);
                     unaAeronave.setFechaAltaFueraServicio(fechaReinicioDeServicio);
                     new cancelarOReemplazar(unaAeronave).Show();
+                    this.Close();
                 }
                 else
                 {
@@ -77,6 +78,12 @@ namespace AerolineaFrba.Abm_Aeronave
               si no hay ninguna aparece un message box que dice "No hay aeronaves disponibles que puedan reemplazarla" o algo por el estilo y aparece una pantalla
               para crear una nueva Aeronave*/
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new buscarAeronave().Show();
+            this.Close();
         }
     }
 }
