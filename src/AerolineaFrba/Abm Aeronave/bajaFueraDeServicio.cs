@@ -59,9 +59,14 @@ namespace AerolineaFrba.Abm_Aeronave
                     unaAeronave.setFechaBajaFueraServicio(fechaActual);
                     unaAeronave.setFechaAltaFueraServicio(fechaReinicioDeServicio);
                     new cancelarOReemplazar(unaAeronave).Show();
-                    
-                    
-
+                }
+                else
+                {
+                    string queryParaMandarFueraDeServicio = "UPDATE Aeronaves set Baja_Fuera_Servicio='SI',Fecha_Fuera_Servicio='" + fechaActual + "',Fecha_Reinicio_Servicio='" + fechaReinicioDeServicio + "' where matricula='" + matriculaAeronave + "'";
+                    ConexionALaBase.Conexion.ejecutarNonQuery(queryParaMandarFueraDeServicio);
+                    MessageBox.Show("Se ha pasado la aeronave a estado fuera de servicio entre la fecha "+fechaActual+" y la fecha "+fechaReinicioDeServicio+" ");
+                    new buscarAeronave().Show();
+                    this.Close();
                 }
                 /*TODO Aca hay que validar si hay pasajes/encomiendas en el rango de fechas seleccionado
               ;si hay aparece un messageBox en el que elije si quiere cancelar los pasajes/encomiendas
