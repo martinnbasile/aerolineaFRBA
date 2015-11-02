@@ -38,7 +38,6 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             
             String queryConsulta = "DELETE from Viajes WHERE Id IN (SELECT v.Id FROM Viajes v WHERE v.Fecha_salida BETWEEN '" + aeronaveAfectada.getFechaBajaFueraServicio() + "'  AND '" + aeronaveAfectada.getFechaAltaFueraServicio() + "' AND v.Matricula='" + aeronaveAfectada.getMatricula() +"')";
-            //Console.Write(queryConsulta);
             //ConexionALaBase.Conexion.ejecutarNonQuery(queryConsulta); Comentado hasta que se desarrolle el trigger necesario, sin el trigger rompe al ejecutarse.
             MessageBox.Show("Se han cancelado los pasajes/encomiendas correspondientes");
             new buscarAeronave().Show();
@@ -49,7 +48,6 @@ namespace AerolineaFrba.Abm_Aeronave
         private void button2_Click(object sender, EventArgs e)
         {
             String procedureParaBuscarReemplazos = "exec dbo.aeronavesSustitutas @matricula='" + aeronaveAfectada.getMatricula() + "',@fechaBaja='" + aeronaveAfectada.getFechaBajaFueraServicio() + "',@fechaAlta='" + aeronaveAfectada.getFechaAltaFueraServicio() + "'";
-            //Console.WriteLine(procedureParaBuscarReemplazos);
             SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase(procedureParaBuscarReemplazos);
             if (consulta.HasRows)
             {
@@ -58,7 +56,9 @@ namespace AerolineaFrba.Abm_Aeronave
             }
             else
             {
-                MessageBox.Show("No hay aeronaves disponibles para sustituirla");
+                MessageBox.Show("No hay aeronaves disponibles para sustituirla, se creara una nueva aeronave para sustuirla");
+                new crearAeronave(aeronaveAfectada).Show();
+                this.Close();
             }         
         }
 
