@@ -69,6 +69,12 @@
     <Compile Include="Abm Aeronave\cancelarOReemplazar.Designer.cs">
       <DependentUpon>cancelarOReemplazar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Aeronave\seleccionarReemplazo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Aeronave\seleccionarReemplazo.Designer.cs">
+      <DependentUpon>seleccionarReemplazo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Ciudad\buscarCiudad.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -243,6 +249,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Aeronave\cancelarOReemplazar.resx">
       <DependentUpon>cancelarOReemplazar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Aeronave\seleccionarReemplazo.resx">
+      <DependentUpon>seleccionarReemplazo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Ciudad\buscarCiudad.resx">
       <DependentUpon>buscarCiudad.cs</DependentUpon>

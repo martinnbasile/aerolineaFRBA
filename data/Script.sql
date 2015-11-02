@@ -1,4 +1,4 @@
-Use GD2C2015
+﻿Use GD2C2015
 go
 drop procedure limpiarBase
 go
@@ -753,3 +753,38 @@ where Cliente=@cliente
 and Fecha_Canje<dateadd(year,-1,fechaDeHoy())
 return
 end
+
+GO
+
+CREATE PROCEDURE aeronavesSustitutas @matricula varchar(10),@fechaBaja smalldatetime,@fechaAlta smalldatetime
+
+AS
+
+	DECLARE @Modelo varchar(30)		
+	DECLARE @Fabricante int
+	DECLARE @Tipo_Servicio int
+	
+	SELECT @Modelo = Modelo from Aeronaves a where a.matricula=@matricula 
+	SELECT @Fabricante = Fabricante from Aeronaves a where a.matricula=@matricula
+	SELECT @Tipo_Servicio = Tipo_Servicio from Aeronaves a where a.matricula=@matricula
+
+SELECT a.Fecha_alta as 'Fecha de alta',  a.Modelo as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.Baja_Fuera_Servicio as 'Baja por fuera de servicio',a.Baja_Vida_Util as 'Baja por vida util',a.Fecha_Fuera_Servicio as 'Fecha de fuera de servicio',a.Fecha_Reinicio_Servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',a.Cantidad_Butacas as 'Cantidad de butacas',a.Cantidad_Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
+from aeronaves a
+join Fabricantes f on (a.Fabricante=f.Id)
+join Tipos_Servicio ts on (a.Tipo_Servicio=ts.Id)
+where  
+	not exists (
+		select * from Viajes v
+		where (v.Fecha_salida between @fechaBaja and @fechaAlta
+		or  v.Fecha_Estimada_llegada between @fechaBaja and @fechaAlta) 
+		and a.matricula=v.Matricula
+	)
+	and a.Modelo=@Modelo
+	and a.Fabricante=@Fabricante
+	and a.Tipo_Servicio=@Tipo_Servicio
+	and a.matricula!=@matricula			 
+		 
+
+GO
+
+

@@ -40,3 +40,4 @@ C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.cspro
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\bin\Debug\AerolineaFrba.exe
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\bin\Debug\AerolineaFrba.pdb
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.cancelarOReemplazar.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.seleccionarReemplazo.resources

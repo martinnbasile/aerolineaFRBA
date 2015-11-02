@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace AerolineaFrba.Abm_Aeronave
 {
@@ -42,6 +43,28 @@ namespace AerolineaFrba.Abm_Aeronave
             new buscarAeronave().Show();
             this.Close();
             
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            String procedureParaBuscarReemplazos = "exec dbo.aeronavesSustitutas @matricula='" + aeronaveAfectada.getMatricula() + "',@fechaBaja='" + aeronaveAfectada.getFechaBajaFueraServicio() + "',@fechaAlta='" + aeronaveAfectada.getFechaAltaFueraServicio() + "'";
+            //Console.WriteLine(procedureParaBuscarReemplazos);
+            SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase(procedureParaBuscarReemplazos);
+            if (consulta.HasRows)
+            {
+                new seleccionarReemplazo(aeronaveAfectada).Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("No hay aeronaves disponibles para sustituirla");
+            }         
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new buscarAeronave().Show();
+            this.Close();
         }
     }
 }
