@@ -566,13 +566,10 @@ BEGIN
 END
 GO
 insert into Paquetes
-select dbo.devuelveViaje3(dbo.devuelveRutaaa(dbo.devuelveIDD(Ruta_Ciudad_Origen),
-dbo.devuelveIDD(Ruta_Ciudad_Destino),dbo.devuelveTipoServicio(Tipo_Servicio)),Aeronave_Matricula,
-FechaSalida,Fecha_Llegada_Estimada,FechaLlegada),Paquete_Kg,Paquete_FechaCompra,dbo.devuelveNumeroCliente(Cli_Dni)
-from gd_esquema.maestra
+select distinct b.Id,a.Paquete_KG,Paquete_FechaCompra,d.Id  from gd_esquema.Maestra as a join Viajes as b on b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and b.Matricula=a.Aeronave_Matricula join Rutas_Aereas as c on b.Ruta=c.Id /*and c.Precio_Base=a.Ruta_Precio_BasePasaje*/ and c.Precio_Kg=a.Ruta_Precio_BaseKG join Tipos_Servicio as g on  c.Tipo_Servicio=g.Id and g.Descripcion =a.Tipo_Servicio join Clientes as d on d.DNI=a.Cli_Dni join Ciudades as e on c.Ciudad_Destino=e.Id and e.Descripcion=a.Ruta_Ciudad_Destino join Ciudades as f on c.Ciudad_Origen=f.Id and f.Descripcion=a.Ruta_Ciudad_Origen
 where Paquete_KG != 0
-group by Tipo_Servicio,Fecha_llegada_estimada,Cli_Dni,Paquete_KG,Paquete_FechaCompra
-,Ruta_Ciudad_Origen,Ruta_Ciudad_Destino,Aeronave_Matricula,FechaSalida,FechaLlegada
+group by b.Id,a.Paquete_KG,Paquete_fechaCompra,d.Id
+
 go
 drop table KG
 go
@@ -580,24 +577,19 @@ Alter table Butacas
 add Estado varchar(50) not null
 go
 insert into Butacas
-select distinct dbo.devuelveViaje3(dbo.devuelveRutaaa(dbo.devuelveIDD(Ruta_Ciudad_Origen),
-dbo.devuelveIDD(Ruta_Ciudad_Destino),dbo.devuelveTipoServicio(Tipo_Servicio)),Aeronave_Matricula,
-FechaSalida,Fecha_Llegada_Estimada,FechaLlegada),Butaca_Nro,Butaca_Tipo,'Vendida' 
-from gd_esquema.maestra
-where Pasaje_codigo !=0
-group by Ruta_ciudad_origen,Ruta_Ciudad_destino,Tipo_Servicio,Aeronave_matricula,FechaSalida,
-Fecha_llegada_estimada,FechaLlegada,Butaca_Nro,Butaca_tipo
-go
-insert into Pasajes
-select distinct dbo.devuelveViaje3(dbo.devuelveRutaaa(dbo.devuelveIDD(Ruta_Ciudad_Origen),
-dbo.devuelveIDD(Ruta_Ciudad_Destino),dbo.devuelveTipoServicio(Tipo_Servicio)),Aeronave_Matricula,
-FechaSalida,Fecha_Llegada_Estimada,FechaLlegada),Butaca_Nro,Paquete_FechaCompra,dbo.devuelveNumeroCliente(Cli_dni) 
-from gd_esquema.maestra
-where Pasaje_codigo !=0
-group by Ruta_Ciudad_Origen,Ruta_Ciudad_Destino,Tipo_servicio,Aeronave_Matricula,FechaSalida,
-Fecha_llegada_Estimada,Fechallegada,Butaca_Nro,Paquete_fechaCompra,Cli_Dni
+select  b.Id,a.Butaca_Nro,a.Butaca_Tipo,'vendida'  from gd_esquema.Maestra as a join Viajes as b on b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and b.Matricula=a.Aeronave_Matricula join Rutas_Aereas as c on b.Ruta=c.Id and c.Precio_Base=a.Ruta_Precio_BasePasaje /*and c.Precio_Kg=a.Ruta_Precio_BaseKG */join Tipos_Servicio as g on  c.Tipo_Servicio=g.Id and g.Descripcion =a.Tipo_Servicio  join Ciudades as e on c.Ciudad_Destino=e.Id and e.Descripcion=a.Ruta_Ciudad_Destino join Ciudades as f on c.Ciudad_Origen=f.Id and f.Descripcion=a.Ruta_Ciudad_Origen
+where Pasaje_codigo <>0
+group by b.Id,Butaca_Nro,a.Butaca_Tipo
 
 go
+insert into Pasajes
+select distinct b.Id,a.Butaca_Nro,Paquete_FechaCompra,d.Id  from gd_esquema.Maestra as a join Viajes as b on b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and b.Matricula=a.Aeronave_Matricula join Rutas_Aereas as c on b.Ruta=c.Id and c.Precio_Base=a.Ruta_Precio_BasePasaje /*and c.Precio_Kg=a.Ruta_Precio_BaseKG */join Tipos_Servicio as g on  c.Tipo_Servicio=g.Id and g.Descripcion =a.Tipo_Servicio join Clientes as d on d.DNI=a.Cli_Dni join Ciudades as e on c.Ciudad_Destino=e.Id and e.Descripcion=a.Ruta_Ciudad_Destino join Ciudades as f on c.Ciudad_Origen=f.Id and f.Descripcion=a.Ruta_Ciudad_Origen
+where Pasaje_codigo <>0
+group by b.Id,Butaca_Nro,Paquete_fechaCompra,d.Id
+
+go
+
+
 
 create view vista_rutas_aereas as
 select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
@@ -732,9 +724,9 @@ returns int
 as
 begin
 return(
-select sum(Cantidad) from Millas
+select sum(Cantidad) from Cambios_Millas
 where Cliente=@cliente
-and Fecha_Canje<dateadd(year,-1,fechaDeHoy())
+and Fecha_Canje<dateadd(year,-1,dbo.fechaDeHoy())
 )
 end
 go
@@ -748,9 +740,9 @@ as
 begin
 insert into @tablita
 
-select Fecha_Canje,Cantidad from Millas
+select Fecha_Canje,Cantidad from Cambios_Millas
 where Cliente=@cliente
-and Fecha_Canje<dateadd(year,-1,fechaDeHoy())
+and Fecha_Canje<dateadd(year,-1,dbo.fechaDeHoy())
 return
 end
 
@@ -764,10 +756,8 @@ AS
 	DECLARE @Fabricante int
 	DECLARE @Tipo_Servicio int
 	
-	SELECT @Modelo = Modelo from Aeronaves a where a.matricula=@matricula 
-	SELECT @Fabricante = Fabricante from Aeronaves a where a.matricula=@matricula
-	SELECT @Tipo_Servicio = Tipo_Servicio from Aeronaves a where a.matricula=@matricula
-
+	SELECT @Modelo = Modelo,@Fabricante = Fabricante,@Tipo_Servicio = Tipo_Servicio from Aeronaves a where a.matricula=@matricula 
+	
 SELECT a.Fecha_alta as 'Fecha de alta',  a.Modelo as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.Baja_Fuera_Servicio as 'Baja por fuera de servicio',a.Baja_Vida_Util as 'Baja por vida util',a.Fecha_Fuera_Servicio as 'Fecha de fuera de servicio',a.Fecha_Reinicio_Servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',a.Cantidad_Butacas as 'Cantidad de butacas',a.Cantidad_Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
 from aeronaves a
 join Fabricantes f on (a.Fabricante=f.Id)
