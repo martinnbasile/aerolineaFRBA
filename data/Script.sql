@@ -706,15 +706,17 @@ close cursorDeFallidos
 deallocate cursorDeFallidos
 commit;
 go	
+
 create table Fecha(
+orden int identity(1,1) primary key,
 fecha date
 )
 go
-create function fechaDeHoy()
+create  function fechaDeHoy()
 returns date
 as begin
 
-return (select max(fecha) from Fecha)
+return (select top 1 fecha from Fecha order by orden)
 end
 go
 
@@ -781,7 +783,7 @@ create function convertirFecha (@fecha varchar(10))
 returns Date
 as
 begin
-return (convert(Date,@fecha,101))
+return (convert(Date,@fecha,103))
 end
 go
 create procedure actualizarFecha @fecha varchar(10) 
