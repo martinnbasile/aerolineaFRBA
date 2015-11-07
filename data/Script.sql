@@ -63,7 +63,7 @@ Id int identity(1,1) primary key,
 Username varchar(50) not null unique,
 Password varchar(256) not null,
 Rol int,
-Estado varchar(10))
+Estado varchar(15))
 go
 Alter table Usuarios
 add constraint FK_Rol FOREIGN KEY (Rol) references Roles(Id)
@@ -680,7 +680,6 @@ drop table #tablaCorrectos
 commit;
 go
 
-
 Create trigger CuandoSeIngresaUnTercerLoginFallidoSEInhabilita
 on Intentos_fallidos
 for  insert
@@ -694,11 +693,11 @@ open cursorDeFallidos
 fetch next from cursorDeFallidos into @num_fallido,@Cod_login
 while(@@FETCH_STATUS=0)
 begin
-if ((select count(*) from Intentos_fallidos,Usuario,Intentos_login
-where Intentos_fallidos.Cod_login=Intentos_login.Id_login and Intentos_login.Codigo_usuario=Usuario.Id_usuario and id_usuario=(Select Codigo_usuario from Intentos_login where Id_login=@Cod_login))>2)
-update Usuario
+if ((select count(*) from Intentos_fallidos,Usuarios,Intentos_login
+where Intentos_fallidos.Cod_login=Intentos_login.Id_login and Intentos_login.Codigo_usuario=Usuarios.Id and Id=(Select Codigo_usuario from Intentos_login where Id_login=@Cod_login))>2)
+update Usuarios
 set Estado='inhabilitado'
-where Id_usuario = (Select Codigo_usuario from Intentos_login where Id_login=@Cod_login)
+where Id = (Select Codigo_usuario from Intentos_login where Id_login=@Cod_login)
 fetch next from cursorDeFallidos into @num_fallido,@Cod_login
 
 end
@@ -836,4 +835,3 @@ raiserror ('Contraseña incorrecta',16,150)
 end
 commit
 go
-

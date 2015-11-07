@@ -36,38 +36,19 @@ namespace AerolineaFrba.Login
             nombre = textBox1.Text;
             pass = textBox2.Text;
             pass = Encriptar.SHA256(pass);
-            ConexionALaBase.Conexion.ejecutarNonQuery("exec dbo.Loggear '" + nombre + "','" + pass + "'");
-            /*try {Validaciones.Validaciones.validarUsername(nombre); }
-            catch (Exception)
+            try { ConexionALaBase.Conexion.ejecutarNonQuery("exec dbo.Loggear '" + nombre + "','" + pass + "'"); }
+            catch (SqlException exc)
             {
-                MessageBox.Show("No existe el username");
+                MessageBox.Show(exc.Message);
                 this.reCargar();
                 return;
             }
-            this.validarContraseña();*/
+
+            new elegirRol().Show();
+            this.Close();
         }
 
-        public void validarContraseña()
-        {
-            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Password from usuarios where Username='" + nombre + "'");
-            reader.Read();
-            String passEnBase = reader.GetString(0);
-            if (passEnBase == pass)
-            {
-                Program.username = nombre;
-                Program.password = pass;
-                new elegirRol().Show();
-                //asentar login correcto
-                this.Close();
-            }
-            else
-            {
-                //asentar login incorrecto
-                MessageBox.Show("Contraseña incorrecta");
-                this.reCargar();
-            }
-        }
-
+        
         private void reCargar(){
             new Login().Show();
             this.Close();
