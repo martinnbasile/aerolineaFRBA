@@ -37,6 +37,10 @@ create Table Ciudades(
 Id int identity(1,1) primary key,
 Descripcion varchar(70) not null unique)
 go
+alter table Ciudades
+add Estado varchar(50) default 'Habilitado'
+go
+
 create Table Fabricantes(
 Id int identity(1,1) primary key,
 Descripcion varchar(70) not null unique)
@@ -860,13 +864,6 @@ create procedure CancelarAeronaveFueraDeServicio
   COMMIT TRAN
   go
 
-alter table Ciudades
-add Estado varchar(50) default 'Habilitado'
-go
-
-update Ciudades
-set Estado='Habilitado'
-go
 
 create procedure BorrarCiudades(
 @Descripcion varchar(100))
@@ -875,8 +872,8 @@ begin tran
 declare @id int
 set @id=(select Id from Ciudades where Descripcion=@Descripcion)
 update Ciudades set Estado='Deshabilitado' where Id=@id
-update Rutas_Aereas set Estado=2 where Ciudad_Destino=@id
-update Rutas_Aereas set Estado=2 where Ciudad_Origen=@id
+update Rutas_Aereas set Estado=2 where Ciudad_Destino=@id or Ciudad_Origen=@id
+
 delete from Butacas where Viaje in (select v.Id from Viajes v inner join Rutas_Aereas r
 on v.Ruta=r.Id
 where r.Estado=2)
@@ -888,7 +885,7 @@ delete from Paquetes where Viaje in (select v.Id from Viajes v inner join Rutas_
 on v.Ruta=r.Id
 where r.Estado=2
 )
-delete from Viajes where Ruta in (select Id from Rutas_Aereas where Estado=2) and Fecha_salida>= getdate()
+delete from Viajes where Ruta in (select Id from Rutas_Aereas where Estado=2) and Fecha_salida>= dbo.fechaDeHoy()
 commit tran
 go
 
@@ -918,9 +915,9 @@ return
 end
 
 GO
-/*
-create procedure asentarLLegadaAeronave @avion int,@origen int,@destino int,@fechaYHoraLlegada varchar(20)
+
+/*create procedure asentarLLegadaAeronave @avion int,@origen int,@destino int,@fechaYHoraLlegada varchar(20)
 as
 begin transaction
-*/--select convert(datetime,'11/7/2015 11:00:00:000AM',131)
 
+--select convert(datetime,'2015-01-30 12:08:56 ',20)
