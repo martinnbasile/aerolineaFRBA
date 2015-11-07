@@ -219,17 +219,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Registro de Usuario\Form1.cs">
+    <Compile Include="Registro Llegada Destino\Registrar llegada a destino.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Registro de Usuario\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Registro Llegada Destino\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Registro Llegada Destino\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Registro Llegada Destino\Registrar llegada a destino.Designer.cs">
+      <DependentUpon>Registrar llegada a destino.cs</DependentUpon>
     </Compile>
     <Compile Include="Validaciones\Validaciones.cs" />
     <EmbeddedResource Include="Abm Aeronave\bajaFueraDeServicio.resx">
@@ -310,6 +304,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Registro Llegada Destino\Registrar llegada a destino.resx">
+      <DependentUpon>Registrar llegada a destino.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

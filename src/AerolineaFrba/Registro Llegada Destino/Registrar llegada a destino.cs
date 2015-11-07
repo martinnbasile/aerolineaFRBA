@@ -16,5 +16,18 @@ namespace AerolineaFrba.Registro_Llegada_Destino
         {
             InitializeComponent();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+            dateTimePicker1.Format = DateTimePickerFormat.Time;
+            dateTimePicker1.ShowUpDown = true;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DateTime date=DateTime.Parse(dateTimePicker1.Value.TimeOfDay.ToString());
+            MessageBox.Show(date.ToString("HH:mm"));
+        }
     }
 }
