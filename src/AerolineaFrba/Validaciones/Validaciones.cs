@@ -22,7 +22,7 @@ namespace AerolineaFrba.Validaciones
 
         public static bool validarMaskedTextBox(MaskedTextBox unMaskedTextBox, String unMensajeDeAlerta)
         {
-            if (unMaskedTextBox.Text.Length == 0)
+            if (unMaskedTextBox.Text.Length <= 1)
             {
                 MessageBox.Show(unMensajeDeAlerta);
                 return false;

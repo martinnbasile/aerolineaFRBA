@@ -908,3 +908,15 @@ where r.Estado=2
 delete from Viajes where Ruta in (select Id from Rutas_Aereas where Estado=2) and Fecha_salida>= getdate()
 commit tran
 go
+
+create view rolPorUsuario as
+select r.descripcion as rol, u.username as usuario from
+usuarios u join Usuario_rol ur on (u.id=ur.cod_usuario)
+join roles r on (ur.cod_rol=r.Id)
+go
+
+
+insert into Usuario_rol values(1,1);
+insert into Usuario_rol values(2,1);
+
+
