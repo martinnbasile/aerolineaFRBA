@@ -861,7 +861,7 @@ create procedure CancelarAeronaveFueraDeServicio
   go
 
 alter table Ciudades
-add Estado varchar(50) default 'Habilidatado'
+add Estado varchar(50) default 'Habilitado'
 go
 
 update Ciudades
@@ -901,7 +901,6 @@ go
 
 insert into Usuario_rol values(1,1);
 insert into Usuario_rol values(2,1);
-<<<<<<< HEAD
 go
 create function movimientosMillas(@cliente int)
 returns @tablita table(
@@ -924,7 +923,4 @@ create procedure asentarLLegadaAeronave @avion int,@origen int,@destino int,@fec
 as
 begin transaction
 */--select convert(datetime,'11/7/2015 11:00:00:000AM',131)
-=======
 
-
->>>>>>> d1f0b87274514db54b4af4d9b51d898e2792b589
