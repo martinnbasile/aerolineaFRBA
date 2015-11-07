@@ -209,9 +209,6 @@ go
 alter table Millas
 add constraint PK primary key (Id)
 go
-alter table Millas
-add Fecha smalldatetime not null default getdate()
-go
 create table Productos_Milla(
 Id int identity(1,1) primary key,
 Descripcion varchar not null,
@@ -916,8 +913,67 @@ end
 
 GO
 
-/*create procedure asentarLLegadaAeronave @avion int,@origen int,@destino int,@fechaYHoraLlegada varchar(20)
+create trigger actualizarVencimientoCuandoSeAgreganMillas on Millas
+for insert 
 as
 begin transaction
+declare cursorMillas Cursor
+for
+select Cliente from inserted
+open cursorMillas
+declare @cliente int
+Fetch next from cursorMillas into @cliente
+while(@@FETCH_STATUS=0)
+begin 
+update Clientes
+set Fecha_prox_vencimiento=dateadd(year,1,dbo.fechaDeHoy())
+where Id=@cliente
+Fetch next from cursorMillas into @cliente
+end
+close cursorMillas
+deallocate cursorMillas
+commit 
+go
+create procedure asentarMillas @viaje int
+as
+begin transaction
+insert into Millas(Cliente,Millas)
+select Cliente,r.Precio_Base/10 from Pasajes p join Viajes v on v.Id=p.Viaje and v.Id=@viaje join Rutas_Aereas r on r.Id=v.Ruta
+union
+select p.Cliente,(p.Kg*r.Precio_Kg)/10 from Paquetes p join Viajes v on v.Id=p.Viaje and v.Id=@viaje join Rutas_Aereas r on r.Id=v.Ruta 
 
---select convert(datetime,'2015-01-30 12:08:56 ',20)
+
+commit
+go
+
+
+create procedure asentarLLegadaAeronave @avion int,@origen int,@destino int,@horaLlegada varchar(20)
+as
+begin transaction
+declare @hora datetime
+declare @viaje int
+select @hora=cast(dbo.fechaDeHoy() as datetime)+(convert(datetime,@horaLlegada,20))
+(select @viaje=v.Id from viajes v join Rutas_Aereas r on v.Ruta=r.Id and r.Ciudad_Destino=@destino and r.Ciudad_Origen=@origen where Matricula=@avion and Fecha_Estimada_llegada between -datediff(hour,1,@hora) and dateadd(hour,1,@hora))
+
+if(@viaje is null)
+begin	
+raiserror ('No deberia estar llegando alli este avion',16,150)
+rollback
+end
+else
+begin
+update Viajes 
+set Fecha_llegada=@hora
+where Id=@viaje
+exec dbo.asentarMillas @viaje
+commit
+end
+
+go
+insert into Millas(Cliente,Millas)
+select Cliente,r.Precio_Base/10 from Pasajes p join Viajes v on v.Id=p.Viaje  join Rutas_Aereas r on r.Id=v.Ruta
+union
+select p.Cliente,(p.Kg*r.Precio_Kg)/10 from Paquetes p join Viajes v on v.Id=p.Viaje   join Rutas_Aereas r on r.Id=v.Ruta 
+
+
+go
