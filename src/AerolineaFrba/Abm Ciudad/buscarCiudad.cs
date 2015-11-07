@@ -29,7 +29,7 @@ namespace AerolineaFrba.Abm_Ciudad
 
         private void buscarCiudad_Load(object sender, EventArgs e)
         {
-            ConexionALaBase.CargadorDeEstructuras.cargarListBox(listBox1, ConexionALaBase.Conexion.consultarBase("select Descripcion from ciudades"));
+            ConexionALaBase.CargadorDeEstructuras.cargarListBox(listBox1, ConexionALaBase.Conexion.consultarBase("select Descripcion from ciudades where Estado='Habilitado'"));
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -50,7 +50,7 @@ namespace AerolineaFrba.Abm_Ciudad
                 String ciudadSeleccionada = listBox1.Text;
                 if (MessageBox.Show("¿Está seguro que desea borrar la ciudad "+ ciudadSeleccionada +"?", "Confirmar operación", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    ConexionALaBase.Conexion.ejecutarNonQuery("delete Ciudades where Descripcion='" + ciudadSeleccionada + "'");
+                    ConexionALaBase.Conexion.ejecutarNonQuery("exec dbo.BorrarCiudades '"+ciudadSeleccionada+"'");
                     MessageBox.Show("La ciudad "+ ciudadSeleccionada +" a sido eliminada");
                     new buscarCiudad().Show();
                     this.Close();
