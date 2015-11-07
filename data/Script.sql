@@ -777,4 +777,16 @@ where
 
 GO
 
-
+create function convertirFecha (@fecha varchar(10))
+returns Date
+as
+begin
+return (convert(Date,@fecha,101))
+end
+go
+create procedure actualizarFecha @fecha varchar(10) 
+as
+begin
+insert into Fecha(fecha) values(dbo.convertirFecha(@fecha))
+end 
+go
