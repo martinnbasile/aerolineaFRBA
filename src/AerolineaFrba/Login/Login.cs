@@ -14,12 +14,12 @@ namespace AerolineaFrba.Login
 {
     public partial class Login : Form
     {
-
         public string nombre;
         public string pass;
         public Login()
         {
             InitializeComponent();
+
         }
 
         private void Login_Load(object sender, EventArgs e)

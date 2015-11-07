@@ -57,7 +57,8 @@ namespace AerolineaFrba.Funcionalidades
                         MessageBox.Show("Todavia no implementado");
                         break;
                     case "REGISTRAR LLEGADA A DESTINO":
-                        MessageBox.Show("Todavia no implementado");
+                        new Registro_Llegada_Destino.Form1().Show();
+                        this.Close();
                         break;
                     case "CONSULTAR MILLAS":
                         new Canje_Millas.ConsultaMillas().Show();
