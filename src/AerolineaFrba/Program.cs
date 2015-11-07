@@ -19,7 +19,7 @@ namespace AerolineaFrba
         [STAThread]
         static void Main()
         {
-            
+            MessageBox.Show(System.DateTime.Today.ToString());
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ConexionALaBase.Conexion.verificarConexion();
