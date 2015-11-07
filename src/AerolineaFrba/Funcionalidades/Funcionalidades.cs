@@ -20,9 +20,7 @@ namespace AerolineaFrba.Funcionalidades
             String rolElegido = Program.rol;
             InitializeComponent();
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            //TODO cambiar el select cuando se cree e inicialice la tabla Rol_Funcionalidades
-            //SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("select Descripcion from funcionalidadPorRol where Rol='"+rolElegido+"'");
-            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("select Descripcion from funcionalidades");
+            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("select Descripcion from funcionalidadPorRol where Rol='"+rolElegido+"'");
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
             
         }

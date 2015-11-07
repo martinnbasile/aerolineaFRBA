@@ -804,3 +804,36 @@ insert into Roles_Funcionalidades(Funcionalidad,Rol) values(8,2);
 
 insert into Roles_Funcionalidades(Funcionalidad,Rol) values(7,2);
 go
+
+
+create procedure dbo.Loggear @username varchar(30),@contra varchar(255)
+as
+begin transaction set transaction isolation level serializable
+if(not Exists (select Id from dbo.Usuarios where Username=@username))
+begin
+	raiserror ('No existe usuario',16,150)
+	rollback
+	return
+	end
+if (exists (select id from dbo.Usuarios where
+Username=@username and Estado='inhabilitado'))
+begin
+	raiserror ('Usuario inhabilitado',16,150)
+	rollback
+	return
+end 
+if (exists (select id from dbo.Usuarios where
+Username=@username and Password=@contra))
+begin
+insert into dbo.Intentos_login	 select id,1 from dbo.Usuarios where
+username=@username
+end
+else
+begin
+insert into dbo.Intentos_login	 select id,0 from dbo.Usuarios where
+username=@username
+raiserror ('Contraseña incorrecta',16,150)
+end
+commit
+go
+

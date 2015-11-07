@@ -162,12 +162,6 @@
     </Compile>
     <Compile Include="ConexionALaBase\CargadorDeEstructura.cs" />
     <Compile Include="ConexionALaBase\Conexion.cs" />
-    <Compile Include="Consulta Millas\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Consulta Millas\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Devolucion\Form1.cs">
       <SubType>Form</SubType>
     </Compile>

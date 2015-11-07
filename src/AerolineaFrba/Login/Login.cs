@@ -36,14 +36,15 @@ namespace AerolineaFrba.Login
             nombre = textBox1.Text;
             pass = textBox2.Text;
             pass = Encriptar.SHA256(pass);
-            try {Validaciones.Validaciones.validarUsername(nombre); }
+            ConexionALaBase.Conexion.ejecutarNonQuery("exec dbo.Loggear '" + nombre + "','" + pass + "'");
+            /*try {Validaciones.Validaciones.validarUsername(nombre); }
             catch (Exception)
             {
                 MessageBox.Show("No existe el username");
                 this.reCargar();
                 return;
             }
-            this.validarContraseña();
+            this.validarContraseña();*/
         }
 
         public void validarContraseña()
