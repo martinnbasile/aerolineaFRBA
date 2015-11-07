@@ -790,3 +790,15 @@ begin
 insert into Fecha(fecha) values(dbo.convertirFecha(@fecha))
 end 
 go
+
+
+insert into Roles_Funcionalidades(Funcionalidad,Rol) select Id,1 from Funcionalidades;
+go
+insert into Roles_Funcionalidades(Funcionalidad,Rol) values(9,2);
+
+insert into Roles_Funcionalidades(Funcionalidad,Rol) values(6,2);
+
+insert into Roles_Funcionalidades(Funcionalidad,Rol) values(8,2);
+
+insert into Roles_Funcionalidades(Funcionalidad,Rol) values(7,2);
+go
