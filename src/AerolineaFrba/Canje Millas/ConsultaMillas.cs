@@ -27,6 +27,7 @@ namespace AerolineaFrba.Canje_Millas
         {
             if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1, "Complete con su DNI"))
             {
+                
                 int dni = int.Parse(maskedTextBox1.Text);
                 new MostrarInformacionMillas(dni).Show();
                 this.Close();
