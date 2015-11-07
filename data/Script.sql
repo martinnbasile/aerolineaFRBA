@@ -90,6 +90,7 @@ Direccion varchar(60) not null,
 Telefono numeric(30) not null,
 Mail varchar(50) not null,
 Fecha_Nacimiento smalldatetime not null,
+Fecha_prox_vencimiento smalldatetime
 )
 go
 Create Table Rutas_Aereas(
@@ -725,29 +726,12 @@ returns int
 as
 begin
 return(
-select sum(Cantidad) from Cambios_Millas
+select sum(Millas) from Millas
 where Cliente=@cliente
-and Fecha_Canje<dateadd(year,-1,dbo.fechaDeHoy())
+and Fecha<dateadd(year,-1,dbo.fechaDeHoy())
 )
 end
 go
-
-create function movimientosMillas(@cliente int)
-returns @tablita table(
-fecha date,
-cantidad int
-)
-as
-begin
-insert into @tablita
-
-select Fecha_Canje,Cantidad from Cambios_Millas
-where Cliente=@cliente
-and Fecha_Canje<dateadd(year,-1,dbo.fechaDeHoy())
-return
-end
-
-GO
 
 CREATE PROCEDURE aeronavesSustitutas @matricula varchar(10),@fechaBaja smalldatetime,@fechaAlta smalldatetime
 
@@ -795,7 +779,6 @@ go
 
 insert into Roles_Funcionalidades(Funcionalidad,Rol) select Id,1 from Funcionalidades;
 go
-insert into Roles_Funcionalidades(Funcionalidad,Rol) values(9,2);
 
 insert into Roles_Funcionalidades(Funcionalidad,Rol) values(6,2);
 
@@ -845,3 +828,25 @@ go
 
 insert into Usuario_rol values(1,1);
 insert into Usuario_rol values(2,1);
+go
+create function movimientosMillas(@cliente int)
+returns @tablita table(
+fecha date,
+cantidad int
+)
+as
+begin
+insert into @tablita
+
+select Fecha,Millas from Millas
+where Cliente=@cliente
+and Fecha<dateadd(year,-1,dbo.fechaDeHoy())
+return
+end
+
+GO
+/*
+create procedure asentarLLegadaAeronave @avion int,@origen int,@destino int,@fechaYHoraLlegada varchar(20)
+as
+begin transaction
+*/--select convert(datetime,'11/7/2015 11:00:00:000AM',131)
