@@ -23,7 +23,6 @@ namespace AerolineaFrba.Abm_Aeronave
         private void seleccionarReemplazo_Load(object sender, EventArgs e)
         {
             String procedureParaBuscarReemplazos = "exec dbo.aeronavesSustitutas @matricula='" + aeronaveAfectada.getMatricula() + "',@fechaBaja='" + aeronaveAfectada.getFechaBajaFueraServicio() + "',@fechaAlta='" + aeronaveAfectada.getFechaAltaFueraServicio() + "'";
-            //Console.WriteLine(procedureParaBuscarReemplazos);
             ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, procedureParaBuscarReemplazos);            
         }
 

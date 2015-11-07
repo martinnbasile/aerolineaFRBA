@@ -40,7 +40,7 @@ namespace AerolineaFrba.Abm_Aeronave
                     String noQueryDelete = "delete from viajes where viajes.Matricula='" + matriculaAeronaveSeleccionada + "'";
                     String noQueryUpdate = "UPDATE Aeronaves set Baja_Vida_Util='SI',Fecha_Baja_Definitiva=GETDATE() where matricula='" + matriculaAeronaveSeleccionada + "'";
                     ConexionALaBase.Conexion.ejecutarNonQuery(noQueryUpdate);
-                    //ConexionALaBase.Conexion.ejecutarNonQuery(noQueryDelete); Comentado hasta que se desarrolle el trigger necesario, sin el trigger rompe al ejecutarse.
+                    ConexionALaBase.Conexion.ejecutarNonQuery(noQueryDelete);// Comentado hasta que se desarrolle el trigger necesario, sin el trigger rompe al ejecutarse.
                     MessageBox.Show("Se ha dado de baja por fin de la vida util la aeronave seleccionada, todos los vuelos,pasajes y encomiendas asociados a la misma han sido cancelados");
                     new buscarAeronave().Show();
                     this.Close();

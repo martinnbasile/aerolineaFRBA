@@ -14,10 +14,29 @@ namespace AerolineaFrba.Canje_Millas
     {
         public MostrarInformacionMillas(int dni)
         {
-
             InitializeComponent();
             textBox1.Text = dni.ToString();
-
+            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select id from clientes where DNI=" + dni);
+            int numCliente;
+            try
+            {
+                reader.Read();
+                numCliente = (int)reader.GetSqlInt32(0);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("El DNI ingresado es incorrecto");
+                new ConsultaMillas().Show();
+                this.Close();
+                reader.Close();
+                reader.Dispose();
+                return;
+            }
+ 
+            
+            reader = ConexionALaBase.Conexion.consultarBase("select dbo.cantidadMillas(" + numCliente + ")");
+            reader.Read();
+            textBox2.Text = (reader.GetSqlInt32(0)).ToString();
             MessageBox.Show("EL DATAGRID Y CARGAR EL TEXTBOX MILLAS ACUM");
 
         }
