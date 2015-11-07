@@ -43,7 +43,8 @@ namespace AerolineaFrba.Login
                 this.reCargar();
                 return;
             }
-
+            Program.username = nombre;
+            
             new elegirRol().Show();
             this.Close();
         }

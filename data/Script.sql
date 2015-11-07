@@ -835,3 +835,13 @@ raiserror ('Contraseña incorrecta',16,150)
 end
 commit
 go
+
+create view rolPorUsuario as
+select r.descripcion as rol, u.username as usuario from
+usuarios u join Usuario_rol ur on (u.id=ur.cod_usuario)
+join roles r on (ur.cod_rol=r.Id)
+go
+
+
+insert into Usuario_rol values(1,1);
+insert into Usuario_rol values(2,1);
