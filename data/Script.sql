@@ -90,6 +90,7 @@ Direccion varchar(60) not null,
 Telefono numeric(30) not null,
 Mail varchar(50) not null,
 Fecha_Nacimiento smalldatetime not null,
+Fecha_prox_vencimiento smalldatetime
 )
 go
 Create Table Rutas_Aereas(
@@ -725,29 +726,12 @@ returns int
 as
 begin
 return(
-select sum(Cantidad) from Cambios_Millas
+select sum(Millas) from Millas
 where Cliente=@cliente
-and Fecha_Canje<dateadd(year,-1,dbo.fechaDeHoy())
+and Fecha<dateadd(year,-1,dbo.fechaDeHoy())
 )
 end
 go
-
-create function movimientosMillas(@cliente int)
-returns @tablita table(
-fecha date,
-cantidad int
-)
-as
-begin
-insert into @tablita
-
-select Fecha_Canje,Cantidad from Cambios_Millas
-where Cliente=@cliente
-and Fecha_Canje<dateadd(year,-1,dbo.fechaDeHoy())
-return
-end
-
-GO
 
 CREATE PROCEDURE aeronavesSustitutas @matricula varchar(10),@fechaBaja smalldatetime,@fechaAlta smalldatetime
 
@@ -795,7 +779,6 @@ go
 
 insert into Roles_Funcionalidades(Funcionalidad,Rol) select Id,1 from Funcionalidades;
 go
-insert into Roles_Funcionalidades(Funcionalidad,Rol) values(9,2);
 
 insert into Roles_Funcionalidades(Funcionalidad,Rol) values(6,2);
 
@@ -836,6 +819,79 @@ end
 commit
 go
 
+
+create procedure CancelarAeronaveVidaUtil
+  (
+  @matricula varchar(10))
+  as
+  BEGIN TRAN
+  declare
+  @dia datetime
+  set @dia=getdate()
+  delete from Butacas where Viaje in (select Id from Viajes
+  where Fecha_salida>=@dia and Matricula=@matricula)
+  delete from Pasajes where Viaje in (select Id from Viajes
+  where Fecha_salida>=@dia and Matricula=@matricula)
+  delete from Paquetes where Viaje in (select Id from Viajes
+  where Fecha_salida>=@dia and Matricula=@matricula)
+  delete from Viajes where Matricula='BJX-148' and Fecha_salida>=GETDATE()
+  
+  COMMIT TRAN
+  go
+
+
+
+create procedure CancelarAeronaveFueraDeServicio
+  (
+  @matricula varchar(10),
+  @hasta datetime)
+  as
+  BEGIN TRAN
+  declare
+  @dia datetime
+  set @dia=getdate()
+  delete from Butacas where Viaje in (select Id from Viajes
+  where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
+  delete from Pasajes where Viaje in (select Id from Viajes
+  where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
+  delete from Paquetes where Viaje in (select Id from Viajes
+  where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
+  delete from Viajes where Matricula='BJX-148' and Fecha_salida>=GETDATE() and Fecha_salida<=@hasta
+  COMMIT TRAN
+  go
+
+alter table Ciudades
+add Estado varchar(50) default 'Habilitado'
+go
+
+update Ciudades
+set Estado='Habilitado'
+go
+
+create procedure BorrarCiudades(
+@Descripcion varchar(100))
+as
+begin tran
+declare @id int
+set @id=(select Id from Ciudades where Descripcion=@Descripcion)
+update Ciudades set Estado='Deshabilitado' where Id=@id
+update Rutas_Aereas set Estado=2 where Ciudad_Destino=@id
+update Rutas_Aereas set Estado=2 where Ciudad_Origen=@id
+delete from Butacas where Viaje in (select v.Id from Viajes v inner join Rutas_Aereas r
+on v.Ruta=r.Id
+where r.Estado=2)
+delete from Pasajes where Viaje in (select v.Id from Viajes v inner join Rutas_Aereas r
+on v.Ruta=r.Id
+where r.Estado=2
+)
+delete from Paquetes where Viaje in (select v.Id from Viajes v inner join Rutas_Aereas r
+on v.Ruta=r.Id
+where r.Estado=2
+)
+delete from Viajes where Ruta in (select Id from Rutas_Aereas where Estado=2) and Fecha_salida>= getdate()
+commit tran
+go
+
 create view rolPorUsuario as
 select r.descripcion as rol, u.username as usuario from
 usuarios u join Usuario_rol ur on (u.id=ur.cod_usuario)
@@ -845,4 +901,26 @@ go
 
 insert into Usuario_rol values(1,1);
 insert into Usuario_rol values(2,1);
+go
+create function movimientosMillas(@cliente int)
+returns @tablita table(
+fecha date,
+cantidad int
+)
+as
+begin
+insert into @tablita
+
+select Fecha,Millas from Millas
+where Cliente=@cliente
+and Fecha<dateadd(year,-1,dbo.fechaDeHoy())
+return
+end
+
+GO
+/*
+create procedure asentarLLegadaAeronave @avion int,@origen int,@destino int,@fechaYHoraLlegada varchar(20)
+as
+begin transaction
+*/--select convert(datetime,'11/7/2015 11:00:00:000AM',131)
 
