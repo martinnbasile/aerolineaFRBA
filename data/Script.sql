@@ -1,7 +1,6 @@
 ﻿Use GD2C2015
 go
-drop procedure limpiarBase
-go
+
 Create Procedure limpiarBase as
 Drop table Butacas
 Drop table Cambios_Millas
@@ -30,8 +29,6 @@ Drop table Usuarios
 Drop table Roles 
 go
 
-exec limpiarBase
-go
 
 create Table Ciudades(
 Id int identity(1,1) primary key,
