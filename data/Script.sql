@@ -1,7 +1,6 @@
 ﻿Use GD2C2015
 go
 
-
 Create Procedure limpiarBase as
 drop Procedure CancelarAeronaveFueraDeServicio
 drop Procedure BorrarCiudades
@@ -50,7 +49,6 @@ Drop table tarjetas_Credito
 Drop table Clientes 
 Drop table Usuarios 
 Drop table Roles 
-
 go
 
 
@@ -374,33 +372,6 @@ insert into Clientes(DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_Nacimient
 Cli_Dni,Cli_Nombre,Cli_Apellido,Cli_Dir,Cli_Telefono,Cli_Mail,Cli_Fecha_Nac from gd_esquema.Maestra)
 go
 
-insert into usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
-go
-
-insert into usuarios values ('martinnbasile','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
-go
-
-insert into usuarios values ('bec','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
-go
-
-insert into usuarios values ('ale','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
-go
-
-insert into usuarios values ('fede','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
-go
-
-insert into usuario_rol values (3,1)
-go
-
-insert into usuario_rol values (4,1)
-go
-
-insert into usuario_rol values (5,1)
-go
-
-insert into usuario_rol values (6,1)
-go
-
 
 alter table Rutas_Aereas
 drop column Fecha_Salida
@@ -661,9 +632,22 @@ from funcionalidades f join Roles_Funcionalidades rf on (f.Id=rf.Funcionalidad)
 go
 
 
-insert into Usuarios
-values ('martinnb','62c66a7a5dd70c3146618063c344e531e6d4b59e379808443ce962b3abd63c5a',1,'OK','Sos dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
+
+insert into usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
 go
+
+insert into usuarios values ('martinnbasile','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
+go
+
+insert into usuarios values ('bec','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
+go
+
+insert into usuarios values ('ale','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
+go
+
+insert into usuarios values ('fede','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
+go
+
 
 Create  trigger CuaandoSeIngresanLoginsIncorrectos
 on Intentos_login
@@ -940,9 +924,7 @@ join roles r on (ur.cod_rol=r.Id)
 go
 
 
-insert into Usuario_rol values(1,1);
-insert into Usuario_rol values(2,1);
-go
+
 
 create function movimientosMillas(@cliente int)
 returns @tablita table(fecha date,cantidad int)
@@ -1019,6 +1001,16 @@ insert into Millas(Cliente,Millas)
 select Cliente,r.Precio_Base/10 from Pasajes p join Viajes v on v.Id=p.Viaje  join Rutas_Aereas r on r.Id=v.Ruta
 union
 select p.Cliente,(p.Kg*r.Precio_Kg)/10 from Paquetes p join Viajes v on v.Id=p.Viaje   join Rutas_Aereas r on r.Id=v.Ruta 
+go
 
 
+insert into Usuario_rol values(1,1);
+go
+insert into Usuario_rol values(2,1);
+go
+insert into usuario_rol values (3,1)
+go
+insert into usuario_rol values (4,1)
+go
+insert into usuario_rol values (5,1)
 go
