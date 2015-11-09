@@ -34,10 +34,10 @@ namespace AerolineaFrba.Canje_Millas
             }
  
             
-            reader = ConexionALaBase.Conexion.consultarBase("select dbo.cantidadMillas(" + numCliente + ")");
+            reader = ConexionALaBase.Conexion.consultarBase("select sum(millas) from millas where cliente=" + numCliente);
             reader.Read();
             textBox2.Text = (reader.GetSqlInt32(0)).ToString();
-            MessageBox.Show("EL DATAGRID Y CARGAR EL TEXTBOX MILLAS ACUM");
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "Select Millas from Millas where cliente=" + numCliente); 
 
         }
 
