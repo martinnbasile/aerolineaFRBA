@@ -1,7 +1,30 @@
 ﻿Use GD2C2015
 go
 
+
 Create Procedure limpiarBase as
+drop Procedure CancelarAeronaveFueraDeServicio
+drop Procedure BorrarCiudades
+drop view rolPorUsuario
+drop Procedure asentarMillas
+drop function movimientosMillas
+drop Procedure asentarLLegadaAeronave
+drop Procedure Loggear
+drop Procedure CancelarAeronaveVidaUtil
+drop function devuelveIDD
+drop function fechaDeHoy
+drop function cantidadMillas
+drop function devuelveRutaaa
+drop Procedure aeronavesSustitutas
+drop function devuelveTipoServicio
+drop function devuelveNumeroCliente
+drop function convertirFecha
+drop Procedure actualizarFecha
+drop function devuelveViaje3
+drop view funcionalidadPorRol
+drop view vista_rutas_aereas
+drop view vista_aeronaves
+Drop table Fecha
 Drop table Butacas
 Drop table Cambios_Millas
 Drop table Cancelaciones
@@ -27,6 +50,7 @@ Drop table tarjetas_Credito
 Drop table Clientes 
 Drop table Usuarios 
 Drop table Roles 
+
 go
 
 
@@ -893,11 +917,9 @@ go
 insert into Usuario_rol values(1,1);
 insert into Usuario_rol values(2,1);
 go
+
 create function movimientosMillas(@cliente int)
-returns @tablita table(
-fecha date,
-cantidad int
-)
+returns @tablita table(fecha date,cantidad int)
 as
 begin
 insert into @tablita
