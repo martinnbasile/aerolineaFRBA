@@ -374,8 +374,34 @@ insert into Clientes(DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_Nacimient
 Cli_Dni,Cli_Nombre,Cli_Apellido,Cli_Dir,Cli_Telefono,Cli_Mail,Cli_Fecha_Nac from gd_esquema.Maestra)
 go
 
-insert into usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','Algo a ver')
+insert into usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','No')
 go
+
+insert into usuarios values ('martinnbasile','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','No')
+go
+
+insert into usuarios values ('bec','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','No')
+go
+
+insert into usuarios values ('ale','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','No')
+go
+
+insert into usuarios values ('fede','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','No')
+go
+
+insert into usuario_rol values (3,1)
+go
+
+insert into usuario_rol values (4,1)
+go
+
+insert into usuario_rol values (5,1)
+go
+
+insert into usuario_rol values (6,1)
+go
+
+
 alter table Rutas_Aereas
 drop column Fecha_Salida
 go
