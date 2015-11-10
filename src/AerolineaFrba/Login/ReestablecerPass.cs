@@ -40,7 +40,7 @@ namespace AerolineaFrba.Login
                     if (textBox1.Text == textBox2.Text)
                     {
                         nuevaPassword = Encriptar.SHA256(textBox1.Text);
-                        ConexionALaBase.Conexion.ejecutarNonQuery("update usuarios set Password='" + nuevaPassword + "' where username='" + user + "'");
+                        ConexionALaBase.Conexion.ejecutarNonQuery("update MM.usuarios set Password='" + nuevaPassword + "' where username='" + user + "'");
                         MessageBox.Show("Su contraseña ha sido actualizada");
                         new Login().Show();
                         this.Close();

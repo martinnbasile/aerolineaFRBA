@@ -945,6 +945,7 @@ MM.usuarios u join MM.Usuario_rol ur on (u.id=ur.cod_usuario)
 join MM.roles r on (ur.cod_rol=r.Id)
 go
 
+/*
 create function MM.movimientosMillas(@cliente int)
 returns @tablita table(fecha date,cantidad int)
 as
@@ -957,7 +958,7 @@ and Fecha<dateadd(year,-1,MM.fechaDeHoy())
 return
 end
 
-GO
+GO*/
 
 create trigger MM.actualizarVencimientoCuandoSeAgreganMillas on MM.Millas
 for insert 

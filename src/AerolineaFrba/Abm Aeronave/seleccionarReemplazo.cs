@@ -38,7 +38,7 @@ namespace AerolineaFrba.Abm_Aeronave
             {
                 DataGridViewRow aeronaveReemplazante = this.dataGridView1.SelectedRows[0];
                 String matriculaAeronaveReemplazante = aeronaveReemplazante.Cells["Matrícula"].Value.ToString();
-                String noQuery = "update viajes set viajes.Matricula='"+matriculaAeronaveReemplazante+"' where viajes.Matricula='"+aeronaveAfectada.getMatricula()+"' and (viajes.Fecha_salida between '"+aeronaveAfectada.getFechaBajaFueraServicio()+"' and '"+aeronaveAfectada.getFechaAltaFueraServicio()+"' or  viajes.Fecha_Estimada_llegada between '"+aeronaveAfectada.getFechaBajaFueraServicio()+"' and '"+aeronaveAfectada.getFechaAltaFueraServicio()+"')";
+                String noQuery = "update MM.viajes set viajes.Matricula='"+matriculaAeronaveReemplazante+"' where viajes.Matricula='"+aeronaveAfectada.getMatricula()+"' and (viajes.Fecha_salida between '"+aeronaveAfectada.getFechaBajaFueraServicio()+"' and '"+aeronaveAfectada.getFechaAltaFueraServicio()+"' or  viajes.Fecha_Estimada_llegada between '"+aeronaveAfectada.getFechaBajaFueraServicio()+"' and '"+aeronaveAfectada.getFechaAltaFueraServicio()+"')";
                 ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
                 MessageBox.Show("Se ha realizado el reemplazo correctamente");
                 new buscarAeronave(); 

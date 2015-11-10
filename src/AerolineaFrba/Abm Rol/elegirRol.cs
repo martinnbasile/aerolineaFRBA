@@ -23,7 +23,7 @@ namespace AerolineaFrba.Abm_Rol
         {
             
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select rol from rolPorUsuario where usuario='"+Program.username+"'"); 
+            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select rol from MM.rolPorUsuario where usuario='"+Program.username+"'"); 
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
    
             

@@ -15,13 +15,13 @@ namespace AerolineaFrba.Abm_Ruta
         public NuevaRuta()
         {
             InitializeComponent();
-            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from ciudades");
+            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades");
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
             reader.Dispose();
-            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from ciudades");
+            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades");
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, reader);
             reader.Dispose();
-            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from Tipos_Servicio");
+            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.Tipos_Servicio");
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox3, reader);
             reader.Dispose();                               
         }

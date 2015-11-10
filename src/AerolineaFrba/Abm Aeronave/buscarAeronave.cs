@@ -90,7 +90,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void buscarAeronave_Load(object sender, EventArgs e)
         {
-            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "select * from vista_aeronaves");
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "select * from MM.vista_aeronaves");
           
         }
 
