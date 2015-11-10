@@ -37,9 +37,9 @@ namespace AerolineaFrba.Abm_Aeronave
             {
 
                 Aeronave nuevaAeronave = new Aeronave();
-                String nuevaAeronaveMatricula = maskedTextBox3.Text;
-                int nuevaAeronaveCantidadDeButacas = int.Parse(maskedTextBox1.Text);
-                int nuevaAeronaveCantidadKgs = int.Parse(maskedTextBox2.Text);
+                String nuevaAeronaveMatricula = maskedTextBox2.Text;
+                int nuevaAeronaveCantidadDeButacas = Convert.ToInt32(numericUpDown1.Value);
+                int nuevaAeronaveCantidadKgs = Convert.ToInt32(numericUpDown2.Value);
                 nuevaAeronave.setMatricula(nuevaAeronaveMatricula);
                 nuevaAeronave.setCantidadButacas(nuevaAeronaveCantidadDeButacas);
                 nuevaAeronave.setCantidadKgs(nuevaAeronaveCantidadKgs);
@@ -74,11 +74,11 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private bool estaCompleto()
         {
-            if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1, "Completar la cantidad de butacas"))
+            if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown1, "Completar la cantidad de butacas con un valor mayor a cero"))
             {
-                if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox2, "Completar la cantidad de kilogramos"))
+                if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown2, "Completar la cantidad de kilogramos con un valor mayor a cero"))
                 {
-                    if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox3, "Completar la matrícula"))
+                    if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox2, "Completar la matrícula"))
                     {
                         return true;
                     }
@@ -89,10 +89,25 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void maskedTextBox3_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
-
+          
         }
 
         private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
+
+        private void maskedTextBox2_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
 
         }

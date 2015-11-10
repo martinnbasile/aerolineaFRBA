@@ -52,5 +52,10 @@ namespace AerolineaFrba.Registro_Llegada_Destino
             new Funcionalidades.Funcionalidades().Show();
             this.Close();
         }
+
+        private void maskedTextBox2_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
     }
 }

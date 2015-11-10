@@ -82,6 +82,16 @@ namespace AerolineaFrba.Validaciones
             }
             return true;
         }
+        public static bool validarNumericUpDown(NumericUpDown unNumericUpDown, String unMensajeDeAlerta)
+        {
+            
+            if ((unNumericUpDown.Text == "") || (unNumericUpDown.Value <= 0))
+            {
+                MessageBox.Show(unMensajeDeAlerta);
+                return false;
+            }
+            return true;
+        }
         
     }
 }

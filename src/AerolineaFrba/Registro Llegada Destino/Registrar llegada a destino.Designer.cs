@@ -84,6 +84,7 @@
             this.maskedTextBox2.Size = new System.Drawing.Size(200, 20);
             this.maskedTextBox2.TabIndex = 5;
             this.maskedTextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.maskedTextBox2.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox2_MaskInputRejected);
             // 
             // textBox1
             // 
