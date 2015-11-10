@@ -16,7 +16,7 @@ namespace AerolineaFrba.Canje_Millas
         {
             InitializeComponent();
             textBox1.Text = dni.ToString();
-            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select id from clientes where DNI=" + dni);
+            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select id from MM.clientes where DNI=" + dni);
             int numCliente;
             try
             {
@@ -34,10 +34,10 @@ namespace AerolineaFrba.Canje_Millas
             }
  
             
-            reader = ConexionALaBase.Conexion.consultarBase("select sum(millas) from millas where cliente=" + numCliente);
+            reader = ConexionALaBase.Conexion.consultarBase("select sum(millas) from MM.millas where cliente=" + numCliente);
             reader.Read();
             textBox2.Text = (reader.GetSqlInt32(0)).ToString();
-            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "Select Millas from Millas where cliente=" + numCliente); 
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "Select Millas from MM.Millas where cliente=" + numCliente); 
 
         }
 

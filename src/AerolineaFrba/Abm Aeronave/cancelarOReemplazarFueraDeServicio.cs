@@ -37,7 +37,7 @@ namespace AerolineaFrba.Abm_Aeronave
         private void button1_Click(object sender, EventArgs e)
         {
             
-            String noQuery = "exec dbo.CancelarAeronaveFueraDeServicio '"+ aeronaveAfectada.getMatricula()+"','"+aeronaveAfectada.getFechaAltaFueraServicio()+"'";
+            String noQuery = "exec MM.CancelarAeronaveFueraDeServicio '"+ aeronaveAfectada.getMatricula()+"','"+aeronaveAfectada.getFechaAltaFueraServicio()+"'";
             ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
             MessageBox.Show("Se han cancelado los pasajes/encomiendas correspondientes");
             new buscarAeronave().Show();
@@ -47,7 +47,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button2_Click(object sender, EventArgs e)
         {
-            String procedureParaBuscarReemplazos = "exec dbo.aeronavesSustitutas @matricula='" + aeronaveAfectada.getMatricula() + "',@fechaBaja='" + aeronaveAfectada.getFechaBajaFueraServicio() + "',@fechaAlta='" + aeronaveAfectada.getFechaAltaFueraServicio() + "'";
+            String procedureParaBuscarReemplazos = "exec MM.aeronavesSustitutas @matricula='" + aeronaveAfectada.getMatricula() + "',@fechaBaja='" + aeronaveAfectada.getFechaBajaFueraServicio() + "',@fechaAlta='" + aeronaveAfectada.getFechaAltaFueraServicio() + "'";
             SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase(procedureParaBuscarReemplazos);
             if (consulta.HasRows)
             {

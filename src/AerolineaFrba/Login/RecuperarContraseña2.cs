@@ -20,7 +20,7 @@ namespace AerolineaFrba.Login
         {
             InitializeComponent();
             userName = unUserName;
-            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Pregunta_Secreta from Usuarios where username='" + unUserName + "'");
+            SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Pregunta_Secreta from MM.Usuarios where username='" + unUserName + "'");
             if (reader.Read())
                 textBox1.Text = reader.GetString(0);
            reader.Dispose();
@@ -37,7 +37,7 @@ namespace AerolineaFrba.Login
             if (Validaciones.Validaciones.validarTextBox(textBox2, "Ingrese una respuesta secreta"))
             {
                 String respuesta="";                
-                SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Respuesta from Usuarios where username='" + userName + "'");
+                SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Respuesta MM.from Usuarios where username='" + userName + "'");
                 if (reader.Read())
                        respuesta = reader.GetString(0);
                         

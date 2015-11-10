@@ -49,7 +49,7 @@ namespace AerolineaFrba.Abm_Aeronave
             if(Validaciones.Validaciones.validarTextBox(textBox1,"Seleccione una fecha"))
             {
                 String fechaActual = DateTime.Now.ToString("yyyy-MM-dd");
-                String queryConsulta = "SELECT * FROM Viajes WHERE Fecha_salida BETWEEN '" + fechaActual + "'  AND '" + fechaReinicioDeServicio + "' AND Matricula='" + aeronaveAfectada.getMatricula() + "' ";
+                String queryConsulta = "SELECT * FROM MM.Viajes WHERE Fecha_salida BETWEEN '" + fechaActual + "'  AND '" + fechaReinicioDeServicio + "' AND Matricula='" + aeronaveAfectada.getMatricula() + "' ";
                 SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase(queryConsulta);
                 if (consulta.HasRows)
                 {
@@ -61,7 +61,7 @@ namespace AerolineaFrba.Abm_Aeronave
                 }
                 else
                 {
-                    string queryParaMandarFueraDeServicio = "UPDATE Aeronaves set Baja_Fuera_Servicio='SI',Fecha_Fuera_Servicio='" + fechaActual + "',Fecha_Reinicio_Servicio='" + fechaReinicioDeServicio + "' where matricula='" + aeronaveAfectada.getMatricula() + "'";
+                    string queryParaMandarFueraDeServicio = "UPDATE MM.Aeronaves set Baja_Fuera_Servicio='SI',Fecha_Fuera_Servicio='" + fechaActual + "',Fecha_Reinicio_Servicio='" + fechaReinicioDeServicio + "' where matricula='" + aeronaveAfectada.getMatricula() + "'";
                     ConexionALaBase.Conexion.ejecutarNonQuery(queryParaMandarFueraDeServicio);
                     MessageBox.Show("Se ha pasado la aeronave a estado fuera de servicio entre la fecha "+fechaActual+" y la fecha "+fechaReinicioDeServicio+" ");
                     new buscarAeronave().Show();
