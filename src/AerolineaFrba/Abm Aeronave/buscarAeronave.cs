@@ -69,7 +69,9 @@ namespace AerolineaFrba.Abm_Aeronave
                 
                DataGridViewRow aeronaveSeleccionada = this.dataGridView1.SelectedRows[0];
                String estadoServicioAeronaveSeleccionada = aeronaveSeleccionada.Cells["Baja por fuera de servicio"].Value.ToString();
-               if(estadoServicioAeronaveSeleccionada.Equals("SI")){
+               String estadoVidaUtilAeronaveSeleccionada = aeronaveSeleccionada.Cells["Baja por vida util"].Value.ToString();
+               if (estadoServicioAeronaveSeleccionada.Equals("SI") || estadoVidaUtilAeronaveSeleccionada.Equals("SI"))
+               {
                     MessageBox.Show("Ya se encuentra fuera de servicio la aeronave seleccionada");
                }else{
                    String matriculaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Matrícula"].Value.ToString();

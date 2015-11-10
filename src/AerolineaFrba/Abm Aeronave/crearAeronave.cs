@@ -33,37 +33,58 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Aeronave nuevaAeronave = new Aeronave();
-            String nuevaAeronaveMatricula = maskedTextBox3.Text;
-            int nuevaAeronaveCantidadDeButacas = int.Parse(maskedTextBox1.Text);
-            int nuevaAeronaveCantidadKgs = int.Parse(maskedTextBox2.Text);
-            nuevaAeronave.setMatricula(nuevaAeronaveMatricula);
-            nuevaAeronave.setCantidadButacas(nuevaAeronaveCantidadDeButacas);
-            nuevaAeronave.setCantidadKgs(nuevaAeronaveCantidadKgs);
-            nuevaAeronave.setModelo(aeronaveAReemplazar.getModelo());
-            nuevaAeronave.setFabricante(aeronaveAReemplazar.getFabricante());
-            nuevaAeronave.setTipoDeServicio(aeronaveAReemplazar.getTipoDeServicio());
-            SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("select id from Tipos_Servicio where Descripcion='" + nuevaAeronave.getTipoDeServicio() + "'");
-            int idTipoServicio = consulta.GetInt32(0);
-            String queryValidarMatricula = "select * from Aeronaves where Matricula='" + nuevaAeronave.getMatricula() + "'";
-            SqlDataReader consultaValidarMatricula = ConexionALaBase.Conexion.consultarBase(queryValidarMatricula);
-            if (consultaValidarMatricula.HasRows)
+            if (estaCompleto())
             {
-                MessageBox.Show("Ya existe una aeronave con la matrícula elegida, ingrese una matrícula diferente");
+
+                Aeronave nuevaAeronave = new Aeronave();
+                String nuevaAeronaveMatricula = maskedTextBox3.Text;
+                int nuevaAeronaveCantidadDeButacas = int.Parse(maskedTextBox1.Text);
+                int nuevaAeronaveCantidadKgs = int.Parse(maskedTextBox2.Text);
+                nuevaAeronave.setMatricula(nuevaAeronaveMatricula);
+                nuevaAeronave.setCantidadButacas(nuevaAeronaveCantidadDeButacas);
+                nuevaAeronave.setCantidadKgs(nuevaAeronaveCantidadKgs);
+                nuevaAeronave.setModelo(aeronaveAReemplazar.getModelo());
+                nuevaAeronave.setFabricante(aeronaveAReemplazar.getFabricante());
+                nuevaAeronave.setTipoDeServicio(aeronaveAReemplazar.getTipoDeServicio());
+                SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Tipos_Servicio where Descripcion='" + nuevaAeronave.getTipoDeServicio() + "'");
+                int idTipoServicio = new int();
+                if (consulta.Read()) { idTipoServicio = consulta.GetInt32(consulta.GetOrdinal("id")); }
+                consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Fabricantes where Descripcion='" + nuevaAeronave.getFabricante() + "'");
+                int idFabricante = new int();
+                if (consulta.Read()) { idFabricante = consulta.GetInt32(consulta.GetOrdinal("id")); }
+                
+                String queryValidarMatricula = "select * from MM.Aeronaves where Matricula='" + nuevaAeronave.getMatricula() + "'";
+                SqlDataReader consultaValidarMatricula = ConexionALaBase.Conexion.consultarBase(queryValidarMatricula);
+                if (consultaValidarMatricula.HasRows)
+                {
+                    MessageBox.Show("Ya existe una aeronave con la matrícula elegida, ingrese una matrícula diferente");
+                }
+                else
+                {
+                    String fechaActual = DateTime.Now.ToString("yyyy-MM-dd");
+                    ConexionALaBase.Conexion.ejecutarNonQuery("INSERT INTO MM.Aeronaves (matricula,Fecha_alta,Modelo,Fabricante,Tipo_Servicio,Cantidad_Butacas,Cantidad_Kg) VALUES ('" + nuevaAeronave.getMatricula() + "','"+fechaActual+"','" + nuevaAeronave.getModelo() + "','" + idFabricante + "'," + idTipoServicio + "," + nuevaAeronave.getCantidadButacas() + "," + nuevaAeronave.getCantidadKgs() + ")");
+                    String noQueryActualizarViajes = "update MM.viajes set MM.viajes.Matricula='" + nuevaAeronave.getMatricula() + "' where MM.viajes.Matricula='" + aeronaveAReemplazar.getMatricula() + "' and (MM.viajes.Fecha_salida between '" + aeronaveAReemplazar.getFechaBajaFueraServicio() + "' and '" + aeronaveAReemplazar.getFechaAltaFueraServicio() + "' or  MM.viajes.Fecha_Estimada_llegada between '" + aeronaveAReemplazar.getFechaBajaFueraServicio() + "' and '" + aeronaveAReemplazar.getFechaAltaFueraServicio() + "')";
+                    ConexionALaBase.Conexion.ejecutarNonQuery(noQueryActualizarViajes);
+                    MessageBox.Show("La aeronave a sido dada de baja y se ha asignado la aeronave creada para que la reemplace en los vuelos correspondientes");
+                    new buscarAeronave().Show();
+                    this.Close();
+                }
             }
-            else
+        }
+
+        private bool estaCompleto()
+        {
+            if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1, "Completar la cantidad de butacas"))
             {
-                ConexionALaBase.Conexion.ejecutarNonQuery("INSERT INTO Aeronaves (matricula,Modelo,Fabricante,Tipo_Servicio,Cantidad_Butacas,Cantidad_Kg) VALUES ('" + nuevaAeronave.getMatricula() + "','" + nuevaAeronave.getModelo() + "','" + nuevaAeronave.getFabricante() + "'," + idTipoServicio + "," + nuevaAeronave.getCantidadButacas() + "," + nuevaAeronave.getCantidadKgs() + ")");
-                String noQueryActualizarViajes = "update viajes set viajes.Matricula='" + nuevaAeronave.getMatricula() + "' where viajes.Matricula='" + aeronaveAReemplazar.getMatricula() + "' and (viajes.Fecha_salida between '" + aeronaveAReemplazar.getFechaBajaFueraServicio() + "' and '" + aeronaveAReemplazar.getFechaAltaFueraServicio() + "' or  viajes.Fecha_Estimada_llegada between '" + aeronaveAReemplazar.getFechaBajaFueraServicio() + "' and '" + aeronaveAReemplazar.getFechaAltaFueraServicio() + "')";
-                ConexionALaBase.Conexion.ejecutarNonQuery(noQueryActualizarViajes);
-                MessageBox.Show("La aeronave a sido dada de baja y se ha asignado la aeronave creada para que la reemplace en los vuelos correspondientes");
-                new buscarAeronave();
-                this.Close();
-            }
-
-
-            
-            
+                if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox2, "Completar la cantidad de kilogramos"))
+                {
+                    if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox3, "Completar la matrícula"))
+                    {
+                        return true;
+                    }
+                }
+            }  
+            return false;
         }
 
         private void maskedTextBox3_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
