@@ -629,21 +629,21 @@ go
 
 
 
-create view vista_rutas_aereas as
+create view MM.vista_rutas_aereas as
 select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
 from MM.Rutas_Aereas r join MM.Ciudades c1 on (r.Ciudad_Origen=c1.Id)
 					join MM.Ciudades c2 on (r.Ciudad_Destino=c2.Id)
 					join MM.Tipos_Servicio t on (r.Tipo_Servicio=t.Id)
 go
 
-create view vista_aeronaves as
+create view MM.vista_aeronaves as
 select a.Fecha_alta as 'Fecha de alta',  a.Modelo as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.Baja_Fuera_Servicio as 'Baja por fuera de servicio',a.Baja_Vida_Util as 'Baja por vida util',a.Fecha_Fuera_Servicio as 'Fecha de fuera de servicio',a.Fecha_Reinicio_Servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',a.Cantidad_Butacas as 'Cantidad de butacas',a.Cantidad_Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
 from MM.Aeronaves a join MM.Fabricantes f on (a.Fabricante=f.Id)
 					join MM.Tipos_Servicio ts on (a.Tipo_Servicio=ts.Id)				
 go
 
 
-create view funcionalidadPorRol as
+create view MM.funcionalidadPorRol as
 select f.descripcion as 'Descripcion', r.Descripcion as 'Rol'
 from MM.funcionalidades f join MM.Roles_Funcionalidades rf on (f.Id=rf.Funcionalidad) 
 					   join MM.Roles r on (r.Id=rf.Rol)
