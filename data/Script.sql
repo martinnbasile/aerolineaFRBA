@@ -1,9 +1,7 @@
 Use GD2C2015
 go
-create schema MM
-go
 
-Create Procedure MM.limpiarBase as
+create Procedure MM.limpiarBase as
 drop Procedure MM.CancelarAeronaveFueraDeServicio
 drop Procedure MM.BorrarCiudades
 drop view MM.rolPorUsuario
@@ -51,14 +49,18 @@ Drop table MM.tarjetas_Credito
 Drop table MM.Clientes 
 Drop table MM.Usuarios 
 Drop table MM.Roles 
+drop trigger mm.actualizarVencimientoCuandoSeAgreganMillas
+drop procedure mm.actualizarFecha
 go
 
-
+create schema MM
+go
 
 create Table MM.Ciudades(
 Id int identity(1,1) primary key,
 Descripcion varchar(70) not null unique)
 go
+
 alter table MM.Ciudades
 add Estado varchar(50) default 'Habilitado'
 go
@@ -629,21 +631,21 @@ go
 
 
 
-create view vista_rutas_aereas as
+create view MM.vista_rutas_aereas as
 select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
 from MM.Rutas_Aereas r join MM.Ciudades c1 on (r.Ciudad_Origen=c1.Id)
 					join MM.Ciudades c2 on (r.Ciudad_Destino=c2.Id)
 					join MM.Tipos_Servicio t on (r.Tipo_Servicio=t.Id)
 go
 
-create view vista_aeronaves as
+create view MM.vista_aeronaves as
 select a.Fecha_alta as 'Fecha de alta',  a.Modelo as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.Baja_Fuera_Servicio as 'Baja por fuera de servicio',a.Baja_Vida_Util as 'Baja por vida util',a.Fecha_Fuera_Servicio as 'Fecha de fuera de servicio',a.Fecha_Reinicio_Servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',a.Cantidad_Butacas as 'Cantidad de butacas',a.Cantidad_Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
 from MM.Aeronaves a join MM.Fabricantes f on (a.Fabricante=f.Id)
 					join MM.Tipos_Servicio ts on (a.Tipo_Servicio=ts.Id)				
 go
 
 
-create view funcionalidadPorRol as
+create view MM.funcionalidadPorRol as
 select f.descripcion as 'Descripcion', r.Descripcion as 'Rol'
 from MM.funcionalidades f join MM.Roles_Funcionalidades rf on (f.Id=rf.Funcionalidad) 
 					   join MM.Roles r on (r.Id=rf.Rol)
@@ -772,8 +774,8 @@ end
 go
 
 
-create function MM.cantidadMillas(@cliente int)
-returns int
+--create function MM.cantidadMillas(@cliente int)
+/*returns int
 as
 begin
 return(
@@ -782,7 +784,7 @@ where Cliente=@cliente
 and Fecha<dateadd(year,-1,MM.fechaDeHoy())
 )
 end
-go
+go*/
 
 CREATE PROCEDURE MM.aeronavesSustitutas @matricula varchar(10),@fechaBaja smalldatetime,@fechaAlta smalldatetime
 
@@ -827,6 +829,8 @@ begin
 insert into MM.Fecha(fecha) values(MM.convertirFecha(@fecha))
 end 
 go
+
+
 
 
 insert into MM.Roles_Funcionalidades(Funcionalidad,Rol) select Id,1 from MM.Funcionalidades;
@@ -941,14 +945,14 @@ go
 
 create view MM.rolPorUsuario as
 select r.descripcion as rol, u.username as usuario from
-MM.usuarios u join Usuario_rol ur on (u.id=ur.cod_usuario)
-join roles r on (ur.cod_rol=r.Id)
+MM.usuarios u join MM.Usuario_rol ur on (u.id=ur.cod_usuario)
+join MM.Roles r on (ur.cod_rol=r.Id)
 go
 
 
 
 
-create function MM.movimientosMillas(@cliente int)
+/*create function MM.movimientosMillas(@cliente int)
 returns @tablita table(fecha date,cantidad int)
 as
 begin
@@ -959,8 +963,7 @@ where Cliente=@cliente
 and Fecha<dateadd(year,-1,MM.fechaDeHoy())
 return
 end
-
-GO
+GO*/
 
 create trigger MM.actualizarVencimientoCuandoSeAgreganMillas on MM.Millas
 for insert 
