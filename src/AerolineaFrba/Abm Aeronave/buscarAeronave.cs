@@ -35,7 +35,20 @@ namespace AerolineaFrba.Abm_Aeronave
                     MessageBox.Show("Ya se encuentra dada de baja por vida util la aeronave seleccionada");
                 }
                 else
-                {
+                {   
+                    String matriculaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Matrícula"].Value.ToString();
+                    String modeloAeronaveSeleccionada = aeronaveSeleccionada.Cells["Modelo"].Value.ToString();
+                    String fabricanteAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fabricante"].Value.ToString();
+                    String tipoDeServicioAeronaveSeleccionada = aeronaveSeleccionada.Cells["Tipo de Servicio"].Value.ToString();
+                    Aeronave unaAeronave = new Aeronave();
+                    unaAeronave.setMatricula(matriculaAeronaveSeleccionada);
+                    unaAeronave.setModelo(modeloAeronaveSeleccionada);
+                    unaAeronave.setFabricante(fabricanteAeronaveSeleccionada);
+                    unaAeronave.setTipoDeServicio(tipoDeServicioAeronaveSeleccionada);
+                    
+                    new cancelarOReemplazarVidaUtil(unaAeronave).Show();
+                    this.Close();
+                    /*
                     String matriculaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Matrícula"].Value.ToString();
                     String noQueryDelete = "delete from viajes where viajes.Matricula='" + matriculaAeronaveSeleccionada + "'";
                     String noQueryUpdate = "UPDATE Aeronaves set Baja_Vida_Util='SI',Fecha_Baja_Definitiva=GETDATE() where matricula='" + matriculaAeronaveSeleccionada + "'";
@@ -44,7 +57,8 @@ namespace AerolineaFrba.Abm_Aeronave
                     MessageBox.Show("Se ha dado de baja por fin de la vida util la aeronave seleccionada, todos los vuelos,pasajes y encomiendas asociados a la misma han sido cancelados");
                     new buscarAeronave().Show();
                     this.Close();
-                }
+                    */ 
+               }
            }
         }
 
@@ -59,7 +73,16 @@ namespace AerolineaFrba.Abm_Aeronave
                     MessageBox.Show("Ya se encuentra fuera de servicio la aeronave seleccionada");
                }else{
                    String matriculaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Matrícula"].Value.ToString();
-                   new bajaFueraDeServicio(matriculaAeronaveSeleccionada).Show();
+                   String modeloAeronaveSeleccionada = aeronaveSeleccionada.Cells["Modelo"].Value.ToString();
+                   String fabricanteAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fabricante"].Value.ToString();
+                   String tipoDeServicioAeronaveSeleccionada = aeronaveSeleccionada.Cells["Tipo de Servicio"].Value.ToString();
+                   Aeronave unaAeronave = new Aeronave();
+                   unaAeronave.setMatricula(matriculaAeronaveSeleccionada);
+                   unaAeronave.setModelo(modeloAeronaveSeleccionada);
+                   unaAeronave.setFabricante(fabricanteAeronaveSeleccionada);
+                   unaAeronave.setTipoDeServicio(tipoDeServicioAeronaveSeleccionada);
+   
+                   new bajaFueraDeServicio(unaAeronave).Show();
                    this.Close();
                }    
             }

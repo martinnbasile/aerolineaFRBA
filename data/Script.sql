@@ -51,6 +51,10 @@ Drop table Usuarios
 Drop table Roles 
 go
 
+exec dbo.limpiarBase
+
+go
+
 
 create Table Ciudades(
 Id int identity(1,1) primary key,
@@ -866,8 +870,9 @@ create procedure CancelarAeronaveVidaUtil
   where Fecha_salida>=@dia and Matricula=@matricula)
   delete from Paquetes where Viaje in (select Id from Viajes
   where Fecha_salida>=@dia and Matricula=@matricula)
-  delete from Viajes where Matricula='BJX-148' and Fecha_salida>=GETDATE()
-  
+  delete from Viajes where Matricula=@matricula and Fecha_salida>=GETDATE()
+  UPDATE Aeronaves set Baja_Vida_Util='SI',Fecha_Baja_Definitiva=GETDATE() where matricula=@matricula 	  
+
   COMMIT TRAN
   go
 
@@ -889,6 +894,7 @@ create procedure CancelarAeronaveFueraDeServicio
   delete from Paquetes where Viaje in (select Id from Viajes
   where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
   delete from Viajes where Matricula='BJX-148' and Fecha_salida>=GETDATE() and Fecha_salida<=@hasta
+  UPDATE Aeronaves set Baja_Fuera_Servicio='SI',Fecha_Fuera_Servicio=GETDATE(), Fecha_Reinicio_Servicio=@hasta where matricula=@matricula
   COMMIT TRAN
   go
 

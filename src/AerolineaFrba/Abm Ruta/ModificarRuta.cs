@@ -80,5 +80,10 @@ namespace AerolineaFrba.Abm_Ruta
                 MessageBox.Show("ToDo: implentar la actualizacion en la base");
             }
         }
+
+        private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
     }
 }

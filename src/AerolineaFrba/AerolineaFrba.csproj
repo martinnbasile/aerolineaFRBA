@@ -63,11 +63,23 @@
     <Compile Include="Abm Aeronave\calendario.Designer.cs">
       <DependentUpon>calendario.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Aeronave\cancelarOReemplazar.cs">
+    <Compile Include="Abm Aeronave\cancelarOReemplazarFueraDeServicio.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm Aeronave\cancelarOReemplazar.Designer.cs">
-      <DependentUpon>cancelarOReemplazar.cs</DependentUpon>
+    <Compile Include="Abm Aeronave\cancelarOReemplazarFueraDeServicio.Designer.cs">
+      <DependentUpon>cancelarOReemplazarFueraDeServicio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Abm Aeronave\cancelarOReemplazarVidaUtil.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Aeronave\cancelarOReemplazarVidaUtil.Designer.cs">
+      <DependentUpon>cancelarOReemplazarVidaUtil.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Abm Aeronave\crearAeronave.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Aeronave\crearAeronave.Designer.cs">
+      <DependentUpon>crearAeronave.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Aeronave\seleccionarReemplazo.cs">
       <SubType>Form</SubType>
@@ -235,8 +247,14 @@
     <EmbeddedResource Include="Abm Aeronave\Calendario.resx">
       <DependentUpon>calendario.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Abm Aeronave\cancelarOReemplazar.resx">
-      <DependentUpon>cancelarOReemplazar.cs</DependentUpon>
+    <EmbeddedResource Include="Abm Aeronave\cancelarOReemplazarFueraDeServicio.resx">
+      <DependentUpon>cancelarOReemplazarFueraDeServicio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Aeronave\cancelarOReemplazarVidaUtil.resx">
+      <DependentUpon>cancelarOReemplazarVidaUtil.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Aeronave\crearAeronave.resx">
+      <DependentUpon>crearAeronave.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Aeronave\seleccionarReemplazo.resx">
       <DependentUpon>seleccionarReemplazo.cs</DependentUpon>

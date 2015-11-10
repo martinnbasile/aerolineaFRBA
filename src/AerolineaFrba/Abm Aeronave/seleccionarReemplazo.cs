@@ -28,7 +28,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button2_Click(object sender, EventArgs e)
         {
-            new cancelarOReemplazar(aeronaveAfectada);
+            new cancelarOReemplazarFueraDeServicio(aeronaveAfectada);
             this.Close();
         }
 
