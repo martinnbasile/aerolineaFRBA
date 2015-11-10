@@ -1,4 +1,4 @@
-Use GD2C2015
+﻿Use GD2C2015
 go
 create schema MM
 go
@@ -941,12 +941,9 @@ go
 
 create view MM.rolPorUsuario as
 select r.descripcion as rol, u.username as usuario from
-MM.usuarios u join Usuario_rol ur on (u.id=ur.cod_usuario)
-join roles r on (ur.cod_rol=r.Id)
+MM.usuarios u join MM.Usuario_rol ur on (u.id=ur.cod_usuario)
+join MM.roles r on (ur.cod_rol=r.Id)
 go
-
-
-
 
 create function MM.movimientosMillas(@cliente int)
 returns @tablita table(fecha date,cantidad int)

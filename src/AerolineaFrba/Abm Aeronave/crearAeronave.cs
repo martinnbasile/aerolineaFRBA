@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace AerolineaFrba.Abm_Aeronave
 {
@@ -42,7 +43,25 @@ namespace AerolineaFrba.Abm_Aeronave
             nuevaAeronave.setModelo(aeronaveAReemplazar.getModelo());
             nuevaAeronave.setFabricante(aeronaveAReemplazar.getFabricante());
             nuevaAeronave.setTipoDeServicio(aeronaveAReemplazar.getTipoDeServicio());
-            //String noQuery = "i
+            SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("select id from Tipos_Servicio where Descripcion='" + nuevaAeronave.getTipoDeServicio() + "'");
+            int idTipoServicio = consulta.GetInt32(0);
+            String queryValidarMatricula = "select * from Aeronaves where Matricula='" + nuevaAeronave.getMatricula() + "'";
+            SqlDataReader consultaValidarMatricula = ConexionALaBase.Conexion.consultarBase(queryValidarMatricula);
+            if (consultaValidarMatricula.HasRows)
+            {
+                MessageBox.Show("Ya existe una aeronave con la matrícula elegida, ingrese una matrícula diferente");
+            }
+            else
+            {
+                ConexionALaBase.Conexion.ejecutarNonQuery("INSERT INTO Aeronaves (matricula,Modelo,Fabricante,Tipo_Servicio,Cantidad_Butacas,Cantidad_Kg) VALUES ('" + nuevaAeronave.getMatricula() + "','" + nuevaAeronave.getModelo() + "','" + nuevaAeronave.getFabricante() + "'," + idTipoServicio + "," + nuevaAeronave.getCantidadButacas() + "," + nuevaAeronave.getCantidadKgs() + ")");
+                String noQueryActualizarViajes = "update viajes set viajes.Matricula='" + nuevaAeronave.getMatricula() + "' where viajes.Matricula='" + aeronaveAReemplazar.getMatricula() + "' and (viajes.Fecha_salida between '" + aeronaveAReemplazar.getFechaBajaFueraServicio() + "' and '" + aeronaveAReemplazar.getFechaAltaFueraServicio() + "' or  viajes.Fecha_Estimada_llegada between '" + aeronaveAReemplazar.getFechaBajaFueraServicio() + "' and '" + aeronaveAReemplazar.getFechaAltaFueraServicio() + "')";
+                ConexionALaBase.Conexion.ejecutarNonQuery(noQueryActualizarViajes);
+                MessageBox.Show("La aeronave a sido dada de baja y se ha asignado la aeronave creada para que la reemplace en los vuelos correspondientes");
+                new buscarAeronave();
+                this.Close();
+            }
+
+
             
             
         }

@@ -50,7 +50,7 @@ namespace AerolineaFrba.Abm_Ciudad
                 String ciudadSeleccionada = listBox1.Text;
                 if (MessageBox.Show("¿Está seguro que desea borrar la ciudad "+ ciudadSeleccionada +"?", "Confirmar operación", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    ConexionALaBase.Conexion.ejecutarNonQuery("exec dbo.BorrarCiudades '"+ciudadSeleccionada+"'");
+                    ConexionALaBase.Conexion.ejecutarNonQuery("exec MM.BorrarCiudades '"+ciudadSeleccionada+"'");
                     MessageBox.Show("La ciudad "+ ciudadSeleccionada +" a sido eliminada");
                     new buscarCiudad().Show();
                     this.Close();

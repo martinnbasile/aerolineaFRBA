@@ -36,7 +36,7 @@ namespace AerolineaFrba.Login
             nombre = textBox1.Text;
             pass = textBox2.Text;
             pass = Encriptar.SHA256(pass);
-            try { ConexionALaBase.Conexion.ejecutarNonQuery("exec dbo.Loggear '" + nombre + "','" + pass + "'"); }
+            try { ConexionALaBase.Conexion.ejecutarNonQuery("exec MM.Loggear '" + nombre + "','" + pass + "'"); }
             catch (SqlException exc)
             {
                 MessageBox.Show(exc.Message);
