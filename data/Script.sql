@@ -2,59 +2,57 @@ Use GD2C2015
 go
 create schema MM
 go
-Create Procedure limpiarBase as
-drop Procedure CancelarAeronaveFueraDeServicio
-drop Procedure BorrarCiudades
-drop view rolPorUsuario
-drop Procedure asentarMillas
-drop function movimientosMillas
-drop Procedure asentarLLegadaAeronave
-drop Procedure Loggear
-drop Procedure CancelarAeronaveVidaUtil
-drop function devuelveIDD
-drop function fechaDeHoy
-drop function cantidadMillas
-drop function devuelveRutaaa
-drop Procedure aeronavesSustitutas
-drop function devuelveTipoServicio
-drop function devuelveNumeroCliente
-drop function convertirFecha
-drop Procedure actualizarFecha
-drop function devuelveViaje3
-drop view funcionalidadPorRol
-drop view vista_rutas_aereas
-drop view vista_aeronaves
-Drop table Fecha
-Drop table Butacas
-Drop table Cambios_Millas
-Drop table Cancelaciones
-Drop table Intentos_Fallidos
-Drop table Inhabilitados
-Drop table Millas
-Drop table Paquetes
-Drop table Pasajes
-Drop table Roles_Funcionalidades
-Drop table Tarjetas_Credito
-Drop table Productos_Milla
-Drop table Funcionalidades
-Drop table Intentos_login
-Drop table KG
-Drop table Usuario_rol
-Drop table Viajes
-Drop table Rutas_Aereas
-Drop table Aeronaves 
-Drop table Tipos_Servicio 
-Drop table Fabricantes 
-Drop table Ciudades 
-Drop table tarjetas_Credito
-Drop table Clientes 
-Drop table Usuarios 
-Drop table Roles 
+
+Create Procedure MM.limpiarBase as
+drop Procedure MM.CancelarAeronaveFueraDeServicio
+drop Procedure MM.BorrarCiudades
+drop view MM.rolPorUsuario
+drop Procedure MM.asentarMillas
+drop function MM.movimientosMillas
+drop Procedure MM.asentarLLegadaAeronave
+drop Procedure MM.Loggear
+drop Procedure MM.CancelarAeronaveVidaUtil
+drop function MM.devuelveIDD
+drop function MM.fechaDeHoy
+drop function MM.cantidadMillas
+drop function MM.devuelveRutaaa
+drop Procedure MM.aeronavesSustitutas
+drop function MM.devuelveTipoServicio
+drop function MM.devuelveNumeroCliente
+drop function MM.convertirFecha
+drop Procedure MM.actualizarFecha
+drop function MM.devuelveViaje3
+drop view MM.funcionalidadPorRol
+drop view MM.vista_rutas_aereas
+drop view MM.vista_aeronaves
+Drop table MM.Fecha
+Drop table MM.Butacas
+Drop table MM.Cambios_Millas
+Drop table MM.Cancelaciones
+Drop table MM.Intentos_Fallidos
+Drop table MM.Inhabilitados
+Drop table MM.Millas
+Drop table MM.Paquetes
+Drop table MM.Pasajes
+Drop table MM.Roles_Funcionalidades
+Drop table MM.Tarjetas_Credito
+Drop table MM.Productos_Milla
+Drop table MM.Funcionalidades
+Drop table MM.Intentos_login
+Drop table MM.KG
+Drop table MM.Usuario_rol
+Drop table MM.Viajes
+Drop table MM.Rutas_Aereas
+Drop table MM.Aeronaves 
+Drop table MM.Tipos_Servicio 
+Drop table MM.Fabricantes 
+Drop table MM.Ciudades 
+Drop table MM.tarjetas_Credito
+Drop table MM.Clientes 
+Drop table MM.Usuarios 
+Drop table MM.Roles 
 go
 
-exec dbo.limpiarBase
-
-go
 
 
 create Table MM.Ciudades(
@@ -439,7 +437,7 @@ go
 alter table MM.Intentos_Fallidos
 drop constraint FK_User
 go
-drop table Intentos_Fallidos
+drop table MM.Intentos_Fallidos
 go
 Create table MM.Intentos_fallidos(
 	Id_fallido int identity(1,1) primary key,
@@ -622,7 +620,7 @@ select distinct b.Id,a.Butaca_Nro,Paquete_FechaCompra,d.Id  from gd_esquema.Maes
 b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and 
 b.Matricula=a.Aeronave_Matricula join MM.Rutas_Aereas as c on b.Ruta=c.Id and c.Precio_Base=a.Ruta_Precio_BasePasaje 
 /*and c.Precio_Kg=a.Ruta_Precio_BaseKG */join MM.Tipos_Servicio as g on  c.Tipo_Servicio=g.Id and g.Descripcion =a.Tipo_Servicio 
-join MM.Clientes as d on d.DNI=a.Cli_Dni join Ciudades as e on c.Ciudad_Destino=e.Id and e.Descripcion=a.Ruta_Ciudad_Destino 
+join MM.Clientes as d on d.DNI=a.Cli_Dni join MM.Ciudades as e on c.Ciudad_Destino=e.Id and e.Descripcion=a.Ruta_Ciudad_Destino 
 join MM.Ciudades as f on c.Ciudad_Origen=f.Id and f.Descripcion=a.Ruta_Ciudad_Origen
 where Pasaje_codigo <>0
 group by b.Id,Butaca_Nro,Paquete_fechaCompra,d.Id
@@ -826,7 +824,7 @@ go
 create procedure MM.actualizarFecha @fecha varchar(10) 
 as
 begin
-insert into MM.Fecha(fecha) values(MM..convertirFecha(@fecha))
+insert into MM.Fecha(fecha) values(MM.convertirFecha(@fecha))
 end 
 go
 
