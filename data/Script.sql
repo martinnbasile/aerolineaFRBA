@@ -2,7 +2,6 @@
 go
 create schema MM
 go
-
 Create Procedure MM.limpiarBase as
 drop Procedure MM.CancelarAeronaveFueraDeServicio
 drop Procedure MM.BorrarCiudades
@@ -52,9 +51,6 @@ Drop table MM.Clientes
 Drop table MM.Usuarios 
 Drop table MM.Roles 
 go
-
-
-
 create Table MM.Ciudades(
 Id int identity(1,1) primary key,
 Descripcion varchar(70) not null unique)
@@ -370,9 +366,10 @@ insert into MM.Roles(Descripcion) values ('Cliente')
 go
 alter table MM.Clientes add Unique(DNI)
 go
-insert into MM.Clientes(DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_Nacimiento) 
-(select distinct
-Cli_Dni,Cli_Nombre,Cli_Apellido,Cli_Dir,Cli_Telefono,Cli_Mail,Cli_Fecha_Nac from gd_esquema.Maestra)
+insert into MM.Clientes(DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_Nacimiento,Fecha_prox_vencimiento) 
+(select 
+Cli_Dni,Cli_Nombre,Cli_Apellido,Cli_Dir,Cli_Telefono,Cli_Mail,Cli_Fecha_Nac,dateadd(year,1,max(FechaLLegada)) from gd_esquema.Maestra
+group by Cli_Dni,Cli_Nombre,Cli_Apellido,Cli_Dir,Cli_Telefono,Cli_Mail,Cli_Fecha_Nac)
 go
 
 
@@ -614,20 +611,9 @@ on c.Ciudad_Origen=f.Id and f.Descripcion=a.Ruta_Ciudad_Origen
 where Pasaje_codigo <>0
 group by b.Id,Butaca_Nro,a.Butaca_Tipo
 
-go
-insert into MM.Pasajes
-select distinct b.Id,a.Butaca_Nro,Paquete_FechaCompra,d.Id  from gd_esquema.Maestra as a join MM.Viajes as b on 
-b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and 
-b.Matricula=a.Aeronave_Matricula join MM.Rutas_Aereas as c on b.Ruta=c.Id and c.Precio_Base=a.Ruta_Precio_BasePasaje 
-/*and c.Precio_Kg=a.Ruta_Precio_BaseKG */join MM.Tipos_Servicio as g on  c.Tipo_Servicio=g.Id and g.Descripcion =a.Tipo_Servicio 
-join MM.Clientes as d on d.DNI=a.Cli_Dni join MM.Ciudades as e on c.Ciudad_Destino=e.Id and e.Descripcion=a.Ruta_Ciudad_Destino 
-join MM.Ciudades as f on c.Ciudad_Origen=f.Id and f.Descripcion=a.Ruta_Ciudad_Origen
-where Pasaje_codigo <>0
-group by b.Id,Butaca_Nro,Paquete_fechaCompra,d.Id
+
 
 go
-
-
 
 create view MM.vista_rutas_aereas as
 select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
@@ -771,7 +757,7 @@ return (select top 1 fecha from MM.Fecha order by orden)
 end
 go
 
-
+/*
 create function MM.cantidadMillas(@cliente int)
 returns int
 as
@@ -783,7 +769,7 @@ and Fecha<dateadd(year,-1,MM.fechaDeHoy())
 )
 end
 go
-
+*/
 CREATE PROCEDURE MM.aeronavesSustitutas @matricula varchar(10),@fechaBaja smalldatetime,@fechaAlta smalldatetime
 
 AS
@@ -825,6 +811,12 @@ create procedure MM.actualizarFecha @fecha varchar(10)
 as
 begin
 insert into MM.Fecha(fecha) values(MM.convertirFecha(@fecha))
+
+insert into mm.Millas(Cliente,Millas) 
+select c.Id,-sum(m.Millas) from mm.Clientes c join mm.Millas m on m.Cliente=c.Id
+where c.Fecha_prox_vencimiento<@fecha
+group by c.Id
+
 end 
 go
 
@@ -879,15 +871,15 @@ create procedure MM.CancelarAeronaveVidaUtil
   BEGIN TRAN
   declare
   @dia datetime
-  set @dia=getdate()
+  set @dia=mm.fechaDeHoy()
   delete from MM.Butacas where Viaje in (select Id from MM.Viajes
   where Fecha_salida>=@dia and Matricula=@matricula)
   delete from MM.Pasajes where Viaje in (select Id from MM.Viajes
   where Fecha_salida>=@dia and Matricula=@matricula)
   delete from MM.Paquetes where Viaje in (select Id from MM.Viajes
   where Fecha_salida>=@dia and Matricula=@matricula)
-  delete from MM.Viajes where Matricula=@matricula and Fecha_salida>=GETDATE()
-  UPDATE MM.Aeronaves set Baja_Vida_Util='SI',Fecha_Baja_Definitiva=GETDATE() where matricula=@matricula 	  
+  delete from MM.Viajes where Matricula=@matricula and Fecha_salida>=@dia
+  UPDATE MM.Aeronaves set Baja_Vida_Util='SI',Fecha_Baja_Definitiva=@dia where matricula=@matricula 	  
 
   COMMIT TRAN
   go
@@ -902,15 +894,15 @@ create procedure MM.CancelarAeronaveFueraDeServicio
   BEGIN TRAN
   declare
   @dia datetime
-  set @dia=getdate()
+  set @dia=mm.fechaDeHoy()
   delete from MM.Butacas where Viaje in (select Id from MM.Viajes
   where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
   delete from MM.Pasajes where Viaje in (select Id from MM.Viajes
   where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
   delete from MM.Paquetes where Viaje in (select Id from MM.Viajes
   where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
-  delete from MM.Viajes where Matricula=@matricula and Fecha_salida>=GETDATE() and Fecha_salida<=@hasta
-  UPDATE MM.Aeronaves set Baja_Fuera_Servicio='SI',Fecha_Fuera_Servicio=GETDATE(), Fecha_Reinicio_Servicio=@hasta where matricula=@matricula
+  delete from MM.Viajes where Matricula=@matricula and Fecha_salida>=@dia and Fecha_salida<=@hasta
+  UPDATE MM.Aeronaves set Baja_Fuera_Servicio='SI',Fecha_Fuera_Servicio=@dia, Fecha_Reinicio_Servicio=@hasta where matricula=@matricula
   COMMIT TRAN
   go
 
@@ -960,27 +952,6 @@ end
 
 GO*/
 
-create trigger MM.actualizarVencimientoCuandoSeAgreganMillas on MM.Millas
-for insert 
-as
-begin transaction
-declare cursorMillas Cursor
-for
-select Cliente from inserted
-open cursorMillas
-declare @cliente int
-Fetch next from cursorMillas into @cliente
-while(@@FETCH_STATUS=0)
-begin 
-update MM.Clientes
-set Fecha_prox_vencimiento=dateadd(year,1,MM.fechaDeHoy())
-where Id=@cliente
-Fetch next from cursorMillas into @cliente
-end
-close cursorMillas
-deallocate cursorMillas
-commit 
-go
 create procedure MM.asentarMillas @viaje int
 as
 begin transaction
@@ -1027,6 +998,27 @@ union
 select p.Cliente,(p.Kg*r.Precio_Kg)/10 from MM.Paquetes p join MM.Viajes v on v.Id=p.Viaje   join MM.Rutas_Aereas r 
 on r.Id=v.Ruta 
 go
+create trigger MM.actualizarVencimientoCuandoSeAgreganMillas on MM.Millas
+for insert 
+as
+begin transaction
+declare cursorMillas Cursor
+for
+select Cliente from inserted
+open cursorMillas
+declare @cliente int
+Fetch next from cursorMillas into @cliente
+while(@@FETCH_STATUS=0)
+begin 
+update MM.Clientes
+set Fecha_prox_vencimiento=dateadd(year,1,MM.fechaDeHoy())
+where Id=@cliente
+Fetch next from cursorMillas into @cliente
+end
+close cursorMillas
+deallocate cursorMillas
+commit 
+go
 
 
 insert into MM.Usuario_rol values(1,1);
@@ -1039,3 +1031,4 @@ insert into MM.usuario_rol values (4,1)
 go
 insert into MM.usuario_rol values (5,1)
 go
+
