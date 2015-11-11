@@ -18,21 +18,10 @@ namespace AerolineaFrba.Canje_Millas
             textBox1.Text = dni.ToString();
             System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select id from MM.clientes where DNI=" + dni);
             int numCliente;
-            try
-            {
-                reader.Read();
-                numCliente = (int)reader.GetSqlInt32(0);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("El DNI ingresado es incorrecto");
-                new ConsultaMillas().Show();
-                this.Close();
-                reader.Close();
-                reader.Dispose();
-                return;
-            }
- 
+            reader.Read();
+            numCliente = (int)reader.GetSqlInt32(0);
+            
+           
             
             reader = ConexionALaBase.Conexion.consultarBase("select sum(millas) from MM.millas where cliente=" + numCliente);
             reader.Read();
@@ -50,6 +39,11 @@ namespace AerolineaFrba.Canje_Millas
         {
             new ConsultaMillas().Show();
             this.Close();
+
+        }
+
+        private void MostrarInformacionMillas_Load(object sender, EventArgs e)
+        {
 
         }
     }

@@ -58,13 +58,18 @@ namespace AerolineaFrba.Abm_Rol
 
         private void buscarRol_Load(object sender, EventArgs e)
         {
-
+            ConexionALaBase.CargadorDeEstructuras.cargarListBox(listBox1, ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.Roles"));
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             new Funcionalidades.Funcionalidades().Show();
             this.Close();
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
