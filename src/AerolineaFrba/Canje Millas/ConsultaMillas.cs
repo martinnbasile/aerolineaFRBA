@@ -29,8 +29,15 @@ namespace AerolineaFrba.Canje_Millas
             {
                 
                 int dni = int.Parse(maskedTextBox1.Text);
-                new MostrarInformacionMillas(dni).Show();
-                this.Close();
+                if (ConexionALaBase.Conexion.consultarBase("Select id from MM.clientes where DNI=" + dni).HasRows)
+                {
+                    new MostrarInformacionMillas(dni).Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("El DNI ingresado es incorrecto");
+                }
             }
         }
     }

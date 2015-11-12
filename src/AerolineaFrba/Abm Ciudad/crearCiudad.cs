@@ -28,10 +28,17 @@ namespace AerolineaFrba.Abm_Ciudad
             if (Validaciones.Validaciones.validarTextBox(textBox2, "Ingrese un nombre para la ciudad a crear"))
             {   
                 String nombreNuevaCiudad = textBox2.Text;
-                ConexionALaBase.Conexion.ejecutarNonQuery("insert into ciudades values ('" + nombreNuevaCiudad + "')");
-                MessageBox.Show("Creada la ciudad " + nombreNuevaCiudad + "");
-                new buscarCiudad().Show();
-                this.Close();
+                if (ConexionALaBase.Conexion.consultarBase("select * from MM.Ciudades where Descripcion='"+nombreNuevaCiudad+"'").HasRows)
+                {
+                    MessageBox.Show("El nombre de ciudad ingresado ya existe en el sistema, ingrese uno diferente");
+                }
+                else
+                {
+                    ConexionALaBase.Conexion.ejecutarNonQuery("insert into MM.ciudades values ('" + nombreNuevaCiudad + "','Habilitado')");
+                    MessageBox.Show("Creada la ciudad " + nombreNuevaCiudad + "");
+                    new buscarCiudad().Show();
+                    this.Close();
+                }
             }
         }
 

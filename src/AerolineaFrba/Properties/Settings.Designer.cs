@@ -33,5 +33,17 @@ namespace AerolineaFrba.Properties {
                 return ((string)(this["GD2C2015ConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("11/11/2015")]
+        public string fechaDelSistema {
+            get {
+                return ((string)(this["fechaDelSistema"]));
+            }
+            set {
+                this["fechaDelSistema"] = value;
+            }
+        }
     }
 }
