@@ -4,19 +4,15 @@ create schema MM
 go
 Create Procedure MM.limpiarBase as
 
-drop function MM.top5ClientesConMasMillas
-drop function MM.millasClienteEnUnPeriodo
 drop Procedure MM.CancelarAeronaveFueraDeServicio
 drop Procedure MM.BorrarCiudades
 drop view MM.rolPorUsuario
 drop Procedure MM.asentarMillas
-drop function MM.movimientosMillas
 drop Procedure MM.asentarLLegadaAeronave
 drop Procedure MM.Loggear
 drop Procedure MM.CancelarAeronaveVidaUtil
 drop function MM.devuelveIDD
 drop function MM.fechaDeHoy
-drop function MM.cantidadMillas
 drop function MM.devuelveRutaaa
 drop Procedure MM.aeronavesSustitutas
 drop function MM.devuelveTipoServicio
@@ -37,11 +33,9 @@ Drop table MM.Millas
 Drop table MM.Paquetes
 Drop table MM.Pasajes
 Drop table MM.Roles_Funcionalidades
-Drop table MM.Tarjetas_Credito
 Drop table MM.Productos_Milla
 Drop table MM.Funcionalidades
 Drop table MM.Intentos_login
-Drop table MM.KG
 Drop table MM.Usuario_rol
 Drop table MM.Viajes
 Drop table MM.Rutas_Aereas
@@ -53,6 +47,11 @@ Drop table MM.tarjetas_Credito
 Drop table MM.Clientes 
 Drop table MM.Usuarios 
 Drop table MM.Roles 
+drop function MM.top5ClientesConMasMillas
+drop function MM.millasClienteEnUnPeriodo
+drop function MM.top5LugaresConMasPasajes
+drop procedure mm.limpiarBase
+drop schema MM
 go
 create Table MM.Ciudades(
 Id int identity(1,1) primary key,
@@ -89,9 +88,7 @@ Username varchar(50) not null unique,
 Password varchar(256) not null,
 Estado varchar(15))
 go
-Alter table MM.Usuarios
-add constraint FK_Rol FOREIGN KEY (Rol) references MM.Roles(Id)
-go
+
 create Table MM.Intentos_Fallidos(
 Id_User int,
 cantidad int)
@@ -639,19 +636,19 @@ go
 
 
 
-insert into MM.usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
+insert into MM.usuarios values ('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7','OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
 go
 
-insert into MM.usuarios values ('martinnbasile','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
+insert into MM.usuarios values ('martinnbasile','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7','OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
 go
 
-insert into MM.usuarios values ('bec','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
+insert into MM.usuarios values ('bec','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7','OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
 go
 
-insert into MM.usuarios values ('ale','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
+insert into MM.usuarios values ('ale','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7','OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
 go
 
-insert into MM.usuarios values ('fede','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7',1,'OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
+insert into MM.usuarios values ('fede','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7','OK','Sos Dios?','1ea442a134b2a184bd5d40104401f2a37fbc09ccf3f4bc9da161c6099be3691d')
 go
 
 
@@ -759,19 +756,6 @@ return (select top 1 fecha from MM.Fecha order by orden)
 end
 go
 
-/*
-create function MM.cantidadMillas(@cliente int)
-returns int
-as
-begin
-return(
-select sum(Millas) from MM.Millas
-where Cliente=@cliente
-and Fecha<dateadd(year,-1,MM.fechaDeHoy())
-)
-end
-go
-*/
 CREATE PROCEDURE MM.aeronavesSustitutas @matricula varchar(10),@fechaBaja smalldatetime,@fechaAlta smalldatetime
 
 AS
@@ -939,20 +923,7 @@ MM.usuarios u join MM.Usuario_rol ur on (u.id=ur.cod_usuario)
 join MM.roles r on (ur.cod_rol=r.Id)
 go
 
-/*
-create function MM.movimientosMillas(@cliente int)
-returns @tablita table(fecha date,cantidad int)
-as
-begin
-insert into @tablita
 
-select Fecha,Millas from MM.Millas
-where Cliente=@cliente
-and Fecha<dateadd(year,-1,MM.fechaDeHoy())
-return
-end
-
-GO*/
 
 create procedure MM.asentarMillas @viaje int
 as
