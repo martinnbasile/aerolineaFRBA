@@ -52,6 +52,7 @@ drop function MM.millasClienteEnUnPeriodo
 drop function MM.top5LugaresConMasPasajes
 drop procedure mm.limpiarBase
 drop schema MM
+
 go
 create Table MM.Ciudades(
 Id int identity(1,1) primary key,
@@ -1004,4 +1005,30 @@ insert into MM.usuario_rol values (4,1)
 go
 insert into MM.usuario_rol values (5,1)
 go
+
+CREATE PROCEDURE [MM].[registrarCanje] @dni int,@cantidad int,@descripcion varchar (30)
+AS
+
+	DECLARE @idCliente int		
+	DECLARE @idProducto int
+	DECLARE @cantidadActual int
+	SELECT @idCliente = id from MM.Clientes a where 
+	a.DNI=@dni
+	SELECT @idProducto = id from MM.Productos_Milla a where 
+	a.Descripcion=@descripcion
+	SELECT @cantidadActual= Cantidad from MM.Productos_Milla a where
+	a.Descripcion=@descripcion 
+
+BEGIN TRANSACTION
+	
+	INSERT INTO MM.Cambios_Millas(Cliente,Producto,Cantidad,Fecha_Canje)
+	VALUES (@idCliente,@idProducto,@cantidad,MM.fechaDeHoy());
+	
+	UPDATE MM.Productos_Milla
+	SET Cantidad=@cantidadActual-@cantidad
+	WHERE Descripcion=@descripcion
+
+COMMIT
+
+GO
 
