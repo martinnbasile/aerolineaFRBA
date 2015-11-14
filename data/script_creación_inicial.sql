@@ -3,6 +3,9 @@ go
 create schema MM
 go
 Create Procedure MM.limpiarBase as
+
+drop function MM.top5ClientesConMasMillas
+drop function MM.millasClienteEnUnPeriodo
 drop Procedure MM.CancelarAeronaveFueraDeServicio
 drop Procedure MM.BorrarCiudades
 drop view MM.rolPorUsuario
@@ -84,7 +87,6 @@ create Table MM.Usuarios(
 Id int identity(1,1) primary key,
 Username varchar(50) not null unique,
 Password varchar(256) not null,
-Rol int,
 Estado varchar(15))
 go
 Alter table MM.Usuarios
