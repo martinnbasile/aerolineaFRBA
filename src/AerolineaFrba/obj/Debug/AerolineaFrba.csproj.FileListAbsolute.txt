@@ -34,3 +34,6 @@ C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.exe
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.pdb
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Canje_Millas.canjeMillas.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Canje_Millas.ingresarDniCanjeMillas.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Listado_Estadistico.elegirFecha.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Listado_Estadistico.ElegirListado.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Listado_Estadistico.verListado.resources

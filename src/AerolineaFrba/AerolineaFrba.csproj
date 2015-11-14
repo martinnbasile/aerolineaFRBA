@@ -154,11 +154,23 @@
     <Compile Include="Abm Ruta\NuevaRuta.Designer.cs">
       <DependentUpon>NuevaRuta.cs</DependentUpon>
     </Compile>
+    <Compile Include="Canje Millas\canjeMillas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Canje Millas\canjeMillas.Designer.cs">
+      <DependentUpon>canjeMillas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Canje Millas\ConsultaMillas.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Canje Millas\ConsultaMillas.Designer.cs">
       <DependentUpon>ConsultaMillas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Canje Millas\ingresarDniCanjeMillas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Canje Millas\ingresarDniCanjeMillas.Designer.cs">
+      <DependentUpon>ingresarDniCanjeMillas.cs</DependentUpon>
     </Compile>
     <Compile Include="Canje Millas\MostrarInformacionMillas.cs">
       <SubType>Form</SubType>
@@ -304,8 +316,14 @@
     <EmbeddedResource Include="Abm Ruta\NuevaRuta.resx">
       <DependentUpon>NuevaRuta.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Canje Millas\canjeMillas.resx">
+      <DependentUpon>canjeMillas.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Canje Millas\ConsultaMillas.resx">
       <DependentUpon>ConsultaMillas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Canje Millas\ingresarDniCanjeMillas.resx">
+      <DependentUpon>ingresarDniCanjeMillas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Canje Millas\MostrarInformacionMillas.resx">
       <DependentUpon>MostrarInformacionMillas.cs</DependentUpon>
