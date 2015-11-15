@@ -11,6 +11,7 @@ using AerolineaFrba.Abm_Rol;
 using AerolineaFrba.ConexionALaBase;
 using System.Data.SqlClient;
 using AerolineaFrba.Abm_Ciudad;
+using AerolineaFrba.Canje_Millas;
 namespace AerolineaFrba.Funcionalidades
 {
     public partial class Funcionalidades : Form
@@ -42,7 +43,8 @@ namespace AerolineaFrba.Funcionalidades
                         this.Close();
                         break;
                     case "CANJEAR MILLAS":
-                        MessageBox.Show("Todavia no implementado");
+                        new ingresarDniCanjeMillas().Show();
+                        this.Close();
                         break;
                     case "COMPRAS":
                         MessageBox.Show("Todavia no implementado");
@@ -54,7 +56,8 @@ namespace AerolineaFrba.Funcionalidades
                         MessageBox.Show("Todavia no implementado");
                         break;
                     case "LISTADO ESTADISTICO":
-                        MessageBox.Show("Todavia no implementado");
+                        new Listado_Estadistico.ElegirListado().Show();
+                        this.Close();
                         break;
                     case "REGISTRAR LLEGADA A DESTINO":
                         new Registro_Llegada_Destino.Form1().Show();

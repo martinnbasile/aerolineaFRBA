@@ -9,5 +9,8 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=localhost\SQLSERVER2012;Initial Catalog=GD2C2015;Integrated Security=False;User ID=gd;Password=gd2015</Value>
     </Setting>
+    <Setting Name="fechaDelSistema" Type="System.String" Scope="User">
+      <Value Profile="(Default)">11/11/2015</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

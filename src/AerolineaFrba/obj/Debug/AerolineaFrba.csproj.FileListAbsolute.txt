@@ -1,22 +1,14 @@
-c:\users\matias\documents\visual studio 2012\Projects\AerolineaFrba\AerolineaFrba\bin\Debug\AerolineaFrba.exe.config
-C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\bin\Debug\AerolineaFrba.exe.config
-C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.csprojResolveAssemblyReference.cache
-C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Rol.buscarRol.resources
-C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Rol.crearRol.resources
-C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Rol.modificarRol.resources
-C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.Properties.Resources.resources
-C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.csproj.GenerateResource.Cache
-C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\bin\Debug\AerolineaFrba.exe
-C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\bin\Debug\AerolineaFrba.pdb
-C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.exe
-C:\Users\f\Desktop\TP Aerolinea FRBA 1.0 - 2C 2015\Aplicacion Desktop\AerolineaFrba\AerolineaFrba\obj\Debug\AerolineaFrba.pdb
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\bin\Debug\AerolineaFrba.exe.config
-C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.exe
-C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.pdb
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\bin\Debug\AerolineaFrba.exe
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\bin\Debug\AerolineaFrba.pdb
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.csprojResolveAssemblyReference.cache
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.bajaFueraDeServicio.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.buscarAeronave.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.calendario.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.cancelarOReemplazarFueraDeServicio.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.cancelarOReemplazarVidaUtil.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.crearAeronave.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.seleccionarReemplazo.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Ciudad.buscarCiudad.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Ciudad.crearCiudad.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Ciudad.modificarCiudad.resources
@@ -36,11 +28,12 @@ C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Login
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Login.RecuperarContraseña2.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Login.ReestablecerPass.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Properties.Resources.resources
-C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.csproj.GenerateResource.Cache
-C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\bin\Debug\AerolineaFrba.exe
-C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\bin\Debug\AerolineaFrba.pdb
-C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.seleccionarReemplazo.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Registro_Llegada_Destino.Form1.resources
-C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.cancelarOReemplazarFueraDeServicio.resources
-C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.cancelarOReemplazarVidaUtil.resources
-C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.crearAeronave.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.csproj.GenerateResource.Cache
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.exe
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.pdb
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Canje_Millas.canjeMillas.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Canje_Millas.ingresarDniCanjeMillas.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Listado_Estadistico.elegirFecha.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Listado_Estadistico.ElegirListado.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Listado_Estadistico.verListado.resources

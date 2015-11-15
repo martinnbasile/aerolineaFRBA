@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace AerolineaFrba.Listado_Estadistico
+{
+    public partial class elegirFecha : Form
+    {
+        String listadoElegido;
+        public elegirFecha(String listadoEle)
+        {
+            InitializeComponent();
+            listadoElegido = listadoEle;
+        }
+
+        private void elegirFecha_Load(object sender, EventArgs e)
+        {
+            comboBox1.Items.Add("Primero");
+            comboBox1.Items.Add("Segundo");
+        }
+
+        private void button2_Click(object sender, EventArgs e) //Volver
+        {
+            new ElegirListado().Show();
+            this.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e) //Confirmar
+        {
+            if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1, "Ingrese un año"))
+            {
+                if (Validaciones.Validaciones.validarComboBox(comboBox1, "Elija un semestre"))
+                {
+                    new verListado(listadoElegido).Show();
+                    this.Close();
+                }
+            }
+        }
+    }
+}

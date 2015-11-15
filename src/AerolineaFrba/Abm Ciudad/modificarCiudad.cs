@@ -40,7 +40,7 @@ namespace AerolineaFrba.Abm_Ciudad
             if (Validaciones.Validaciones.validarTextBox(textBox1, "Ingrese un nuevo nombre"))
             {
                 String nuevoNombreCiudad = textBox1.Text;
-                ConexionALaBase.Conexion.ejecutarNonQuery("update Ciudades set Descripcion='" + nuevoNombreCiudad + "' where Descripcion='" + ciudad + "'");
+                ConexionALaBase.Conexion.ejecutarNonQuery("update MM.Ciudades set Descripcion='" + nuevoNombreCiudad + "' where Descripcion='" + ciudad + "'");
                 MessageBox.Show("Modificado el nombre de la ciudad");
                 new buscarCiudad().Show();
                 this.Close();

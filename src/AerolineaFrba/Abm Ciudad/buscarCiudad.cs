@@ -29,7 +29,7 @@ namespace AerolineaFrba.Abm_Ciudad
 
         private void buscarCiudad_Load(object sender, EventArgs e)
         {
-            ConexionALaBase.CargadorDeEstructuras.cargarListBox(listBox1, ConexionALaBase.Conexion.consultarBase("select Descripcion from ciudades where Estado='Habilitado'"));
+            ConexionALaBase.CargadorDeEstructuras.cargarListBox(listBox1, ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.ciudades where Estado='Habilitado'"));
         }
 
         private void button2_Click(object sender, EventArgs e)

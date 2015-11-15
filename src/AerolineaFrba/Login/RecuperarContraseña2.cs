@@ -36,13 +36,13 @@ namespace AerolineaFrba.Login
         {
             if (Validaciones.Validaciones.validarTextBox(textBox2, "Ingrese una respuesta secreta"))
             {
-                String respuesta="";                
-                SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Respuesta MM.from Usuarios where username='" + userName + "'");
+                String respuesta="";
+                SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select Respuesta from MM.Usuarios where username='" + userName + "'");
                 if (reader.Read())
                        respuesta = reader.GetString(0);
                         
                   reader.Dispose();
-                  if (textBox2.Text == respuesta)
+                  if (Encriptar.SHA256(textBox2.Text) == respuesta)
                   {
                       
                       new ReestablecerPass(userName).Show();
