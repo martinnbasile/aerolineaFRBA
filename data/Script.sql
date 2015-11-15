@@ -585,6 +585,17 @@ BEGIN
 
 END
 GO
+
+insert into MM.Pasajes
+select distinct b.Id,a.Butaca_Nro,Paquete_FechaCompra,d.Id  from gd_esquema.Maestra as a join MM.Viajes as b on 
+b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and 
+b.Matricula=a.Aeronave_Matricula join MM.Rutas_Aereas as c on b.Ruta=c.Id and c.Precio_Base=a.Ruta_Precio_BasePasaje 
+/*and c.Precio_Kg=a.Ruta_Precio_BaseKG */join MM.Tipos_Servicio as g on  c.Tipo_Servicio=g.Id and g.Descripcion =a.Tipo_Servicio 
+join MM.Clientes as d on d.DNI=a.Cli_Dni join MM.Ciudades as e on c.Ciudad_Destino=e.Id and e.Descripcion=a.Ruta_Ciudad_Destino 
+join MM.Ciudades as f on c.Ciudad_Origen=f.Id and f.Descripcion=a.Ruta_Ciudad_Origen
+where Pasaje_codigo <>0
+group by b.Id,Butaca_Nro,Paquete_fechaCompra,d.Id
+
 insert into MM.Paquetes
 select distinct b.Id,a.Paquete_KG,Paquete_FechaCompra,d.Id  from gd_esquema.Maestra as a join MM.Viajes as b on b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada 
 and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and b.Matricula=a.Aeronave_Matricula join MM.Rutas_Aereas 
