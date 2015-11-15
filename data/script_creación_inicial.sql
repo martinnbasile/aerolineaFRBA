@@ -1047,3 +1047,12 @@ add Estado varchar(20) default 'Habilitado'
 go
 update MM.roles
 set Estado = 'Habilitado'
+go
+create procedure DarBajaRol
+@rol varchar (50)
+as
+begin
+update MM.roles
+set Estado='Habilitado'
+where Descripcion = @rol
+end
