@@ -1042,4 +1042,8 @@ BEGIN TRANSACTION
 COMMIT
 
 GO
-
+alter table MM.Roles
+add Estado varchar(20) default 'Habilitado'
+go
+update MM.roles
+set Estado = 'Habilitado'
