@@ -932,11 +932,8 @@ go
 create view MM.rolPorUsuario as
 select r.descripcion as rol, u.username as usuario from
 MM.usuarios u join MM.Usuario_rol ur on (u.id=ur.cod_usuario)
-join MM.roles r on (ur.cod_rol=r.Id)
+join MM.roles r on (ur.cod_rol=r.Id) 
 go
-
-
-
 create procedure MM.asentarMillas @viaje int
 as
 begin transaction
@@ -1042,17 +1039,25 @@ BEGIN TRANSACTION
 COMMIT
 
 GO
+
 alter table MM.Roles
 add Estado varchar(20) default 'Habilitado'
 go
 update MM.roles
 set Estado = 'Habilitado'
 go
-create procedure DarBajaRol
-@rol varchar (50)
-as
-begin
+
+CREATE PROCEDURE [MM].[darDeBajaRol]
+@rol VARCHAR (50)
+AS
+	DECLARE @idRol int		
+	SELECT @idRol = id from MM.Roles a where 
+	a.Descripcion=@rol
+BEGIN TRANSACTION
 update MM.roles
-set Estado='Habilitado'
+set Estado='Deshabilitado'
 where Descripcion = @rol
-end
+delete from MM.Usuario_rol where cod_rol=@idRol
+COMMIT
+
+GO

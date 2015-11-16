@@ -41,19 +41,21 @@ namespace AerolineaFrba.Abm_Rol
             if (Validaciones.Validaciones.validarListBox(listBox1, "Seleccione un rol"))
             {
                 rol = listBox1.SelectedItem.ToString();
-                //Aca hay que hacer lo que corresponda para eliminarlo de la base y que asigne true a success en caso de tener exito y false en caso contrario
-                bool success = true;    // esta asignacion va a borrarse despues, es solo para probar
-                if (success)
+                String noQuery = "exec MM.darDeBajaRol @rol='" + rol + "'";
+                ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
+                MessageBox.Show("Se ha deshabilitado el rol " + rol + "");
+                if (Program.rol.Equals(rol))
                 {
-                    MessageBox.Show("Se ha eliminado el rol " + rol);
+                    MessageBox.Show("El rol desactivado es el que estaba utilizandose, seleccione un nuevo Rol");
+                    new elegirRol().Show();
+                    this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("No se ha podido eliminar el rol " + rol);
-                }            
+                    new buscarRol().Show();
+                    this.Close();
+                }
             }
-         
-
         }
 
         private void buscarRol_Load(object sender, EventArgs e)
