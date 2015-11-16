@@ -81,6 +81,12 @@
     <Compile Include="Abm Aeronave\crearAeronave.Designer.cs">
       <DependentUpon>crearAeronave.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Aeronave\crearAeronaveSustituta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Aeronave\crearAeronaveSustituta.Designer.cs">
+      <DependentUpon>crearAeronaveSustituta.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Aeronave\seleccionarReemplazo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -279,6 +285,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Aeronave\crearAeronave.resx">
       <DependentUpon>crearAeronave.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Aeronave\crearAeronaveSustituta.resx">
+      <DependentUpon>crearAeronaveSustituta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Aeronave\seleccionarReemplazo.resx">
       <DependentUpon>seleccionarReemplazo.cs</DependentUpon>

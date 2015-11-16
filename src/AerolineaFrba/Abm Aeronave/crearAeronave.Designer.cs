@@ -28,96 +28,162 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.maskedTextBox2 = new System.Windows.Forms.MaskedTextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
-            // label2
+            // maskedTextBox2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 24);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 13);
-            this.label2.TabIndex = 24;
-            this.label2.Text = "Matrícula:";
+            this.maskedTextBox2.Location = new System.Drawing.Point(166, 24);
+            this.maskedTextBox2.Mask = "AAA-000";
+            this.maskedTextBox2.Name = "maskedTextBox2";
+            this.maskedTextBox2.Size = new System.Drawing.Size(119, 20);
+            this.maskedTextBox2.TabIndex = 43;
+            this.maskedTextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.maskedTextBox2.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox2_MaskInputRejected);
             // 
-            // label1
+            // numericUpDown2
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 89);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(178, 13);
-            this.label1.TabIndex = 25;
-            this.label1.Text = "Cantidad de Kgs para encomiendas:";
+            this.numericUpDown2.Location = new System.Drawing.Point(194, 172);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(90, 20);
+            this.numericUpDown2.TabIndex = 42;
             // 
-            // label3
+            // numericUpDown1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 58);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(109, 13);
-            this.label3.TabIndex = 26;
-            this.label3.Text = "Cantidad de Butacas:";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(184, 128);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 32);
-            this.button1.TabIndex = 30;
-            this.button1.Text = "Confirmar";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.numericUpDown1.Location = new System.Drawing.Point(194, 145);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(90, 20);
+            this.numericUpDown1.TabIndex = 41;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(15, 128);
+            this.button2.Location = new System.Drawing.Point(15, 204);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 32);
-            this.button2.TabIndex = 31;
+            this.button2.TabIndex = 40;
             this.button2.Text = "Volver";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // numericUpDown1
+            // button1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(194, 56);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(90, 20);
-            this.numericUpDown1.TabIndex = 33;
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            this.button1.Location = new System.Drawing.Point(184, 204);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(100, 32);
+            this.button1.TabIndex = 39;
+            this.button1.Text = "Confirmar";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // numericUpDown2
+            // label3
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(194, 87);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(90, 20);
-            this.numericUpDown2.TabIndex = 34;
-            this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 147);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(109, 13);
+            this.label3.TabIndex = 38;
+            this.label3.Text = "Cantidad de Butacas:";
             // 
-            // maskedTextBox2
+            // label1
             // 
-            this.maskedTextBox2.Location = new System.Drawing.Point(165, 24);
-            this.maskedTextBox2.Mask = "AAA-000";
-            this.maskedTextBox2.Name = "maskedTextBox2";
-            this.maskedTextBox2.Size = new System.Drawing.Size(119, 20);
-            this.maskedTextBox2.TabIndex = 35;
-            this.maskedTextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.maskedTextBox2.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox2_MaskInputRejected);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 174);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(178, 13);
+            this.label1.TabIndex = 37;
+            this.label1.Text = "Cantidad de Kgs para encomiendas:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 24);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.TabIndex = 36;
+            this.label2.Text = "Matrícula:";
+            // 
+            // maskedTextBox1
+            // 
+            this.maskedTextBox1.Location = new System.Drawing.Point(165, 53);
+            this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.Size = new System.Drawing.Size(119, 20);
+            this.maskedTextBox1.TabIndex = 45;
+            this.maskedTextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.maskedTextBox1.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 53);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(45, 13);
+            this.label4.TabIndex = 44;
+            this.label4.Text = "Modelo:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(13, 115);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(87, 13);
+            this.label5.TabIndex = 46;
+            this.label5.Text = "Tipo de Servicio:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(13, 84);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(60, 13);
+            this.label6.TabIndex = 48;
+            this.label6.Text = "Fabricante:";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(165, 84);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(118, 21);
+            this.comboBox2.TabIndex = 49;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(166, 115);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(118, 21);
+            this.comboBox1.TabIndex = 50;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // crearAeronave
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 168);
+            this.ClientSize = new System.Drawing.Size(297, 248);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.maskedTextBox1);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.maskedTextBox2);
             this.Controls.Add(this.numericUpDown2);
             this.Controls.Add(this.numericUpDown1);
@@ -129,8 +195,8 @@
             this.Name = "crearAeronave";
             this.Text = "crearAeronave";
             this.Load += new System.EventHandler(this.crearAeronave_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,13 +204,19 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.MaskedTextBox maskedTextBox2;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }

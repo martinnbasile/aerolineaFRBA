@@ -170,6 +170,7 @@
             this.Controls.Add(this.comboBox1);
             this.Name = "NuevaRuta";
             this.Text = "ABM Ruta Aerea";
+            this.Load += new System.EventHandler(this.NuevaRuta_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

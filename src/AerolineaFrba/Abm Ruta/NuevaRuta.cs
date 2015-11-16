@@ -69,5 +69,10 @@ namespace AerolineaFrba.Abm_Ruta
             
            
         }
+
+        private void NuevaRuta_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
