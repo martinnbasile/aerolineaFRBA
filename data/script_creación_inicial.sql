@@ -1061,3 +1061,54 @@ delete from MM.Usuario_rol where cod_rol=@idRol
 COMMIT
 
 GO
+
+create procedure mm.AeronavesMasDiasFueraServicio
+@semestre int,
+@anio char(4)
+as
+begin
+declare @desde char(4)
+declare @hasta char(4)
+if @semestre=1
+begin
+set @desde='0101'
+set @hasta='0530'
+end
+if @semestre=2
+begin
+set @desde='0601'
+set @hasta='1231'
+end
+select top 5 matricula
+from MM.Aeronaves 
+where Fecha_Fuera_Servicio is not null and Fecha_Fuera_Servicio 
+between @anio+@desde and @anio+@hasta  
+order by DATEDIFF(day,Fecha_Fuera_Servicio,GETDATE()) desc
+end
+go
+
+
+create procedure mm.DestinosMasVendidosPasajes
+@semestre int,
+@anio char(4)
+as
+begin
+declare @desde char(4)
+declare @hasta char(4)
+if @semestre=1
+begin
+set @desde='0101'
+set @hasta='0530'
+end
+if @semestre=2
+begin
+set @desde='0601'
+set @hasta='1231'
+end
+select top 5 d.Descripcion
+from MM.Pasajes a,MM.Viajes b, mm.Rutas_Aereas c, MM.Ciudades d
+where a.Viaje=b.Id and b.Ruta=c.Ciudad_Destino and c.Ciudad_Destino=d.Id and b.Fecha_salida 
+between @anio+@desde and @anio+@hasta 
+group by d.Descripcion 
+order by count(*) desc
+end
