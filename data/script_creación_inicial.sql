@@ -419,7 +419,7 @@ case
 	when Tipo_Servicio='Semi-Cama' then 4
 	when Tipo_Servicio='Premium' then 5
 	end,
-	'NO','NO',NULL,NULL,NULL,1250,
+	'NO','NO',NULL,NULL,NULL,45,
 	Aeronave_KG_Disponibles 
 from gd_esquema.Maestra
 order by Aeronave_Matricula
