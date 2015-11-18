@@ -31,8 +31,7 @@ namespace AerolineaFrba.Abm_Rol
             {
                 rol = listBox1.SelectedItem.ToString();
                 new modificarRol(rol).Show();
-            }else{
-                MessageBox.Show("Para modificar un rol debe seleccionar primero uno de la lista");
+                this.Close();
             }
         }
 
