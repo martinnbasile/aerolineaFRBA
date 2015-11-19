@@ -1127,6 +1127,43 @@ end
 
 go
 
+create function mm.DestinosMasCancelados
+(@semestre int,
+@anio char(4))
+returns @table table
+(Description varchar(100))
+as
+begin
+declare @desde char(4)
+declare @hasta char(4)
+if @semestre=1
+begin
+set @desde='0101'
+set @hasta='0530'
+end
+if @semestre=2
+begin
+set @desde='0601'
+set @hasta='1231'
+end
+insert into @table  
+
+select top 5 e.Descripcion
+from MM.Cancelaciones a,MM.Pasajes b, MM.Viajes c, MM.Rutas_Aereas d, MM.Ciudades e
+where	a.Codigo_Pasaje=b.Id and
+		b.Viaje=c.Id and
+		c.Ruta=d.Id and
+		d.Ciudad_Destino=e.Id 
+		and c.Fecha_salida 
+between @anio+@desde and @anio+@hasta 
+group by e.Descripcion 
+order by count(*) desc
+return
+end
+GO
+
+
+
 CREATE PROCEDURE MM.agregarFuncionalidadesRol @rol varchar(70) 
 AS
 	DECLARE @idRol int		
