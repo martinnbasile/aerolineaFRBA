@@ -88,9 +88,64 @@ namespace AerolineaFrba.Abm_Rol
 
         private void button3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Falta el update en la base");
-            new buscarRol();
-            this.Close();
+            if ((textBox1.Text.Length != 0) && (ConexionALaBase.Conexion.consultarBase("select * from MM.Roles where Descripcion='" + textBox1.Text + "'").HasRows))
+            {
+                MessageBox.Show("Ya existe un Rol con el nombre ingresado, ingrese uno diferente");
+            }
+            else
+            {
+                System.Data.SqlClient.SqlCommand comando = ConexionALaBase.Conexion.getComando();
+                
+                String noQueryCrearTablaTemporalFuncionalidades = "Create table #tablaTemporal (funcionalidad varchar(70))";
+                comando.CommandText = noQueryCrearTablaTemporalFuncionalidades;
+                comando.ExecuteNonQuery();
+                foreach (Object unaFuncionalidad in listBox1.Items)
+                {
+
+                    String funcionalidad = unaFuncionalidad.ToString();
+                    String noQueryInsertEnTablaTemporal = "insert into #tablaTemporal values('"+funcionalidad+"')";
+                    comando.CommandText = noQueryInsertEnTablaTemporal;
+                    comando.ExecuteNonQuery();
+                }
+                String noQueryActualizarFuncionalidades = "exec MM.agregarFuncionalidadesRol " + rolModificado + "";
+                comando.CommandText = noQueryActualizarFuncionalidades;
+                comando.ExecuteNonQuery();
+
+                if (comboBox1.SelectedIndex > -1)
+                {
+                    String noQuery = "exec MM.darDeBajaRol @rol='" + rolModificado + "'";
+                    ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
+                }
+
+                if (textBox1.Text.Length != 0)  //SE HACE ULTIMO PORQUE CAMBIAR EL NOMBRE DEL ROL ANTES HACE QUE LOS NOQUERY DE ARRIBA SE HAGAN MAL
+                {
+                    String noQueryCambiarNombreRol = "update MM.Roles set Descripcion='" + textBox1.Text + "' where Descripcion='" + rolModificado + "'";
+                    ConexionALaBase.Conexion.ejecutarNonQuery(noQueryCambiarNombreRol);
+                }
+
+                if (Program.rol.Equals(rolModificado) && (comboBox1.SelectedIndex > -1) && comboBox1.SelectedItem.ToString().Equals("Deshabilitado"))
+                {
+                    MessageBox.Show("Se han guardado los cambios. El rol desactivado es el que estaba utilizandose, seleccione un nuevo Rol");
+                    new elegirRol().Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Se han guardado los cambios");
+                    new Funcionalidades.Funcionalidades().Show();
+                    this.Close();
+                }
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

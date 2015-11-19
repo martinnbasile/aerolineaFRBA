@@ -11,6 +11,8 @@ drop Procedure MM.asentarMillas
 drop Procedure MM.asentarLLegadaAeronave
 drop Procedure MM.Loggear
 drop Procedure MM.CancelarAeronaveVidaUtil
+drop Procedure MM.agregarFuncionalidadesRol
+drop Procedure MM.darDeBajaRol
 drop function MM.devuelveIDD
 drop function MM.fechaDeHoy
 drop function MM.devuelveRutaaa
@@ -19,6 +21,9 @@ drop function MM.devuelveTipoServicio
 drop function MM.devuelveNumeroCliente
 drop function MM.convertirFecha
 drop Procedure MM.actualizarFecha
+drop Procedure MM.DestinosMasVendidosPasajes
+drop Procedure MM.AeronavesMasDiasFueraServicio
+drop Procedure MM.registrarCanje
 drop function MM.devuelveViaje3
 drop view MM.funcionalidadPorRol
 drop view MM.vista_rutas_aereas
@@ -1112,3 +1117,19 @@ between @anio+@desde and @anio+@hasta
 group by d.Descripcion 
 order by count(*) desc
 end
+GO
+
+CREATE PROCEDURE MM.agregarFuncionalidadesRol @rol varchar(70) 
+AS
+	DECLARE @idRol int		
+	SELECT @idRol = id from MM.Roles a where 
+	a.Descripcion=@rol
+BEGIN TRANSACTION
+	DELETE from MM.Roles_Funcionalidades
+	where Rol=@idRol
+	INSERT INTO MM.Roles_Funcionalidades(Funcionalidad,Rol)
+	select MM.Funcionalidades.Id,@idRol from MM.Funcionalidades,#tablaTemporal as f where funcionalidad=MM.Funcionalidades.Descripcion
+	DROP table #tablaTemporal
+COMMIT
+GO
+
