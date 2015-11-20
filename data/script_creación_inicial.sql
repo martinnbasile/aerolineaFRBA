@@ -226,7 +226,7 @@ Id int identity(1,1),
 Cliente int,
 Millas int not null,
 Fecha_movimiento datetime,
-Descripcion varchar(10))
+Descripcion varchar(20))
 go
 alter table MM.Millas
 add constraint Cliente_Millero foreign key (Cliente) references MM.Clientes(Id)
@@ -809,21 +809,23 @@ create function MM.convertirFecha (@fecha varchar(10))
 returns Date
 as
 begin
-return (convert(Date,@fecha,103))
+return ( convert(Date,@fecha,103))
 end
 go
-create procedure MM.actualizarFecha @fecha varchar(10) 
+create   procedure MM.actualizarFecha @fecha varchar(10) 
 as
 begin
 insert into MM.Fecha(fecha) values(MM.convertirFecha(@fecha))
 
-insert into mm.Millas(Cliente,Millas,Fecha,Descripcion) 
-select c.Id,-sum(m.Millas),@fecha,'VENCIMIENTO' from mm.Clientes c join mm.Millas m on m.Cliente=c.Id
+insert into mm.Millas(Cliente,Millas,Fecha_movimiento,Descripcion) 
+select c.Id,-sum(m.Millas),MM.convertirFecha(@fecha),'VENCIMIENTO' 
+from mm.Clientes c join mm.Millas m on m.Cliente=c.Id
 where c.Fecha_prox_vencimiento<@fecha
 group by c.Id
 
 end 
 go
+
 
 
 insert into MM.Roles_Funcionalidades(Funcionalidad,Rol) select Id,1 from MM.Funcionalidades;
@@ -944,7 +946,7 @@ go
 create procedure MM.asentarMillas @viaje int
 as
 begin transaction
-insert into MM.Millas(Cliente,Millas,Fecha,Descripcion)
+insert into MM.Millas(Cliente,Millas,Fecha_movimiento,Descripcion)
 select Cliente,r.Precio_Base/10,MM.fechaDeHoy(),'COMPRA PASAJE' from MM.Pasajes p join MM.Viajes v on v.Id=p.Viaje and v.Id=@viaje join MM.Rutas_Aereas r 
 on r.Id=v.Ruta
 union
@@ -980,11 +982,11 @@ commit
 end
 
 go
-insert into MM.Millas(Cliente,Millas)
-select Cliente,r.Precio_Base/10 from MM.Pasajes p join MM.Viajes v on v.Id=p.Viaje  join MM.Rutas_Aereas r 
+insert into MM.Millas(Cliente,Millas,Fecha_movimiento,Descripcion)
+select Cliente,r.Precio_Base/10,v.Fecha_llegada,'COMPRA PASAJE' from MM.Pasajes p join MM.Viajes v on v.Id=p.Viaje  join MM.Rutas_Aereas r 
 on r.Id=v.Ruta
 union
-select p.Cliente,(p.Kg*r.Precio_Kg)/10 from MM.Paquetes p join MM.Viajes v on v.Id=p.Viaje   join MM.Rutas_Aereas r 
+select p.Cliente,(p.Kg*r.Precio_Kg)/10,v.Fecha_llegada,'COMPRA PAQUETE' from MM.Paquetes p join MM.Viajes v on v.Id=p.Viaje   join MM.Rutas_Aereas r 
 on r.Id=v.Ruta 
 go
 create trigger MM.actualizarVencimientoCuandoSeAgreganMillas on MM.Millas
@@ -1179,3 +1181,4 @@ BEGIN TRANSACTION
 	DROP table #tablaTemporal
 COMMIT
 GO
+
