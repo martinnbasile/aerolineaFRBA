@@ -37,3 +37,4 @@ C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Canje
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Listado_Estadistico.elegirFecha.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Listado_Estadistico.ElegirListado.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Listado_Estadistico.verListado.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.crearAeronaveSustituta.resources

@@ -11,6 +11,8 @@ drop Procedure MM.asentarMillas
 drop Procedure MM.asentarLLegadaAeronave
 drop Procedure MM.Loggear
 drop Procedure MM.CancelarAeronaveVidaUtil
+drop Procedure MM.agregarFuncionalidadesRol
+drop Procedure MM.darDeBajaRol
 drop function MM.devuelveIDD
 drop function MM.fechaDeHoy
 drop function MM.devuelveRutaaa
@@ -19,6 +21,9 @@ drop function MM.devuelveTipoServicio
 drop function MM.devuelveNumeroCliente
 drop function MM.convertirFecha
 drop Procedure MM.actualizarFecha
+drop Procedure MM.DestinosMasVendidosPasajes
+drop Procedure MM.AeronavesMasDiasFueraServicio
+drop Procedure MM.registrarCanje
 drop function MM.devuelveViaje3
 drop view MM.funcionalidadPorRol
 drop view MM.vista_rutas_aereas
@@ -421,7 +426,7 @@ case
 	when Tipo_Servicio='Semi-Cama' then 4
 	when Tipo_Servicio='Premium' then 5
 	end,
-	'NO','NO',NULL,NULL,NULL,1250,
+	'NO','NO',NULL,NULL,NULL,45,
 	Aeronave_KG_Disponibles 
 from gd_esquema.Maestra
 order by Aeronave_Matricula
@@ -934,11 +939,8 @@ go
 create view MM.rolPorUsuario as
 select r.descripcion as rol, u.username as usuario from
 MM.usuarios u join MM.Usuario_rol ur on (u.id=ur.cod_usuario)
-join MM.roles r on (ur.cod_rol=r.Id)
+join MM.roles r on (ur.cod_rol=r.Id) 
 go
-
-
-
 create procedure MM.asentarMillas @viaje int
 as
 begin transaction
@@ -1045,3 +1047,135 @@ COMMIT
 
 GO
 
+alter table MM.Roles
+add Estado varchar(20) default 'Habilitado'
+go
+update MM.roles
+set Estado = 'Habilitado'
+go
+
+CREATE PROCEDURE [MM].[darDeBajaRol]
+@rol VARCHAR (50)
+AS
+	DECLARE @idRol int		
+	SELECT @idRol = id from MM.Roles a where 
+	a.Descripcion=@rol
+BEGIN TRANSACTION
+update MM.roles
+set Estado='Deshabilitado'
+where Descripcion = @rol
+delete from MM.Usuario_rol where cod_rol=@idRol
+COMMIT
+
+GO
+create function mm.DestinosMasVendidosPasajes
+(@semestre int,
+@anio char(4))
+returns @table table
+(Description varchar(100))
+as
+begin
+declare @desde char(4)
+declare @hasta char(4)
+if @semestre=1
+begin
+set @desde='0101'
+set @hasta='0530'
+end
+if @semestre=2
+begin
+set @desde='0601'
+set @hasta='1231'
+end
+insert into @table  
+select top 5 d.Descripcion
+from MM.Pasajes a,MM.Viajes b, mm.Rutas_Aereas c, MM.Ciudades d
+where a.Viaje=b.Id and b.Ruta=c.Ciudad_Destino and c.Ciudad_Destino=d.Id and b.Fecha_salida 
+between @anio+@desde and @anio+@hasta 
+group by d.Descripcion 
+order by count(*) desc
+return
+end
+GO
+
+
+create function mm.AeronavesMasDiasFueraServicio
+(@semestre int,
+@anio char(4))
+returns @table table
+(Description varchar(50))
+as
+begin
+declare @desde char(4)
+declare @hasta char(4)
+if @semestre=1
+begin
+set @desde='0101'
+set @hasta='0530'
+end
+if @semestre=2
+begin
+set @desde='0601'
+set @hasta='1231'
+end
+insert into @table
+select top 5 matricula
+from MM.Aeronaves 
+where Fecha_Fuera_Servicio is not null and Fecha_Fuera_Servicio 
+between @anio+@desde and @anio+@hasta  
+order by DATEDIFF(day,Fecha_Fuera_Servicio,GETDATE()) desc
+return
+end
+
+go
+
+create function mm.DestinosMasCancelados
+(@semestre int,
+@anio char(4))
+returns @table table
+(Description varchar(100))
+as
+begin
+declare @desde char(4)
+declare @hasta char(4)
+if @semestre=1
+begin
+set @desde='0101'
+set @hasta='0530'
+end
+if @semestre=2
+begin
+set @desde='0601'
+set @hasta='1231'
+end
+insert into @table  
+
+select top 5 e.Descripcion
+from MM.Cancelaciones a,MM.Pasajes b, MM.Viajes c, MM.Rutas_Aereas d, MM.Ciudades e
+where	a.Codigo_Pasaje=b.Id and
+		b.Viaje=c.Id and
+		c.Ruta=d.Id and
+		d.Ciudad_Destino=e.Id 
+		and c.Fecha_salida 
+between @anio+@desde and @anio+@hasta 
+group by e.Descripcion 
+order by count(*) desc
+return
+end
+GO
+
+
+
+CREATE PROCEDURE MM.agregarFuncionalidadesRol @rol varchar(70) 
+AS
+	DECLARE @idRol int		
+	SELECT @idRol = id from MM.Roles a where 
+	a.Descripcion=@rol
+BEGIN TRANSACTION
+	DELETE from MM.Roles_Funcionalidades
+	where Rol=@idRol
+	INSERT INTO MM.Roles_Funcionalidades(Funcionalidad,Rol)
+	select MM.Funcionalidades.Id,@idRol from MM.Funcionalidades,#tablaTemporal as f where funcionalidad=MM.Funcionalidades.Descripcion
+	DROP table #tablaTemporal
+COMMIT
+GO

@@ -105,5 +105,12 @@ namespace AerolineaFrba.Abm_Aeronave
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            new crearAeronave().Show();
+            this.Close();
+
+        }
     }
 }

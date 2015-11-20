@@ -57,7 +57,7 @@ namespace AerolineaFrba.Abm_Aeronave
             else
             {
                 MessageBox.Show("No hay aeronaves disponibles para sustituirla, se creara una nueva aeronave para sustuirla");
-                new crearAeronave(aeronaveAfectada).Show();
+                new crearAeronaveSustituta(aeronaveAfectada).Show();
                 this.Close();
             }         
         }

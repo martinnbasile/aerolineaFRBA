@@ -19,10 +19,15 @@ namespace AerolineaFrba.Funcionalidades
         public Funcionalidades()
         {
             String rolElegido = Program.rol;
+            
             InitializeComponent();
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.funcionalidadPorRol where Rol='"+rolElegido+"'");
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
+            if (rolElegido == "Cliente")
+            {
+                button2.Visible = false;
+            }
             
         }
 
@@ -88,12 +93,10 @@ namespace AerolineaFrba.Funcionalidades
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (Program.rol == "Administrador")
-            {
+            
                 new elegirRol().Show();
                 this.Close();
-            }
-            else MessageBox.Show("Opción invalida");
+            
         }
 
        
