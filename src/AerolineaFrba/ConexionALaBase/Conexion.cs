@@ -43,6 +43,7 @@ namespace AerolineaFrba.ConexionALaBase
         {
             SqlCommand comandoo = conseguirComando(); 
             comandoo.CommandText = unaQuery;
+            comandoo.CommandTimeout = 21600;
             comandoo.ExecuteNonQuery();
             return;
         }
