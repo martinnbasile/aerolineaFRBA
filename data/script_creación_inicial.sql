@@ -1103,33 +1103,30 @@ order by count(*) desc
 return
 end
 GO
+create function mm.semestre(@fecha date)
+returns int
+as 
+begin
+declare @puto int
+set @puto=1+(month(@fecha)-1)/6
 
+return @puto
+end
+go
+create  function mm.AeronavesMasDiasFueraServicio
+(@semestre int, @anio char(4))
 
-create function mm.AeronavesMasDiasFueraServicio
-(@semestre int,
-@anio char(4))
-returns @table table
-(Description varchar(50))
+returns @table table (Description varchar(50))
 as
 begin
-declare @desde char(4)
-declare @hasta char(4)
-if @semestre=1
-begin
-set @desde='0101'
-set @hasta='0530'
-end
-if @semestre=2
-begin
-set @desde='0601'
-set @hasta='1231'
-end
+
 insert into @table
-select top 5 matricula
-from MM.Aeronaves 
-where Fecha_Fuera_Servicio is not null and Fecha_Fuera_Servicio 
-between @anio+@desde and @anio+@hasta  
-order by DATEDIFF(day,Fecha_Fuera_Servicio,GETDATE()) desc
+select top 5 aeronave
+from  mm.logBajasAeronaves
+where (year(fechabaja)=@anio and mm.semestre(FechaBaja)=@semestre)
+group by aeronave
+order by count(*) desc
+
 return
 end
 
