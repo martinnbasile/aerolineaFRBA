@@ -1188,6 +1188,7 @@ GO
 
 
 create index indiceMillero on mm.clientes (nombre,apellido)
+go
 
 create function mm.maximosMilleros(@semestre int,@anio int) returns
 @tablita table(nombre varchar(30), apellido varchar(30),cantMillas int)
@@ -1208,9 +1209,39 @@ go
 
 create table mm.logBajasAeronaves(
 id int identity(1,1),
-aeronave int,
+aeronave varchar(10) foreign key references mm.aeronaves(matricula),
 fechaBaja DateTime,
 fechaAlta DateTime
 )
 
 create index aeronavesBajas on mm.logBajasAernoves (aeronave)
+go
+
+create trigger mm.actualizarTablaLog on MM.Aeronaves
+after update
+as
+begin
+	
+	insert into mm.logBajasAeronaves (aeronave,fechaBaja,fechaAlta)
+	Select i.matricula, i.fecha_fuera_servicio, i.fecha_reinicio_servicio
+	from inserted i join deleted d on (i.matricula=d.matricula and i.Baja_fuera_servicio='SI' and d.Baja_Fuera_servicio='NO')
+	
+	declare miCursor cursor for
+	select id, fecha_reinicio_servicio 
+	from mm.logBajasAeronaves l join inserted i on 
+	(l.aeronave=i.matricula and l.fechaBaja=i.fecha_fuera_servicio
+	and l.fechaBaja<i.fecha_fuera_servicio)
+	declare @id int
+	declare @fechaR DateTime
+
+	open miCursor
+
+	fetch next from miCursor into @id,@fechaR
+	while (@@fetch_status=0)
+	begin
+		update mm.logBajasAeronaves
+		set fechaAlta = @fechaR
+		where id = @id
+	end
+end
+go
