@@ -1186,3 +1186,19 @@ BEGIN TRANSACTION
 COMMIT
 GO
 
+create function mm.maximosMilleros(@semestre int,@anio int) returns
+@tablita table(nombre varchar(30), apellido varchar(30),cantMillas int)
+as
+begin
+insert into @tablita 
+select top 5 c.nombre, c.apellido, sum(m.millas)
+
+from mm.millas m join mm.clientes c on (m.cliente=c.id)
+where m.millas>0 and year(m.Fecha_movimiento)=@anio and (1+(month(m.Fecha_movimiento)-1)/6)=@semestre
+group by c.nombre,c.apellido
+
+
+order by sum(m.millas) DESC
+return
+end
+go
