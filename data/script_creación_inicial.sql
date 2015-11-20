@@ -4,6 +4,8 @@ create schema MM
 go
 Create Procedure MM.limpiarBase as
 
+drop table mm.maximosMilleros
+drop table mm.logBajasAeronaves
 drop function mm.DestinosMasVendidosPasajes
 drop function mm.DestinosMasCancelados
 drop function mm.AeronavesMasDiasFueraServicio
@@ -1183,7 +1185,10 @@ BEGIN TRANSACTION
 	DROP table #tablaTemporal
 COMMIT
 GO
+
+
 create index indiceMillero on mm.clientes (nombre,apellido)
+
 create function mm.maximosMilleros(@semestre int,@anio int) returns
 @tablita table(nombre varchar(30), apellido varchar(30),cantMillas int)
 as
@@ -1200,3 +1205,12 @@ order by sum(m.millas) DESC
 return
 end
 go
+
+create table mm.logBajasAeronaves(
+id int identity(1,1),
+aeronave int,
+fechaBaja DateTime,
+fechaAlta DateTime
+)
+
+create index aeronavesBajas on mm.logBajasAernoves (aeronave)
