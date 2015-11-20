@@ -822,7 +822,7 @@ insert into MM.Fecha(fecha) values(MM.convertirFecha(@fecha))
 
 insert into mm.Millas(Cliente,Millas,Fecha_movimiento,Descripcion) 
 select c.Id,-sum(m.Millas),MM.convertirFecha(@fecha),'VENCIMIENTO' from mm.Clientes c join mm.Millas m on m.Cliente=c.Id
-where c.Fecha_prox_vencimiento<@fecha
+where c.Fecha_prox_vencimiento<MM.convertirFecha(@fecha) ---esto?
 group by c.Id
 
 end 

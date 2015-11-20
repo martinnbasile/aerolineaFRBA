@@ -22,7 +22,6 @@ namespace AerolineaFrba
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ConexionALaBase.Conexion.verificarConexion();
-            
             ConexionALaBase.Conexion.ejecutarNonQuery("exec MM.actualizarFecha '" + AerolineaFrba.Properties.Settings.Default.fechaDelSistema + "'");
             if (MessageBox.Show("¿ES UN TERMINAL KIOSCO?", "INICIO", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
