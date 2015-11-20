@@ -1185,7 +1185,7 @@ BEGIN TRANSACTION
 	DROP table #tablaTemporal
 COMMIT
 GO
-
+create index indiceMillero on mm.clientes (nombre,apellido)
 create function mm.maximosMilleros(@semestre int,@anio int) returns
 @tablita table(nombre varchar(30), apellido varchar(30),cantMillas int)
 as

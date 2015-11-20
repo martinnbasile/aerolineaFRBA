@@ -26,7 +26,7 @@ namespace AerolineaFrba.Listado_Estadistico
                     
                     break;
                 case "Clientes con más millas acumuladas":
-
+                    queryListadoElegido = "select * from mm.maximosMilleros(" + semestre + "," + anio + ")";
                     break;
                 case "Destinos con más pasajes cancelados":
                     queryListadoElegido = "select * from mm.DestinosMasCancelados(" + semestre + "," + anio+")";
