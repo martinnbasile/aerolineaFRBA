@@ -4,6 +4,9 @@ create schema MM
 go
 Create Procedure MM.limpiarBase as
 
+drop function mm.DestinosMasVendidosPasajes
+drop function mm.DestinosMasCancelados
+drop function mm.AeronavesMasDiasFueraServicio
 drop Procedure MM.CancelarAeronaveFueraDeServicio
 drop Procedure MM.BorrarCiudades
 drop view MM.rolPorUsuario
@@ -818,8 +821,10 @@ begin
 insert into MM.Fecha(fecha) values(MM.convertirFecha(@fecha))
 
 insert into mm.Millas(Cliente,Millas,Fecha_movimiento,Descripcion) 
+
 select c.Id,-sum(m.Millas),MM.convertirFecha(@fecha),'VENCIMIENTO' 
 from mm.Clientes c join mm.Millas m on m.Cliente=c.Id
+
 where c.Fecha_prox_vencimiento<@fecha
 group by c.Id
 
