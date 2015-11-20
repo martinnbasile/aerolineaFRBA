@@ -918,27 +918,25 @@ create procedure MM.CancelarAeronaveFueraDeServicio
   go
 
 
-create procedure MM.BorrarCiudades(
+create  procedure MM.BorrarCiudades(
 @Descripcion varchar(100))
 as
 begin tran
 declare @id int
-set @id=(select Id from MM.Ciudades where Descripcion=@Descripcion)
-update MM.Ciudades set Estado='Deshabilitado' where Id=@id
-update MM.Rutas_Aereas set Estado=2 where Ciudad_Destino=@id or Ciudad_Origen=@id
+select @id=(select Id from MM.Ciudades where Descripcion= @Descripcion)
+update MM.Ciudades set Estado='Deshabilitado' where Id= @id
+update MM.Rutas_Aereas set Estado=2 where Ciudad_Destino=10/*@id */or Ciudad_Origen=10@id
+delete b  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id  join mm.butacas b on b.viaje=v.id
+where r.Estado=2
 
-delete from MM.Butacas where Viaje in (select v.Id from MM.Viajes v inner join MM.Rutas_Aereas r
-on v.Ruta=r.Id
-where r.Estado=2)
-delete from MM.Pasajes where Viaje in (select v.Id from MM.Viajes v inner join MM.Rutas_Aereas r
-on v.Ruta=r.Id
+delete p  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id join mm.pasajes p on p.viaje=v.id 
 where r.Estado=2
-)
-delete from MM.Paquetes where Viaje in (select v.Id from MM.Viajes v inner join MM.Rutas_Aereas r
-on v.Ruta=r.Id
+
+delete w  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id join  mm.paquetes w on w.viaje=v.id 
 where r.Estado=2
-)
-delete from MM.Viajes where Ruta in (select Id from MM.Rutas_Aereas where Estado=2) and Fecha_salida>= MM.fechaDeHoy()
+
+delete v  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id 
+where r.Estado=2
 commit tran
 go
 
