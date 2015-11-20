@@ -219,7 +219,9 @@ go
 create table MM.Millas(
 Id int identity(1,1),
 Cliente int,
-Millas int not null)
+Millas int not null,
+Fecha_movimiento datetime,
+Descripcion varchar(10))
 go
 alter table MM.Millas
 add constraint Cliente_Millero foreign key (Cliente) references MM.Clientes(Id)
@@ -238,7 +240,7 @@ Id int identity(1,1) primary key,
 Cliente int,
 Producto int,
 Cantidad int not null,
-Fecha_Canje smalldatetime default getdate() )
+Fecha_Canje smalldatetime  )
 go
 alter table MM.Cambios_Millas
 add constraint Cliente_Cambiador foreign key (Cliente) references MM.Clientes(Id)
@@ -810,8 +812,8 @@ as
 begin
 insert into MM.Fecha(fecha) values(MM.convertirFecha(@fecha))
 
-insert into mm.Millas(Cliente,Millas) 
-select c.Id,-sum(m.Millas) from mm.Clientes c join mm.Millas m on m.Cliente=c.Id
+insert into mm.Millas(Cliente,Millas,Fecha,Descripcion) 
+select c.Id,-sum(m.Millas),@fecha,'VENCIMIENTO' from mm.Clientes c join mm.Millas m on m.Cliente=c.Id
 where c.Fecha_prox_vencimiento<@fecha
 group by c.Id
 
@@ -940,11 +942,11 @@ go
 create procedure MM.asentarMillas @viaje int
 as
 begin transaction
-insert into MM.Millas(Cliente,Millas)
-select Cliente,r.Precio_Base/10 from MM.Pasajes p join MM.Viajes v on v.Id=p.Viaje and v.Id=@viaje join MM.Rutas_Aereas r 
+insert into MM.Millas(Cliente,Millas,Fecha,Descripcion)
+select Cliente,r.Precio_Base/10,MM.fechaDeHoy(),'COMPRA PASAJE' from MM.Pasajes p join MM.Viajes v on v.Id=p.Viaje and v.Id=@viaje join MM.Rutas_Aereas r 
 on r.Id=v.Ruta
 union
-select p.Cliente,(p.Kg*r.Precio_Kg)/10 from MM.Paquetes p join MM.Viajes v on v.Id=p.Viaje and v.Id=@viaje join MM.Rutas_Aereas 
+select p.Cliente,(p.Kg*r.Precio_Kg)/10,MM.fechaDeHoy(),'COMPRA PAQUETE' from MM.Paquetes p join MM.Viajes v on v.Id=p.Viaje and v.Id=@viaje join MM.Rutas_Aereas 
 r on r.Id=v.Ruta 
 
 
