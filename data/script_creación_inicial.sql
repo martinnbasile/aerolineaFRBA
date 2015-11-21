@@ -129,7 +129,7 @@ Fecha_prox_vencimiento smalldatetime
 )
 go
 Create Table MM.Rutas_Aereas(
-Id int identity(1,1) primary key,
+Id int  primary key,
 Ciudad_Destino int,
 Ciudad_Origen int,
 Tipo_Servicio int,
@@ -488,9 +488,9 @@ BEGIN
 END
 GO
 
-insert into MM.Rutas_Aereas(Ciudad_Destino,Ciudad_Origen,Precio_Base,Precio_Kg,Estado)
-select d.Id,o.Id,max(e.Ruta_Precio_BasePasaje),max(e.Ruta_Precio_BaseKG),1 from gd_esquema.Maestra as e join mm.ciudades as d on e.Ruta_Ciudad_Destino=d.Descripcion join  mm.Ciudades as o on e.Ruta_Ciudad_Origen=o.Descripcion 
-group by d.Id,o.Id
+insert into MM.Rutas_Aereas(Id,Ciudad_Destino,Ciudad_Origen,Precio_Base,Precio_Kg,Estado)
+select e.Ruta_Codigo,d.Id,o.Id,max(e.Ruta_Precio_BasePasaje),max(e.Ruta_Precio_BaseKG),1 from gd_esquema.Maestra as e join mm.ciudades as d on e.Ruta_Ciudad_Destino=d.Descripcion join  mm.Ciudades as o on e.Ruta_Ciudad_Origen=o.Descripcion 
+group by d.Id,o.Id,e.Ruta_Codigo
 
 go
 create FUNCTION MM.devuelveRutaaa
@@ -527,15 +527,14 @@ Begin
 END
 go
 
-
 insert into MM.Viajes
-select Aeronave_Matricula,MM.devuelveRutaaa(MM.devuelveIDD(Ruta_Ciudad_Origen),
-MM.devuelveIDD(Ruta_Ciudad_Destino),MM.devuelveTipoServicio(Tipo_Servicio)),
+select Aeronave_Matricula,Ruta_Codigo,
 FechaSalida,Fecha_LLegada_Estimada,FechaLlegada
-from gd_esquema.Maestra
-group by Aeronave_Matricula,Ruta_Ciudad_Destino,Ruta_Ciudad_Origen,
-FechaSalida,FechaLLegada,Fecha_LLegada_Estimada,Tipo_Servicio
+from gd_esquema.Maestra g 
+group by Aeronave_Matricula,Ruta_Codigo,
+FechaSalida,FechaLLegada,Fecha_LLegada_Estimada
 go
+
 Create FUNCTION MM.devuelveNumeroCliente
 (
     @DNI numeric(20)
