@@ -14,6 +14,7 @@ namespace AerolineaFrba.Canje_Millas
     {
         int dni;
         int millasDisponibles;
+        int numCliente;
 
         public canjeMillas(int unDni)
         {
@@ -23,10 +24,9 @@ namespace AerolineaFrba.Canje_Millas
 
         private void canjeMillas_Load(object sender, EventArgs e)
         {
-            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "select Descripcion,Millas_Necesarias as 'Precio en millas' from MM.Productos_Milla");
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "select Descripcion,Millas_Necesarias as 'Precio en millas',cantidad from MM.Productos_Milla");
             textBox1.Text = dni.ToString();
             System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select id from MM.clientes where DNI=" + dni);
-            int numCliente;
             reader.Read();
             numCliente = (int)reader.GetSqlInt32(0);
             reader = ConexionALaBase.Conexion.consultarBase("select sum(millas) from MM.millas where cliente=" + numCliente);
@@ -71,14 +71,14 @@ namespace AerolineaFrba.Canje_Millas
                 String descripcionProducto = productoSeleccionado.Cells["Descripcion"].Value.ToString();
                 int precioEnMillasPorUnidad = int.Parse(productoSeleccionado.Cells["Precio en millas"].Value.ToString());
                 int cantidadQueQuiereCanjear = Convert.ToInt32(numericUpDown1.Value);
-                 if ((cantidadQueQuiereCanjear * precioEnMillasPorUnidad )> millasDisponibles)
+                if ((cantidadQueQuiereCanjear * precioEnMillasPorUnidad )> millasDisponibles)
                  {
-                     MessageBox.Show("No tiene las millas suficientes para realizar ese canje");
-                 }else
+                    MessageBox.Show("No tiene las millas suficientes para realizar ese canje");
+                 }
+                 else
                  {
-                        String noQuery = "exec MM.registrarCanje @dni="+dni+",@cantidad="+numericUpDown1.Value+",@descripcion='"+descripcionProducto+"'";
+                        String noQuery = "exec MM.registrarCanje @numCliente="+numCliente+",@cantidad="+numericUpDown1.Value+",@descripcion='"+descripcionProducto+"'";
                         ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
-                        MessageBox.Show("Se ha registrado la transaccion, debera ser aprobada por un administrador");
                         new ingresarDniCanjeMillas().Show();
                         this.Close();
                  }
