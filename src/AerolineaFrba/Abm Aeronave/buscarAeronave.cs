@@ -24,13 +24,13 @@ namespace AerolineaFrba.Abm_Aeronave
             this.Close();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e) //Baja por vida util
         {
            if (Validaciones.Validaciones.validarDataGridView(dataGridView1, "Selecciona una Aeronave a dar de baja por Vida Util"))
             {
                 DataGridViewRow aeronaveSeleccionada = this.dataGridView1.SelectedRows[0];
-                String dadaDeBajaPorVidaUtilAeronaveSeleccionada = aeronaveSeleccionada.Cells["Baja por vida util"].Value.ToString();
-                if (dadaDeBajaPorVidaUtilAeronaveSeleccionada.Equals("SI"))
+                String fechaBajaDefinitivaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fecha de baja definitiva"].Value.ToString();
+                if (!fechaBajaDefinitivaAeronaveSeleccionada.Equals(""))
                 {
                     MessageBox.Show("Ya se encuentra dada de baja por vida util la aeronave seleccionada");
                 }
@@ -48,32 +48,27 @@ namespace AerolineaFrba.Abm_Aeronave
                     
                     new cancelarOReemplazarVidaUtil(unaAeronave).Show();
                     this.Close();
-                    /*
-                    String matriculaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Matrícula"].Value.ToString();
-                    String noQueryDelete = "delete from viajes where viajes.Matricula='" + matriculaAeronaveSeleccionada + "'";
-                    String noQueryUpdate = "UPDATE Aeronaves set Baja_Vida_Util='SI',Fecha_Baja_Definitiva=GETDATE() where matricula='" + matriculaAeronaveSeleccionada + "'";
-                    ConexionALaBase.Conexion.ejecutarNonQuery(noQueryUpdate);
-                    ConexionALaBase.Conexion.ejecutarNonQuery(noQueryDelete);// Comentado hasta que se desarrolle el trigger necesario, sin el trigger rompe al ejecutarse.
-                    MessageBox.Show("Se ha dado de baja por fin de la vida util la aeronave seleccionada, todos los vuelos,pasajes y encomiendas asociados a la misma han sido cancelados");
-                    new buscarAeronave().Show();
-                    this.Close();
-                    */ 
+
                }
            }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e) //FUERA DE SERVICIO
         {
            if (Validaciones.Validaciones.validarDataGridView(dataGridView1, "Selecciona una Aeronave a dar de baja por Fuera de Servicio"))
             {  
                 
                DataGridViewRow aeronaveSeleccionada = this.dataGridView1.SelectedRows[0];
-               String estadoServicioAeronaveSeleccionada = aeronaveSeleccionada.Cells["Baja por fuera de servicio"].Value.ToString();
-               String estadoVidaUtilAeronaveSeleccionada = aeronaveSeleccionada.Cells["Baja por vida util"].Value.ToString();
-               if (estadoServicioAeronaveSeleccionada.Equals("SI") || estadoVidaUtilAeronaveSeleccionada.Equals("SI"))
+               String fechaBajaDefinitivaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fecha de baja definitiva"].Value.ToString();
+               String fechaBajaTemporalAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fecha de fuera de servicio"].Value.ToString();
+               String fechaAltaTemporalAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fecha de reinicio de servicio"].Value.ToString();
+
+               if (!fechaBajaDefinitivaAeronaveSeleccionada.Equals("")||(!fechaBajaTemporalAeronaveSeleccionada.Equals("") &&
+                   DateTime.Parse(Properties.Settings.Default.fechaDelSistema)>DateTime.Parse(fechaBajaTemporalAeronaveSeleccionada) && DateTime.Parse(fechaAltaTemporalAeronaveSeleccionada)<DateTime.Parse(Properties.Settings.Default.fechaDelSistema)))
                {
                     MessageBox.Show("Ya se encuentra fuera de servicio la aeronave seleccionada");
-               }else{
+               }
+               else{
                    String matriculaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Matrícula"].Value.ToString();
                    String modeloAeronaveSeleccionada = aeronaveSeleccionada.Cells["Modelo"].Value.ToString();
                    String fabricanteAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fabricante"].Value.ToString();

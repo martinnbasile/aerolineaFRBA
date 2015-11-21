@@ -42,7 +42,6 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button1_Click(object sender, EventArgs e)
         {
-
             String noQuery = "exec MM.CancelarAeronaveVidaUtil '" + aeronaveAfectada.getMatricula() + "'";
             ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
             MessageBox.Show("Se han cancelado los pasajes/encomiendas correspondientes y se ha dado de baja la aeronave");
@@ -66,7 +65,7 @@ namespace AerolineaFrba.Abm_Aeronave
             else
             {
                 MessageBox.Show("No hay aeronaves disponibles para sustituirla, se creara una nueva aeronave para sustuirla");
-                new crearAeronaveSustituta(aeronaveAfectada).Show();
+                new crearAeronaveSustituta(aeronaveAfectada,"Defi").Show();
                 this.Close();
             }
         }

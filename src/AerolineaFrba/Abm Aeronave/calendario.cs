@@ -28,8 +28,17 @@ namespace AerolineaFrba.Abm_Aeronave
         private void button1_Click(object sender, EventArgs e)
         {
             DateTime fechaSeleccionada = monthCalendar1.SelectionRange.Start;
-            abmQueLlamo.recibirFecha(fechaSeleccionada);
-            this.Close();
+            if (fechaSeleccionada < DateTime.Parse(Properties.Settings.Default.fechaDelSistema))
+            {
+                MessageBox.Show("No puede elegir una fecha anterior a la actual");
+                new calendario(abmQueLlamo).Show();
+                this.Close();
+            }
+            else
+            {
+                abmQueLlamo.recibirFecha(fechaSeleccionada);
+                this.Close();
+            }
         }
 
         private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
