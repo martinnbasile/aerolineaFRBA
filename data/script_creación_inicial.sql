@@ -4,7 +4,9 @@ create schema MM
 go
 Create Procedure MM.limpiarBase as
 
-drop table mm.maximosMilleros
+drop table mm.modeloAvion
+drop table mm.Butacas_Avion
+drop function mm.maximosMilleros
 drop table mm.logBajasAeronaves
 drop function mm.DestinosMasVendidosPasajes
 drop function mm.DestinosMasCancelados
@@ -148,35 +150,34 @@ go
 alter table MM.Usuarios
 add Respuesta varchar(256) not null
 go
-create table MM.Aeronaves(
+create table mm.modeloAvion(
+id int identity(1,1) primary key,
+Modelo_descripcion varchar(10),
+Kg int,
+fabricante varchar(20),
+tipoServicio varchar(20)
+)
+go
+
+create table mm.Butacas_Avion(
+id  int identity(1,1) primary key ,
+butacaNum int,
+butacaPiso int,
+butacaTipo varchar(30),
+modeloAvion int foreign key references mm.ModeloAvion(id)
+)
+go
+
+create table mm.aeronaves(
 matricula varchar(10) primary key,
-Fecha_alta smalldatetime not null,
-Modelo varchar(30) not null,
-Fabricante int,
-Tipo_Servicio int,
-Baja_Fuera_Servicio varchar(2),
-Baja_Vida_Util varchar(2),
-Fecha_Fuera_Servicio smalldatetime,
-Fecha_Reinicio_Servicio smalldatetime,
-Fecha_Baja_Definitiva smalldatetime,
-Cantidad_Butacas int not null,
-Cantidad_Kg int not null)
+fecha_alta datetime,
+modelo int foreign key references mm.ModeloAvion(id),
+baja_definitiva varchar(2),
+fecha_baja_definitiva datetime
+)
 go
-alter table MM.Aeronaves
-add constraint Fabricante foreign key (Fabricante) references MM.Fabricantes(Id)  
-go
-alter table MM.Aeronaves
-add constraint Tipo_Servicio foreign key (Tipo_Servicio) references MM.Tipos_Servicio(Id)
-go
-create table MM.Butacas(
-Matricula varchar(10) not null,
-Numero int not null,
-Tipo varchar(20) not null,
-Piso int not null)
-go
-alter table MM.Butacas
-add constraint Matricula foreign key (Matricula) references MM.Aeronaves(Matricula)
-go
+
+
 Create table MM.Viajes(
 Id int identity(1,1) ,
 Matricula varchar(10),
@@ -243,6 +244,7 @@ create table MM.Productos_Milla(
 Id int identity(1,1) primary key,
 Descripcion varchar not null,
 Cantidad int not null,
+check (Cantidad>0),
 Millas_Necesarias int not null)
 go
 create table MM.Cambios_Millas(
@@ -282,12 +284,13 @@ go
 alter table MM.Tarjetas_Credito
 add constraint Cliente_Tarjetero foreign key(Cliente) references MM.Clientes(Id)
 go
-drop table MM.Butacas
-go
 create table MM.Butacas(
 Viaje int not null,
 Nro int not null,
-Ubicacion varchar(30))
+Ubicacion varchar(30),
+Estado varchar(50) not null,
+FOREIGN KEY (Viaje) references MM.Viajes(Id)
+)
 go
 create table MM.Usuario_rol(
 
@@ -314,6 +317,24 @@ go
 insert into MM.Ciudades(Descripcion)
 select distinct Ruta_Ciudad_Destino from gd_esquema.Maestra union
 select distinct Ruta_Ciudad_Origen from gd_esquema.Maestra
+go
+
+
+insert into mm.modeloAvion(Modelo_descripcion,Kg,fabricante,tipoServicio)
+select distinct Aeronave_Modelo,Aeronave_KG_Disponibles,f.Id,s.Id from gd_esquema.Maestra as m join mm.Fabricantes as f on f.Descripcion=m.Aeronave_Fabricante join mm.Tipos_Servicio as s on s.Descripcion=m.Tipo_Servicio 
+go
+
+insert into mm.Butacas_Avion (butacaNum,butacaPiso,butacaTipo,modeloAvion)
+select ma.Butaca_Nro,ma.Butaca_Piso,ma.Butaca_Tipo,mo.id
+from gd_esquema.Maestra ma join mm.modeloAvion mo on (ma.Aeronave_KG_Disponibles=mo.Kg and ma.Aeronave_Modelo=mo.Modelo_descripcion and ma.Butaca_Nro<>0) join mm.Fabricantes f on f.Id=mo.fabricante and f.Descripcion=ma.Aeronave_Fabricante join mm.Tipos_Servicio t on t.Id=mo.tipoServicio and t.Descripcion=ma.Tipo_Servicio
+go
+
+
+insert into MM.Aeronaves 
+select distinct Aeronave_Matricula,'1999-01-01', mo.id, 
+
+	'NO',NULL 
+from gd_esquema.Maestra ma join mm.modeloAvion mo on (ma.Aeronave_KG_Disponibles=mo.Kg and ma.Aeronave_Modelo=mo.Modelo_descripcion ) join mm.Fabricantes f on f.Id=mo.fabricante and f.Descripcion=ma.Aeronave_Fabricante join mm.Tipos_Servicio t on t.Id=mo.tipoServicio and t.Descripcion=ma.Tipo_Servicio
 go
 create table MM.Roles_Funcionalidades(
 Funcionalidad int,
@@ -413,29 +434,6 @@ go
 alter table MM.KG
 add constraint FK_Viajes FOREIGN KEY (Viaje) references MM.Viajes(Id)
 go
-alter table MM.Butacas
-add constraint FK_Viajes_2 FOREIGN KEY (Viaje) references MM.Viajes(Id)
-go
-insert into MM.Aeronaves
-select distinct Aeronave_Matricula,'1999-01-01',Aeronave_Modelo, 
-case 
-	when Aeronave_Fabricante='Airbus' then 1
-	when Aeronave_Fabricante='Bombardier' then 2
-	when Aeronave_Fabricante='Embraer' then 3
-	when Aeronave_Fabricante='Boeing' then 4
-	end,
-case
-	when Tipo_Servicio='Cama' then 3
-	when Tipo_Servicio='Común' then 1
-	when Tipo_Servicio='Ejecutivo' then 2 
-	when Tipo_Servicio='Semi-Cama' then 4
-	when Tipo_Servicio='Premium' then 5
-	end,
-	'NO','NO',NULL,NULL,NULL,45,
-	Aeronave_KG_Disponibles 
-from gd_esquema.Maestra
-order by Aeronave_Matricula
-go
 Create table MM.Intentos_login(
 	Id_login int identity(1,1) primary key,
 	Codigo_usuario int not null,
@@ -490,35 +488,12 @@ BEGIN
 
 END
 GO
-insert into MM.Rutas_Aereas
-select MM.devuelveIDD( A.Ruta_Ciudad_Destino),MM.devuelveIDD( a.Ruta_Ciudad_Origen),
-case
-when a.Tipo_Servicio='Cama' then 3
-	when a.Tipo_Servicio='Común' then 1
-	when a.Tipo_Servicio='Ejecutivo' then 2 
-	when a.Tipo_Servicio='Semi-Cama' then 4
-	when a.Tipo_Servicio='Premium' then 5
-	end
-	AS Tipo
-	,b.Ruta_Precio_BasePasaje,A.Ruta_Precio_BaseKG,1
-from 
-(select distinct Ruta_Ciudad_Destino,Ruta_Ciudad_Origen, Tipo_Servicio,Ruta_Precio_BaseKG
-from gd_esquema.Maestra 
-where Ruta_Precio_BaseKG != 0.00
-group by Ruta_Ciudad_Destino,Ruta_Ciudad_Origen, Tipo_Servicio,Ruta_Precio_BaseKG
-)A
-inner join
-(select distinct Ruta_Ciudad_Destino,Ruta_Ciudad_Origen, Tipo_Servicio,Ruta_Precio_BasePasaje
-from gd_esquema.Maestra 
-where Ruta_Precio_BasePasaje != 0.00
-group by Ruta_Ciudad_Destino,Ruta_Ciudad_Origen, Tipo_Servicio,Ruta_Precio_BasePasaje)B
-on a.Ruta_Ciudad_Destino=b.Ruta_Ciudad_Destino
-and
-a.Ruta_Ciudad_Origen=b.Ruta_Ciudad_Origen
-and 
-a.Tipo_Servicio=b.Tipo_Servicio
-go
 
+insert into MM.Rutas_Aereas(Ciudad_Destino,Ciudad_Origen,Precio_Base,Precio_Kg,Estado)
+select d.Id,o.Id,max(e.Ruta_Precio_BasePasaje),max(e.Ruta_Precio_BaseKG),1 from gd_esquema.Maestra as e join mm.ciudades as d on e.Ruta_Ciudad_Destino=d.Descripcion join  mm.Ciudades as o on e.Ruta_Ciudad_Origen=o.Descripcion 
+group by d.Id,o.Id
+
+go
 create FUNCTION MM.devuelveRutaaa
 (
 	@ciudad_origen int,
@@ -621,9 +596,7 @@ group by b.Id,a.Paquete_KG,Paquete_fechaCompra,d.Id
 go
 drop table MM.KG
 go
-Alter table MM.Butacas
-add Estado varchar(50) not null
-go
+
 insert into MM.Butacas
 select  b.Id,a.Butaca_Nro,a.Butaca_Tipo,'vendida'  from gd_esquema.Maestra as a join MM.Viajes as b on 
 b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and 
@@ -1242,3 +1215,4 @@ begin
 	end
 end
 go
+
