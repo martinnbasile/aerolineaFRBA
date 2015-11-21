@@ -44,7 +44,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e) //COnfirmar baja
         {
             if(Validaciones.Validaciones.validarTextBox(textBox1,"Seleccione una fecha"))
             {
@@ -61,7 +61,7 @@ namespace AerolineaFrba.Abm_Aeronave
                 }
                 else
                 {
-                    string queryParaMandarFueraDeServicio = "UPDATE MM.Aeronaves set Baja_Fuera_Servicio='SI',Fecha_Fuera_Servicio='" + fechaActual + "',Fecha_Reinicio_Servicio='" + fechaReinicioDeServicio + "' where matricula='" + aeronaveAfectada.getMatricula() + "'";
+                    string queryParaMandarFueraDeServicio = "UPDATE MM.Aeronaves set Fecha_baja_Fuera_Servicio='" + fechaActual + "',Fecha_alta_fuera_Servicio='" + fechaReinicioDeServicio + "' where matricula='" + aeronaveAfectada.getMatricula() + "'";
                     ConexionALaBase.Conexion.ejecutarNonQuery(queryParaMandarFueraDeServicio);
                     MessageBox.Show("Se ha pasado la aeronave a estado fuera de servicio entre la fecha "+fechaActual+" y la fecha "+fechaReinicioDeServicio+" ");
                     new buscarAeronave().Show();

@@ -13,11 +13,14 @@ namespace AerolineaFrba.Abm_Aeronave
 {
     public partial class crearAeronaveSustituta : Form
     {
+        String deQueBajaVengo;
         Aeronave aeronaveAReemplazar;
-        public crearAeronaveSustituta(Aeronave unaAeronave)
+        public crearAeronaveSustituta(Aeronave unaAeronave, String tipoDeBaja)
         {
+            
             aeronaveAReemplazar = unaAeronave;
             InitializeComponent();
+            deQueBajaVengo = tipoDeBaja;
         }
 
         private void crearAeronave_Load(object sender, EventArgs e)
@@ -27,7 +30,14 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (deQueBajaVengo=="Tempo")
+            {
+                new cancelarOReemplazarFueraDeServicio(aeronaveAReemplazar).Show();
+            }
+            else 
+            {
             new cancelarOReemplazarVidaUtil(aeronaveAReemplazar).Show();
+            }
             this.Close();
         }
 
