@@ -5,7 +5,6 @@ go
 Create Procedure MM.limpiarBase as
 
 drop function mm.semestre
-drop table mm.modeloAvion
 drop table mm.Butacas_Avion
 drop function mm.maximosMilleros
 drop table mm.logBajasAeronaves
@@ -53,6 +52,7 @@ Drop table MM.Usuario_rol
 Drop table MM.Viajes
 Drop table MM.Rutas_Aereas
 Drop table MM.Aeronaves 
+drop table mm.modeloAvion
 Drop table MM.Tipos_Servicio 
 Drop table MM.Fabricantes 
 Drop table MM.Ciudades 
@@ -173,26 +173,23 @@ create table mm.aeronaves(
 matricula varchar(10) primary key,
 fecha_alta datetime,
 modelo int foreign key references mm.ModeloAvion(id),
-baja_definitiva varchar(2),
-fecha_baja_definitiva datetime
+fecha_baja_definitiva datetime,
+fecha_baja_fuera_servicio datetime,
+fecha_alta_fuera_servicio datetime,
 )
 go
 
 
 Create table MM.Viajes(
-Id int identity(1,1) ,
-Matricula varchar(10),
-Ruta int)
+Id int identity(1,1) primary key ,
+Matricula varchar(10) foreign key references MM.Aeronaves(Matricula),
+Ruta int,
+constraint Ruta foreign key (Ruta) references MM.Rutas_Aereas(Id)
+)
 go
-alter table MM.Viajes
-add constraint Id primary key (Id)
-go
-alter table MM.Viajes
-add constraint Matricula_Avion foreign key (Matricula) references MM.Aeronaves(Matricula)
-go
-alter table MM.Viajes
-add constraint Ruta foreign key (Ruta) references MM.Rutas_Aereas(Id)
-go
+
+
+
 alter table MM.Rutas_Aereas
 add Fecha_Salida datetime not null
 go
@@ -209,12 +206,15 @@ Kg int not null,
 Fecha_Compra smalldatetime,
 Cliente int)
 go
+
 alter table MM.Paquetes
 add constraint Viaje2 foreign key (Viaje) references MM.Viajes(Id)
 go
+
 alter table MM.Paquetes
 add constraint Cliente_Paquete foreign key (Cliente) references MM.Clientes(Id)
 go
+
 Create table MM.Pasajes(
 Id int identity(1,1) primary key,
 Viaje int,
@@ -330,13 +330,11 @@ select ma.Butaca_Nro,ma.Butaca_Piso,ma.Butaca_Tipo,mo.id
 from gd_esquema.Maestra ma join mm.modeloAvion mo on (ma.Aeronave_KG_Disponibles=mo.Kg and ma.Aeronave_Modelo=mo.Modelo_descripcion and ma.Butaca_Nro<>0) join mm.Fabricantes f on f.Id=mo.fabricante and f.Descripcion=ma.Aeronave_Fabricante join mm.Tipos_Servicio t on t.Id=mo.tipoServicio and t.Descripcion=ma.Tipo_Servicio
 go
 
-
-insert into MM.Aeronaves 
-select distinct Aeronave_Matricula,'1999-01-01', mo.id, 
-
-	'NO',NULL 
+insert into MM.Aeronaves (matricula,fecha_alta,modelo)
+select distinct Aeronave_Matricula,'1999-01-01', mo.id 
 from gd_esquema.Maestra ma join mm.modeloAvion mo on (ma.Aeronave_KG_Disponibles=mo.Kg and ma.Aeronave_Modelo=mo.Modelo_descripcion ) join mm.Fabricantes f on f.Id=mo.fabricante and f.Descripcion=ma.Aeronave_Fabricante join mm.Tipos_Servicio t on t.Id=mo.tipoServicio and t.Descripcion=ma.Tipo_Servicio
 go
+
 create table MM.Roles_Funcionalidades(
 Funcionalidad int,
 Rol int)
@@ -528,6 +526,8 @@ Begin
 
 END
 go
+
+
 insert into MM.Viajes
 select Aeronave_Matricula,MM.devuelveRutaaa(MM.devuelveIDD(Ruta_Ciudad_Origen),
 MM.devuelveIDD(Ruta_Ciudad_Destino),MM.devuelveTipoServicio(Tipo_Servicio)),
@@ -620,9 +620,9 @@ from MM.Rutas_Aereas r join MM.Ciudades c1 on (r.Ciudad_Origen=c1.Id)
 go
 
 create view MM.vista_aeronaves as
-select a.Fecha_alta as 'Fecha de alta',  a.Modelo as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.Baja_Fuera_Servicio as 'Baja por fuera de servicio',a.Baja_Vida_Util as 'Baja por vida util',a.Fecha_Fuera_Servicio as 'Fecha de fuera de servicio',a.Fecha_Reinicio_Servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',a.Cantidad_Butacas as 'Cantidad de butacas',a.Cantidad_Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
-from MM.Aeronaves a join MM.Fabricantes f on (a.Fabricante=f.Id)
-					join MM.Tipos_Servicio ts on (a.Tipo_Servicio=ts.Id)				
+select a.Fecha_alta as 'Fecha de alta',  mo.Modelo_descripcion as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.fecha_baja_fuera_servicio as 'Fecha de fuera de servicio',a.fecha_alta_fuera_servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
+from MM.Aeronaves a join mm.modeloAvion mo on mo.id=a.modelo join MM.Fabricantes f on (mo.Fabricante=f.Id)
+					join MM.Tipos_Servicio ts on (mo.tipoServicio=ts.Id)				
 go
 
 
@@ -762,13 +762,20 @@ AS
 	DECLARE @Fabricante int
 	DECLARE @Tipo_Servicio int
 	
-	SELECT @Modelo = Modelo,@Fabricante = Fabricante,@Tipo_Servicio = Tipo_Servicio from MM.Aeronaves a where 
+	SELECT @Modelo = Modelo,@Fabricante = Fabricante,@Tipo_Servicio = TipoServicio
+	from MM.Aeronaves a join mm.modeloAvion mo on (a.modelo=mo.id) where 
 	a.matricula=@matricula 
 	
-SELECT a.Fecha_alta as 'Fecha de alta',  a.Modelo as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.Baja_Fuera_Servicio as 'Baja por fuera de servicio',a.Baja_Vida_Util as 'Baja por vida util',a.Fecha_Fuera_Servicio as 'Fecha de fuera de servicio',a.Fecha_Reinicio_Servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',a.Cantidad_Butacas as 'Cantidad de butacas',a.Cantidad_Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
+
+
+SELECT a.Fecha_alta as 'Fecha de alta',  a.Modelo as 'Modelo',a.matricula as 'Matrícula',
+f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',
+a.fecha_baja_fuera_servicio as 'Fecha de fuera de servicio',a.fecha_alta_fuera_servicio as 'Fecha de reinicio de servicio',
+a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
 from MM.aeronaves a
-join MM.Fabricantes f on (a.Fabricante=f.Id)
-join MM.Tipos_Servicio ts on (a.Tipo_Servicio=ts.Id)
+join mm.modeloAvion mo on (a.modelo=mo.id)
+join MM.Fabricantes f on (mo.Fabricante=f.Id)
+join MM.Tipos_Servicio ts on (mo.TipoServicio=ts.Id)
 where  
 	not exists (
 		select * from MM.Viajes v
@@ -777,11 +784,9 @@ where
 		and a.matricula=v.Matricula
 	)
 	and a.Modelo=@Modelo
-	and a.Fabricante=@Fabricante
-	and a.Tipo_Servicio=@Tipo_Servicio
+	and mo.Fabricante=@Fabricante
+	and mo.TipoServicio=@Tipo_Servicio
 	and a.matricula!=@matricula			 
-		 
-
 GO
 
 create function MM.convertirFecha (@fecha varchar(10))
@@ -851,48 +856,53 @@ commit
 go
 
 
-create procedure MM.CancelarAeronaveVidaUtil
-  (
-  @matricula varchar(10))
+create procedure MM.CancelarAeronaveVidaUtil (@matricula varchar(10))
   as
   BEGIN TRAN
-  declare
-  @dia datetime
-  set @dia=mm.fechaDeHoy()
-  delete from MM.Butacas where Viaje in (select Id from MM.Viajes
-  where Fecha_salida>=@dia and Matricula=@matricula)
-  delete from MM.Pasajes where Viaje in (select Id from MM.Viajes
-  where Fecha_salida>=@dia and Matricula=@matricula)
-  delete from MM.Paquetes where Viaje in (select Id from MM.Viajes
-  where Fecha_salida>=@dia and Matricula=@matricula)
-  delete from MM.Viajes where Matricula=@matricula and Fecha_salida>=@dia
-  UPDATE MM.Aeronaves set Baja_Vida_Util='SI',Fecha_Baja_Definitiva=@dia where matricula=@matricula 	  
 
+  
+  
+  delete from MM.Butacas where Viaje in (select Id from MM.Viajes
+  where Fecha_salida>=mm.fechaDeHoy() and Matricula=@matricula)
+
+  delete from MM.Pasajes where Viaje in (select Id from MM.Viajes
+  where Fecha_salida>=mm.fechaDeHoy() and Matricula=@matricula)
+
+  delete from MM.Paquetes where Viaje in (select Id from MM.Viajes
+  where Fecha_salida>=mm.fechaDeHoy() and Matricula=@matricula)
+
+  delete from MM.Viajes where Matricula=@matricula and Fecha_salida>=mm.fechaDeHoy()
+
+  UPDATE MM.Aeronaves set fecha_baja_definitiva=mm.fechaDeHoy() where matricula=@matricula 	  
+  
   COMMIT TRAN
   go
 
 
 
-create procedure MM.CancelarAeronaveFueraDeServicio
-  (
-  @matricula varchar(10),
-  @hasta datetime)
+create procedure MM.CancelarAeronaveFueraDeServicio(@matricula varchar(10), @hasta datetime)
   as
   BEGIN TRAN
   declare
+
   @dia datetime
   set @dia=mm.fechaDeHoy()
+
   delete from MM.Butacas where Viaje in (select Id from MM.Viajes
   where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
+
   delete from MM.Pasajes where Viaje in (select Id from MM.Viajes
   where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
+
   delete from MM.Paquetes where Viaje in (select Id from MM.Viajes
   where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
+
   delete from MM.Viajes where Matricula=@matricula and Fecha_salida>=@dia and Fecha_salida<=@hasta
-  UPDATE MM.Aeronaves set Baja_Fuera_Servicio='SI',Fecha_Fuera_Servicio=@dia, Fecha_Reinicio_Servicio=@hasta where matricula=@matricula
+
+  UPDATE MM.Aeronaves set fecha_baja_fuera_servicio=@dia, Fecha_alta_fuera_servicio=@hasta
+  where matricula=@matricula
   COMMIT TRAN
   go
-
 
 create  procedure MM.BorrarCiudades(
 @Descripcion varchar(100))
@@ -901,7 +911,7 @@ begin tran
 declare @id int
 select @id=(select Id from MM.Ciudades where Descripcion= @Descripcion)
 update MM.Ciudades set Estado='Deshabilitado' where Id= @id
-update MM.Rutas_Aereas set Estado=2 where Ciudad_Destino=10/*@id */or Ciudad_Origen=10@id
+update MM.Rutas_Aereas set Estado=2 where Ciudad_Destino=10/*@id */or Ciudad_Origen=@id
 delete b  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id  join mm.butacas b on b.viaje=v.id
 where r.Estado=2
 
@@ -1191,7 +1201,7 @@ fechaBaja DateTime,
 fechaAlta DateTime
 )
 
-create index aeronavesBajas on mm.logBajasAernoves (aeronave)
+create index aeronavesBajas on mm.logBajasAeronaves (aeronave)
 go
 
 create trigger mm.actualizarTablaLog on MM.Aeronaves
@@ -1200,14 +1210,14 @@ as
 begin
 	
 	insert into mm.logBajasAeronaves (aeronave,fechaBaja,fechaAlta)
-	Select i.matricula, i.fecha_fuera_servicio, i.fecha_reinicio_servicio
-	from inserted i join deleted d on (i.matricula=d.matricula and i.Baja_fuera_servicio='SI' and d.Baja_Fuera_servicio='NO')
+	Select i.matricula, i.fecha_baja_fuera_servicio, i.fecha_alta_fuera_servicio
+	from inserted i join deleted d on (i.matricula=d.matricula and i.fecha_alta_fuera_servicio>=mm.fechaDeHoy() and d.fecha_alta_fuera_servicio<mm.fechaDeHoy())
 	
 	declare miCursor cursor for
-	select id, fecha_reinicio_servicio 
+	select id, fecha_alta_fuera_servicio 
 	from mm.logBajasAeronaves l join inserted i on 
-	(l.aeronave=i.matricula and l.fechaBaja=i.fecha_fuera_servicio
-	and l.fechaBaja<i.fecha_fuera_servicio)
+	(l.aeronave=i.matricula and l.fechaBaja=i.fecha_baja_fuera_servicio
+	and l.fechaBaja<i.fecha_baja_fuera_servicio)
 	declare @id int
 	declare @fechaR DateTime
 
