@@ -129,7 +129,8 @@ Fecha_prox_vencimiento smalldatetime
 )
 go
 Create Table MM.Rutas_Aereas(
-Id int  primary key,
+Id int identity(1,1) primary key,
+Ruta_Codigo int ,
 Ciudad_Destino int,
 Ciudad_Origen int,
 Tipo_Servicio int,
@@ -488,9 +489,9 @@ BEGIN
 END
 GO
 
-insert into MM.Rutas_Aereas(Id,Ciudad_Destino,Ciudad_Origen,Precio_Base,Precio_Kg,Estado)
-select e.Ruta_Codigo,d.Id,o.Id,max(e.Ruta_Precio_BasePasaje),max(e.Ruta_Precio_BaseKG),1 from gd_esquema.Maestra as e join mm.ciudades as d on e.Ruta_Ciudad_Destino=d.Descripcion join  mm.Ciudades as o on e.Ruta_Ciudad_Origen=o.Descripcion 
-group by d.Id,o.Id,e.Ruta_Codigo
+insert into MM.Rutas_Aereas(Ruta_Codigo,Ciudad_Destino,Ciudad_Origen,Precio_Base,Precio_Kg,Estado,Tipo_Servicio)
+select e.Ruta_Codigo,d.Id,o.Id,max(e.Ruta_Precio_BasePasaje),max(e.Ruta_Precio_BaseKG),1,t.Id from gd_esquema.Maestra as e join mm.ciudades as d on e.Ruta_Ciudad_Destino=d.Descripcion join  mm.Ciudades as o on e.Ruta_Ciudad_Origen=o.Descripcion join mm.Tipos_Servicio t on t.Descripcion=e.Tipo_Servicio
+group by d.Id,o.Id,e.Ruta_Codigo,t.Id
 
 go
 create FUNCTION MM.devuelveRutaaa
@@ -528,11 +529,11 @@ END
 go
 
 insert into MM.Viajes
-select Aeronave_Matricula,Ruta_Codigo,
+select Aeronave_Matricula,r.Id,
 FechaSalida,Fecha_LLegada_Estimada,FechaLlegada
-from gd_esquema.Maestra g 
-group by Aeronave_Matricula,Ruta_Codigo,
-FechaSalida,FechaLLegada,Fecha_LLegada_Estimada
+from gd_esquema.Maestra g join MM.Rutas_Aereas as r on g.Ruta_Codigo=r.Ruta_Codigo join MM.Tipos_Servicio t on t.Id=r.Tipo_Servicio and g.Tipo_Servicio=t.Descripcion join mm.Ciudades o on g.Ruta_Ciudad_Origen=o.Descripcion and r.Ciudad_Origen=o.Id join mm.Ciudades c on c.Descripcion=g.Ruta_Ciudad_Destino and r.Ciudad_Destino=c.Id
+group by Aeronave_Matricula,
+FechaSalida,FechaLLegada,Fecha_LLegada_Estimada,r.Id
 go
 
 Create FUNCTION MM.devuelveNumeroCliente
@@ -596,7 +597,7 @@ group by b.Id,a.Paquete_KG,Paquete_fechaCompra,d.Id
 go
 drop table MM.KG
 go
-
+/*
 insert into MM.Butacas
 select  b.Id,a.Butaca_Nro,a.Butaca_Tipo,'vendida'  from gd_esquema.Maestra as a join MM.Viajes as b on 
 b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and 
@@ -607,7 +608,7 @@ on c.Ciudad_Origen=f.Id and f.Descripcion=a.Ruta_Ciudad_Origen
 where Pasaje_codigo <>0
 group by b.Id,Butaca_Nro,a.Butaca_Tipo
 
-
+*/
 
 go
 
