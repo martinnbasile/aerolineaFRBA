@@ -4,6 +4,7 @@ create schema MM
 go
 Create Procedure MM.limpiarBase as
 
+drop function mm.semestre
 drop table mm.modeloAvion
 drop table mm.Butacas_Avion
 drop function mm.maximosMilleros
@@ -959,6 +960,7 @@ commit
 end
 
 go
+
 insert into MM.Millas(Cliente,Millas,Fecha_movimiento,Descripcion)
 select Cliente,r.Precio_Base/10,v.Fecha_llegada,'COMPRA PASAJE' from MM.Pasajes p join MM.Viajes v on v.Id=p.Viaje  join MM.Rutas_Aereas r 
 on r.Id=v.Ruta
@@ -1000,30 +1002,35 @@ go
 insert into MM.usuario_rol values (5,1)
 go
 
-CREATE PROCEDURE [MM].[registrarCanje] @dni int,@cantidad int,@descripcion varchar (30)
+CREATE PROCEDURE [MM].[registrarCanje] @numCli int,@cantidad int,@descripcion varchar (30)
 AS
 
-	DECLARE @idCliente int		
+			
 	DECLARE @idProducto int
 	DECLARE @cantidadActual int
-	SELECT @idCliente = id from MM.Clientes a where 
-	a.DNI=@dni
-	SELECT @idProducto = id from MM.Productos_Milla a where 
+	declare @millasCosto int
+
+	SELECT @idProducto = id, @cantidadActual=Cantidad,@millasCosto=Millas_necesarias  from MM.Productos_Milla a where 
 	a.Descripcion=@descripcion
-	SELECT @cantidadActual= Cantidad from MM.Productos_Milla a where
-	a.Descripcion=@descripcion 
+	 
 
 BEGIN TRANSACTION
 	
-	INSERT INTO MM.Cambios_Millas(Cliente,Producto,Cantidad,Fecha_Canje)
-	VALUES (@idCliente,@idProducto,@cantidad,MM.fechaDeHoy());
-	
+	Insert into mm.millas(cliente,Millas,Fecha_movimiento,Descripcion)
+	values (@numCli,-(@cantidad*@millasCosto),getdate(),'Canje de millas')
+		
+	Begin try
 	UPDATE MM.Productos_Milla
 	SET Cantidad=@cantidadActual-@cantidad
 	WHERE Descripcion=@descripcion
+	end try
+
+	begin catch
+			raiserror ('No hay cantidad suficiente en stock',10,16)
+			rollback
+	end catch
 
 COMMIT
-
 GO
 
 alter table MM.Roles

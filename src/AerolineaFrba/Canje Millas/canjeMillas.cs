@@ -65,25 +65,33 @@ namespace AerolineaFrba.Canje_Millas
         private void button2_Click(object sender, EventArgs e)
         {
             if (Validaciones.Validaciones.validarDataGridView(dataGridView1, "Seleccione un producto"))
-            { if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown1, "Seleccione una cantidad de productos a canjear"))
-              {
-                DataGridViewRow productoSeleccionado = this.dataGridView1.SelectedRows[0];
-                String descripcionProducto = productoSeleccionado.Cells["Descripcion"].Value.ToString();
-                int precioEnMillasPorUnidad = int.Parse(productoSeleccionado.Cells["Precio en millas"].Value.ToString());
-                int cantidadQueQuiereCanjear = Convert.ToInt32(numericUpDown1.Value);
-                if ((cantidadQueQuiereCanjear * precioEnMillasPorUnidad )> millasDisponibles)
-                 {
-                    MessageBox.Show("No tiene las millas suficientes para realizar ese canje");
-                 }
-                 else
-                 {
-                        String noQuery = "exec MM.registrarCanje @numCliente="+numCliente+",@cantidad="+numericUpDown1.Value+",@descripcion='"+descripcionProducto+"'";
-                        ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
-                        new ingresarDniCanjeMillas().Show();
-                        this.Close();
-                 }
-                 
-               }   
+            {
+                if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown1, "Seleccione una cantidad de productos a canjear"))
+                {
+                    DataGridViewRow productoSeleccionado = this.dataGridView1.SelectedRows[0];
+                    String descripcionProducto = productoSeleccionado.Cells["Descripcion"].Value.ToString();
+                    int precioEnMillasPorUnidad = int.Parse(productoSeleccionado.Cells["Precio en millas"].Value.ToString());
+                    int cantidadQueQuiereCanjear = Convert.ToInt32(numericUpDown1.Value);
+                    if ((cantidadQueQuiereCanjear * precioEnMillasPorUnidad) > millasDisponibles)
+                    {
+                        MessageBox.Show("No tiene las millas suficientes para realizar ese canje");
+                    }
+                    else
+                    {
+                        try
+                        {
+                            String noQuery = "exec MM.registrarCanje @numCliente=" + numCliente + ",@cantidad=" + numericUpDown1.Value + ",@descripcion='" + descripcionProducto + "'";
+                            ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
+                            new ingresarDniCanjeMillas().Show();
+                            this.Close();
+                        }
+                        catch (System.Data.SqlClient.SqlException ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
+                    }
+                }
             }
         }
     }
