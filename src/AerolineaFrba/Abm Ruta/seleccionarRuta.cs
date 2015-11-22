@@ -12,6 +12,8 @@ namespace AerolineaFrba.Abm_Ruta
 {
     public partial class SeleccionarRuta : Form
     {
+        Ruta rutaElegida = new Ruta();
+        int idRutaElegida;
         int intencion;
         public SeleccionarRuta(int opcionElegida) //opcion 1=modificar opcion 2=borrar
         {
@@ -40,13 +42,14 @@ namespace AerolineaFrba.Abm_Ruta
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Ruta rutaElegida = new Ruta();
+            
                 
             if (dataGridView1.SelectedRows.Count == 1)
             {
                 DataGridViewRow row = this.dataGridView1.SelectedRows[0];
-                rutaElegida.cargate(dataGridView1.SelectedRows[0]);
-             
+                rutaElegida.cargate(row);
+                idRutaElegida = int.Parse(row.Cells["Codigo"].Value.ToString());
+                MessageBox.Show(idRutaElegida.ToString());
             }
             else
             {
@@ -59,14 +62,15 @@ namespace AerolineaFrba.Abm_Ruta
             
             if (intencion == 1)
             {//vino a modificar
-                new ModificarRuta(rutaElegida).Show();
+                new ModificarRuta(rutaElegida,idRutaElegida).Show();
                 this.Close();
                 return;
             }
             else
             { //vino a borrar
-                //implementar baja logica de la base, ya tenes Ruta rutaElegida
-                MessageBox.Show("Quiere borrar");
+                
+                ConexionALaBase.Conexion.ejecutarNonQuery("update mm.rutas_aereas set estado='Inhabilitada' where id=" + idRutaElegida);
+                
             }
         }
     }
