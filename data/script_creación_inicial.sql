@@ -420,7 +420,7 @@ alter table MM.Rutas_Aereas
 drop column Fecha_llegada
 go
 alter table MM.Rutas_Aereas
-add Estado int not null 
+add Estado int not null default 'Habilitado'
 go
 alter table MM.Viajes
 add Fecha_Salida date not null
@@ -975,7 +975,7 @@ begin
 update MM.Viajes 
 set Fecha_llegada=@hora
 where Id=@viaje
-exec MM.asentarMillas @viaje
+exec MM.asentarMillas @viajeault 
 delete from MM.Butacas where Viaje=@viaje
 commit
 end
@@ -1295,4 +1295,21 @@ set @dest=(select Id from ciudades where Descripcion=@destino)
 update  mm.Rutas_Aereas 
 set Ciudad_Destino=@dest, Ciudad_Origen=@ori,Tipo_Servicio=(select Id from Tipos_Servicio where Descripcion=@servicio),Precio_Base=@basePasaje,Precio_Kg=@baseKg
 where Id=@id  
+end
+go
+
+
+create procedure mm.generarViaje @matricula varchar(10),@ruta int,@fechaSalida varchar(15),@fechaLlegada vaarchar(15)--FORMATO DE FECHAS aaaa-mm-dd hh:mi:ss(24h)
+as
+begin
+declare @salida datetime
+declare @llegada datetime
+set @llegada=convert(date,@fechaLlegada,20)
+set @salida=convert(date,@fechaSalida,20)
+
+insert into mm.Viajes(Matricula,Ruta,Fecha_salida,Fecha_llegada) values (@matricula,@ruta,@salida,@llegada)
+declare @a int
+select @a=max(Id) from mm.Viajes
+insert into mm.Butacas (Viaje,Nro,Ubicacion,Estado)
+select @a,b.butacaNum,b.butacaTipo,'Libre' from mm.Butacas_Avion b join mm.modeloAvion m on m.id=b.modeloAvion join mm.aeronaves a on a.modelo=m.Id and a.matricula=@matricula
 end
