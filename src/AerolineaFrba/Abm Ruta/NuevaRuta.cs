@@ -61,7 +61,7 @@ namespace AerolineaFrba.Abm_Ruta
                 String precioBaseEncomienda = maskedTextBox2.Text;
 
 
-                ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.crearRuta '"+ ciudadDestino +"' '"+ ciudadOrigen+"' '"+ servicio+"' "+ precioBase +" "+precioBaseEncomienda);
+                ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.crearRuta '"+ ciudadDestino +"', '"+ ciudadOrigen+"', '"+ servicio+"', "+ precioBase +", "+precioBaseEncomienda);
                 MessageBox.Show("Operacion exitosa");
                 new ABM_RUTA().Show();
                 this.Close();
