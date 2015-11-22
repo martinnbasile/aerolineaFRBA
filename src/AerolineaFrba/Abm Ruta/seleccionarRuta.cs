@@ -49,7 +49,7 @@ namespace AerolineaFrba.Abm_Ruta
                 DataGridViewRow row = this.dataGridView1.SelectedRows[0];
                 rutaElegida.cargate(row);
                 idRutaElegida = int.Parse(row.Cells["Codigo"].Value.ToString());
-                MessageBox.Show(idRutaElegida.ToString());
+                
             }
             else
             {
@@ -70,7 +70,9 @@ namespace AerolineaFrba.Abm_Ruta
             { //vino a borrar
                 
                 ConexionALaBase.Conexion.ejecutarNonQuery("update mm.rutas_aereas set estado='Inhabilitada' where id=" + idRutaElegida);
-                
+                MessageBox.Show("La ruta fue borrada");
+                new ABM_RUTA().Show();
+                this.Close();
             }
         }
     }

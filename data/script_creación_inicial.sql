@@ -4,6 +4,8 @@ create schema MM
 go
 Create Procedure MM.limpiarBase as
 
+drop procedure mm.crearAeronave
+drop procedure mm.crearModeloAvion
 drop function mm.semestre
 drop function mm.maximosMilleros
 drop function mm.DestinosMasVendidosPasajes
