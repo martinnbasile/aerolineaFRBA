@@ -20,9 +20,10 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void crearAeronave_Load(object sender, EventArgs e)
         {
-          
-            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.Fabricantes"));
-            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.Tipos_Servicio"));
+
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "select * from MM.vista_modelos");
+            //ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.Fabricantes"));
+            //ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.Tipos_Servicio"));
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -38,22 +39,13 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             if (Validaciones.Validaciones.validarMatricula(maskedTextBox2, "Completar la matrícula"))
             {
-                if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1, "Completar el modelo"))
-                {
-                    if (Validaciones.Validaciones.validarComboBox(comboBox2, "Seleccione un Fabricante"))
-                    {
-                        if (Validaciones.Validaciones.validarComboBox(comboBox1, "Seleccione un Tipo de Servicio"))
-                        {
-                            if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown1, "Completar la cantidad de butacas con un valor mayor a cero"))
-                            {
-                                if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown2, "Completar la cantidad de kilogramos con un valor mayor a cero"))
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
+               if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown1, "Completar la cantidad de butacas con un valor mayor a cero"))
+               {
+                     if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown2, "Completar la cantidad de kilogramos con un valor mayor a cero"))
+                     {
+                         return true;
+                     }
+               }                
             }
             return false;
         }
@@ -69,12 +61,12 @@ namespace AerolineaFrba.Abm_Aeronave
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {
+        {   /*
             if (estaCompleto())
             {
                 Aeronave nuevaAeronave = new Aeronave();
                 String nuevaAeronaveMatricula = maskedTextBox2.Text;
-                String nuevaAeronaveModelo = maskedTextBox1.Text;
+                String nuevaAeronaveModelo = "jojo";
                 String nuevaAeronaveFabricante = comboBox2.SelectedItem.ToString();
                 String nuevaAeronaveTipoDeServicio = comboBox1.SelectedItem.ToString();
                 int nuevaAeronaveCantidadDeButacas = Convert.ToInt32(numericUpDown1.Value);
@@ -107,12 +99,24 @@ namespace AerolineaFrba.Abm_Aeronave
                     new buscarAeronave().Show();
                     this.Close();
                 }
+           
             }
+             */
         }
 
         private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            new crearModelo().Show();
         }
 
     }
