@@ -974,6 +974,7 @@ update MM.Viajes
 set Fecha_llegada=@hora
 where Id=@viaje
 exec MM.asentarMillas @viaje
+delete from MM.Butacas where Viaje=@viaje
 commit
 end
 
