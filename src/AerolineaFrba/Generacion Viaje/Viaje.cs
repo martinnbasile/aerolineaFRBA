@@ -8,7 +8,7 @@ namespace AerolineaFrba.Generacion_Viaje
 {
     class Viaje
     {
-        public DateTime fechaSalida;
-        public DateTime fechaLlegada;
+        public String fechaSalida;
+        public String fechaLlegada;
     }
 }

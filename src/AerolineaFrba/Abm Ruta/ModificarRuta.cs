@@ -32,6 +32,7 @@ namespace AerolineaFrba.Abm_Ruta
             comboBox3.Text = unaRuta.getServicio();
             maskedTextBox1.Text = unaRuta.getPrecioBase();
             maskedTextBox2.Text = unaRuta.getPrecioEncomienda();
+
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -75,9 +76,10 @@ namespace AerolineaFrba.Abm_Ruta
                 String nuevoServicio = comboBox3.SelectedItem.ToString();
                 int nuevoPrecioBase = int.Parse(maskedTextBox1.Text);
                 int nuevoPrecioEncomienda = int.Parse(maskedTextBox2.Text);
-                ConexionALaBase.Conexion.ejecutarNonQuery("execute mm.actualizarRuta " + idRutaE + " '" + nuevoDestino + "' '" + nuevoOrigen + "' '" + nuevoServicio + "' " + nuevoPrecioBase + " " + nuevoPrecioEncomienda);
+                ConexionALaBase.Conexion.ejecutarNonQuery("execute mm.actualizarRuta " + idRutaE + ", '" + nuevoDestino + "', '" + nuevoOrigen + "', '" + nuevoServicio + "', " + nuevoPrecioBase + ", " + nuevoPrecioEncomienda);
                 MessageBox.Show("Se actualizo la ruta correctamente");
                 new ABM_RUTA().Show();
+                this.Close();
             }
         }
 

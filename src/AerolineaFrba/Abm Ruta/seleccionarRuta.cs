@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace AerolineaFrba.Abm_Ruta
 {
     public partial class SeleccionarRuta : Form
@@ -69,7 +70,7 @@ namespace AerolineaFrba.Abm_Ruta
             else
             { //vino a borrar
                 
-                ConexionALaBase.Conexion.ejecutarNonQuery("update mm.rutas_aereas set estado='Inhabilitada' where id=" + idRutaElegida);
+                ConexionALaBase.Conexion.ejecutarNonQuery("update mm.rutas_aereas set estado=2 where id=" + idRutaElegida);
                 MessageBox.Show("La ruta fue borrada");
                 new ABM_RUTA().Show();
                 this.Close();

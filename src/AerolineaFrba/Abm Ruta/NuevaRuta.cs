@@ -12,6 +12,7 @@ namespace AerolineaFrba.Abm_Ruta
 {
     public partial class NuevaRuta : Form
     {
+
         public NuevaRuta()
         {
             InitializeComponent();
