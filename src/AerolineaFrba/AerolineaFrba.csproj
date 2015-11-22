@@ -87,6 +87,12 @@
     <Compile Include="Abm Aeronave\crearAeronaveSustituta.Designer.cs">
       <DependentUpon>crearAeronaveSustituta.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Aeronave\crearModelo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Aeronave\crearModelo.Designer.cs">
+      <DependentUpon>crearModelo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Aeronave\seleccionarReemplazo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -192,11 +198,11 @@
     </Compile>
     <Compile Include="ConexionALaBase\CargadorDeEstructura.cs" />
     <Compile Include="ConexionALaBase\Conexion.cs" />
-    <Compile Include="Devolucion\Form1.cs">
+    <Compile Include="Devolucion\elegirCliente.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Devolucion\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Devolucion\elegirCliente.Designer.cs">
+      <DependentUpon>elegirCliente.cs</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -210,12 +216,25 @@
     <Compile Include="Funcionalidades\Funcionalidades.Designer.cs">
       <DependentUpon>Funcionalidades.cs</DependentUpon>
     </Compile>
-    <Compile Include="Generacion Viaje\Form1.cs">
+    <Compile Include="Generacion Viaje\calendario.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Generacion Viaje\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Generacion Viaje\calendario.Designer.cs">
+      <DependentUpon>calendario.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generacion Viaje\elegirRuta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generacion Viaje\elegirRuta.Designer.cs">
+      <DependentUpon>elegirRuta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generacion Viaje\generarViaje.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generacion Viaje\generarViaje.Designer.cs">
+      <DependentUpon>generarViaje.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generacion Viaje\Viaje.cs" />
     <Compile Include="Listado Estadistico\elegirFecha.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -289,6 +308,9 @@
     <EmbeddedResource Include="Abm Aeronave\crearAeronaveSustituta.resx">
       <DependentUpon>crearAeronaveSustituta.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Abm Aeronave\crearModelo.resx">
+      <DependentUpon>crearModelo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Abm Aeronave\seleccionarReemplazo.resx">
       <DependentUpon>seleccionarReemplazo.cs</DependentUpon>
     </EmbeddedResource>
@@ -337,8 +359,20 @@
     <EmbeddedResource Include="Canje Millas\MostrarInformacionMillas.resx">
       <DependentUpon>MostrarInformacionMillas.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Devolucion\elegirCliente.resx">
+      <DependentUpon>elegirCliente.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Funcionalidades\Funcionalidades.resx">
       <DependentUpon>Funcionalidades.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generacion Viaje\calendario.resx">
+      <DependentUpon>calendario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generacion Viaje\elegirRuta.resx">
+      <DependentUpon>elegirRuta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generacion Viaje\generarViaje.resx">
+      <DependentUpon>generarViaje.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Listado Estadistico\elegirFecha.resx">
       <DependentUpon>elegirFecha.cs</DependentUpon>

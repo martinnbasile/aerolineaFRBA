@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace AerolineaFrba.Devolucion
 {
-    public partial class Form1 : Form
+    public partial class elegirCliente : Form
     {
-        public Form1()
+        public elegirCliente()
         {
             InitializeComponent();
         }

@@ -56,9 +56,10 @@ namespace AerolineaFrba.Funcionalidades
                         break;
                     case "DEVOLUCIONES Y CANCELACIONES":
                         MessageBox.Show("Todavia no implementado");
-                        break;
+                       break;
                     case "GENERAR VIAJE":
-                        MessageBox.Show("Todavia no implementado");
+                        new Generacion_Viaje.generarViaje().Show();
+                        this.Close();
                         break;
                     case "LISTADO ESTADISTICO":
                         new Listado_Estadistico.ElegirListado().Show();
