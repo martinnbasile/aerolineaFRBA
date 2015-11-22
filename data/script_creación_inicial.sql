@@ -1313,12 +1313,25 @@ insert into mm.Butacas (Viaje,Nro,Ubicacion,Estado)
 select @a,b.butacaNum,b.butacaTipo,'Libre' from mm.Butacas_Avion b join mm.modeloAvion m on m.id=b.modeloAvion join mm.aeronaves a on a.modelo=m.Id and a.matricula=@matricula
 
 end
+go
 
-
-create function mm.aeronavesDisponibles(@fechaSalida datetime,@fechaLlegada datetime,@TipoServicio varchar(15))
-returns table
+create function mm.aeronavesDisponibles(@fechaSalida varchar(15),@fechaLlegada varchar(15),@TipoServicio varchar(15))
+returns @tabla table
 (matricula varchar(10))
 as
 begin
-select from mm.aeronaves a join mm.Viajes v on v.Matricula=a.matricula join modeloAvion m on m.id=a.modelo join m.
 
+declare @salida datetime
+declare @llegada datetime
+set @llegada=convert(date,@fechaLlegada,20)
+set @salida=convert(date,@fechaSalida,20)
+
+insert into @tabla
+select a.matricula  from mm.aeronaves a join mm.Viajes v on v.Matricula=a.matricula join modeloAvion m on m.id=a.modelo join mm.Tipos_Servicio t on t.Id=m.tipoServicio
+where t.Descripcion=@TipoServicio and not((v.Fecha_llegada between @salida and @llegada  ) or (v.Fecha_salida between @salida and @llegada  ) )
+
+group by a.Matricula
+
+return 
+end
+go
