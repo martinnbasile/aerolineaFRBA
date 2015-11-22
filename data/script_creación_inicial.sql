@@ -1239,3 +1239,29 @@ begin
 	end
 end
 go
+
+create   procedure  mm.crearModeloAvion @modeloDescripcion varchar(20),@Kg int,@fabricante int,@tipoServicio int,@cantPisos int,@cantButacasPiso int
+as
+begin transaction
+insert into MM.modeloAvion(Modelo_descripcion,fabricante,Kg,tipoServicio) values(@modeloDescripcion,@fabricante,@Kg,@tipoServicio)
+select @Kg=max(Id) from mm.modeloAvion
+select @fabricante=@cantButacasPiso
+while(@cantPisos>0)
+begin
+while(@cantButacasPiso>0)
+begin
+if(@cantButacasPiso%2=0)
+insert into mm.Butacas_Avion(modeloAvion,butacaNum,butacaPiso,butacaTipo) values (@Kg,@fabricante*(@cantPisos-1)+@cantButacasPiso,@cantPisos,'Pasillo')
+else
+
+insert into mm.Butacas_Avion(modeloAvion,butacaNum,butacaPiso,butacaTipo) values (@Kg,@fabricante*(@cantPisos-1)+@cantButacasPiso,@cantPisos,'Ventanilla')
+set @cantButacasPiso=@cantButacasPiso-1
+end
+set @cantButacasPiso=@fabricante
+set @cantPisos=@cantPisos-1
+end 
+commit
+
+
+
+go
