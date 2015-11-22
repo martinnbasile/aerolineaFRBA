@@ -5,9 +5,7 @@ go
 Create Procedure MM.limpiarBase as
 
 drop function mm.semestre
-drop table mm.Butacas_Avion
 drop function mm.maximosMilleros
-drop table mm.logBajasAeronaves
 drop function mm.DestinosMasVendidosPasajes
 drop function mm.DestinosMasCancelados
 drop function mm.AeronavesMasDiasFueraServicio
@@ -47,25 +45,28 @@ Drop table MM.Paquetes
 Drop table MM.Pasajes
 Drop table MM.Roles_Funcionalidades
 Drop table MM.Productos_Milla
-Drop table MM.Funcionalidades
 Drop table MM.Intentos_login
 Drop table MM.Usuario_rol
 Drop table MM.Viajes
 Drop table MM.Rutas_Aereas
-Drop table MM.Aeronaves 
-drop table mm.modeloAvion
-Drop table MM.Tipos_Servicio 
-Drop table MM.Fabricantes 
 Drop table MM.Ciudades 
 Drop table MM.tarjetas_Credito
 Drop table MM.Clientes 
 Drop table MM.Usuarios 
 Drop table MM.Roles 
+drop table MM.Funcionalidades
+drop table MM.Fabricantes
+drop table MM.Tipos_Servicio
+drop table MM.logBajasAeronaves
+drop table MM.Butacas_Avion
+drop table MM.Aeronaves
+drop table MM.modeloAvion
 drop function MM.top5ClientesConMasMillas
 drop function MM.millasClienteEnUnPeriodo
 drop function MM.top5LugaresConMasPasajes
 drop procedure mm.limpiarBase
 drop schema MM
+
 
 go
 create Table MM.Ciudades(
