@@ -1261,7 +1261,10 @@ set @cantButacasPiso=@fabricante
 set @cantPisos=@cantPisos-1
 end 
 commit
-
-
-
 go
+
+
+
+create procedure crearAeronave @matricula varchar(10),@id_Modelo int
+as
+insert into mm.aeronaves(matricula,modelo,fecha_alta) values(@matricula,@id_Modelo,mm.fechaDeHoy())
