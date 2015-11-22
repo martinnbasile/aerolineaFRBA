@@ -67,6 +67,7 @@
             this.listBox2.Name = "listBox2";
             this.listBox2.Size = new System.Drawing.Size(287, 69);
             this.listBox2.TabIndex = 15;
+            this.listBox2.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
             // 
             // button2
             // 
@@ -76,6 +77,7 @@
             this.button2.TabIndex = 13;
             this.button2.Text = "Quitar funcionalidad";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -85,6 +87,7 @@
             this.button1.TabIndex = 12;
             this.button1.Text = "Agregar funcionalidad";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label4
             // 
@@ -124,6 +127,9 @@
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "Habilitado\t",
+            "Deshabilitado"});
             this.comboBox2.Location = new System.Drawing.Point(351, 72);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(205, 21);
@@ -179,6 +185,7 @@
             this.Controls.Add(this.label3);
             this.Name = "crearRol";
             this.Text = "CREAR ROL";
+            this.Load += new System.EventHandler(this.crearRol_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
