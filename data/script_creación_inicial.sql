@@ -1299,7 +1299,7 @@ end
 go
 
 
-create procedure mm.generarViaje @matricula varchar(10),@ruta int,@fechaSalida varchar(15),@fechaLlegada vaarchar(15)--FORMATO DE FECHAS aaaa-mm-dd hh:mi:ss(24h)
+create procedure mm.generarViaje @matricula varchar(10),@ruta int,@fechaSalida varchar(15),@fechaLlegada varchar(15)--FORMATO DE FECHAS aaaa-mm-dd hh:mi:ss(24h)
 as
 begin
 declare @salida datetime
@@ -1313,3 +1313,11 @@ select @a=max(Id) from mm.Viajes
 insert into mm.Butacas (Viaje,Nro,Ubicacion,Estado)
 select @a,b.butacaNum,b.butacaTipo,'Libre' from mm.Butacas_Avion b join mm.modeloAvion m on m.id=b.modeloAvion join mm.aeronaves a on a.modelo=m.Id and a.matricula=@matricula
 end
+
+
+create function mm.aeronavesDisponibles(@fechaSalida datetime,@fechaLlegada datetime,@TipoServicio varchar(15))
+returns table
+(matricula varchar(10))
+as
+begin
+select from mm.aeronaves a join mm.Viajes v on v.Matricula=a.matricula join modeloAvion m on m.id=a.modelo join m.
