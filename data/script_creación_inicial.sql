@@ -14,6 +14,7 @@ drop function mm.AeronavesMasDiasFueraServicio
 drop Procedure MM.CancelarAeronaveFueraDeServicio
 drop Procedure MM.BorrarCiudades
 drop view MM.rolPorUsuario
+drop view MM.vista_modelos
 drop Procedure MM.asentarMillas
 drop Procedure MM.asentarLLegadaAeronave
 drop Procedure MM.Loggear
@@ -621,6 +622,12 @@ go
 
 create view MM.vista_aeronaves as
 select a.Fecha_alta as 'Fecha de alta',  mo.Modelo_descripcion as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.fecha_baja_fuera_servicio as 'Fecha de fuera de servicio',a.fecha_alta_fuera_servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
+from MM.Aeronaves a join mm.modeloAvion mo on mo.id=a.modelo join MM.Fabricantes f on (mo.Fabricante=f.Id)
+					join MM.Tipos_Servicio ts on (mo.tipoServicio=ts.Id)				
+go
+
+create view MM.vista_modelos as
+select mo.Modelo_descripcion as 'Modelo',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
 from MM.Aeronaves a join mm.modeloAvion mo on mo.id=a.modelo join MM.Fabricantes f on (mo.Fabricante=f.Id)
 					join MM.Tipos_Servicio ts on (mo.tipoServicio=ts.Id)				
 go
