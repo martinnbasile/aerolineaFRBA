@@ -12,20 +12,20 @@ namespace AerolineaFrba.Abm_Ruta
 {
     public partial class ModificarRuta : Form
     {
-        public ModificarRuta(Abm_Ruta.Ruta unaRuta)
+        int idRutaE;
+        public ModificarRuta(Abm_Ruta.Ruta unaRuta, int idRuta)
         {
             InitializeComponent();
-            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades");
+            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades where estado='Habilitado'");
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
             reader.Dispose();
-            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades");
+            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades where estado='Habilitado'");
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, reader);
             reader.Dispose();
             reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.Tipos_Servicio");
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox3, reader);
             reader.Dispose();
-
-
+            idRutaE = idRuta;
 
             comboBox1.Text = unaRuta.getOrigen();
             comboBox2.Text = unaRuta.getDestino();
@@ -71,13 +71,13 @@ namespace AerolineaFrba.Abm_Ruta
             if (this.estaCompleto())
             {
                 String nuevoOrigen = comboBox1.SelectedItem.ToString();
-                
                 String nuevoDestino = comboBox2.SelectedItem.ToString();
                 String nuevoServicio = comboBox3.SelectedItem.ToString();
                 int nuevoPrecioBase = int.Parse(maskedTextBox1.Text);
                 int nuevoPrecioEncomienda = int.Parse(maskedTextBox2.Text);
-
-                MessageBox.Show("ToDo: implentar la actualizacion en la base");
+                ConexionALaBase.Conexion.ejecutarNonQuery("execute mm.actualizarRuta " + idRutaE + " '" + nuevoDestino + "' '" + nuevoOrigen + "' '" + nuevoServicio + "' " + nuevoPrecioBase + " " + nuevoPrecioEncomienda);
+                MessageBox.Show("Se actualizo la ruta correctamente");
+                new ABM_RUTA().Show();
             }
         }
 

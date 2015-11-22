@@ -15,10 +15,10 @@ namespace AerolineaFrba.Abm_Ruta
         public NuevaRuta()
         {
             InitializeComponent();
-            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades");
+            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades where estado='Habilitado'");
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
             reader.Dispose();
-            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades");
+            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades where estado='Habilitado'");
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, reader);
             reader.Dispose();
             reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.Tipos_Servicio");
@@ -54,16 +54,18 @@ namespace AerolineaFrba.Abm_Ruta
             //Falta implementar la insercion en la base
             if (this.estaCompleto())
             {
-                String ciudadDestino;
-                String ciudadOrigen;
-                String servicio;
-                String precioBase;
-                String precioBaseEncomienda;
+                String ciudadDestino = comboBox2.Text;
+                String ciudadOrigen = comboBox1.Text;
+                String servicio = comboBox3.Text;
+                String precioBase = maskedTextBox1.Text;
+                String precioBaseEncomienda = maskedTextBox2.Text;
 
-                MessageBox.Show("Falta implementar la insercion en la base");
+
+                ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.crearRuta '"+ ciudadDestino +"', '"+ ciudadOrigen+"', '"+ servicio+"', "+ precioBase +", "+precioBaseEncomienda);
                 MessageBox.Show("Operacion exitosa");
                 new ABM_RUTA().Show();
                 this.Close();
+
             }
 
             
