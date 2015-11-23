@@ -40,7 +40,7 @@ namespace AerolineaFrba.Compra
 
         private bool validarTodo()
         {
-            if (Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija una fila"))
+            if (true)//Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija una fila"))
             {
                 if (numericUpDown2.Value != 0 || numericUpDown1.Value != 0)
                 {
@@ -56,8 +56,8 @@ namespace AerolineaFrba.Compra
             {
                 unaCompra.cantidadPasajes = int.Parse(numericUpDown1.Value.ToString());
                 unaCompra.cantidadKgs = int.Parse(numericUpDown2.Value.ToString());
-                DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
-                unaCompra.idViaje = int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString());
+                //DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
+                unaCompra.idViaje = 1;// int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString());
 
                 new DNI(unaCompra).Show();
                 this.Close();
