@@ -202,12 +202,19 @@
     <Compile Include="Compra\compra.Designer.cs">
       <DependentUpon>compra.cs</DependentUpon>
     </Compile>
+    <Compile Include="Compra\datosDelCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compra\datosDelCliente.Designer.cs">
+      <DependentUpon>datosDelCliente.cs</DependentUpon>
+    </Compile>
     <Compile Include="Compra\DNI.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Compra\DNI.Designer.cs">
       <DependentUpon>DNI.cs</DependentUpon>
     </Compile>
+    <Compile Include="Compra\LaCompra.cs" />
     <Compile Include="Compra\viajesDisponibles.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -388,6 +395,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Compra\compra.resx">
       <DependentUpon>compra.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compra\datosDelCliente.resx">
+      <DependentUpon>datosDelCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Compra\DNI.resx">
       <DependentUpon>DNI.cs</DependentUpon>
