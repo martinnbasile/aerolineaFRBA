@@ -73,6 +73,9 @@ drop function mm.aeronavesDisponibles
 drop procedure mm.limpiarBase
 DROP FUNCTION MM.BUTACASDISPONIBLES
 DROP FUNCTION MM.VIAJESDISPONIBLES
+drop procedure mm.ingresarCompraPaquete
+drop procedure mm.ingresarCompraPasaje
+
 drop schema MM
 
 
@@ -84,7 +87,6 @@ go
 alter table MM.Ciudades
 add Estado varchar(50) default 'Habilitado'
 go
-
 create Table MM.Fabricantes(
 Id int identity(1,1) primary key,
 Descripcion varchar(70) not null unique)
@@ -439,13 +441,7 @@ alter table MM.Viajes
 add Fecha_Estimada_llegada date
 alter table MM.Viajes
 add Fecha_llegada date
-go 
-create table MM.KG(
-Viaje int not null,
-Kg int not null)
-go
-alter table MM.KG
-add constraint FK_Viajes FOREIGN KEY (Viaje) references MM.Viajes(Id)
+
 go
 Create table MM.Intentos_login(
 	Id_login int identity(1,1) primary key,
@@ -607,8 +603,6 @@ f.Descripcion=a.Ruta_Ciudad_Origen
 where Paquete_KG != 0
 group by b.Id,a.Paquete_KG,Paquete_fechaCompra,d.Id
 
-go
-drop table MM.KG
 go
 /*
 insert into MM.Butacas
@@ -1420,7 +1414,7 @@ set @llegada=convert(date,@fecha,20)
 insert into @jaja
 
 select v.Id,butacasDisponibles,kgDisponibles,t.Descripcion from mm.viajes v join mm.Rutas_Aereas r on r.Id=v.Ruta join Tipos_Servicio t on t.Id=r.Tipo_servicio join mm.Ciudades d on d.id=r.Ciudad_Destino join mm.Ciudades o on o.Id=r.Ciudad_Origen
-where v.fecha_salida = @llegada and d.Descripcion=@destino and o.Descripcion=@origen
+where datepart(dayofyear,v.fecha_salida) = datepart(dayofyear,@llegada) and year(v.Fecha_salida)=year(@llegada) and d.Descripcion=@destino and o.Descripcion=@origen
  
  return 
  end
@@ -1449,12 +1443,11 @@ tipoButaca varchar(20))
 as
 begin
 insert into @jaja
-select Nro,b.Ubicacion from mm.Butacas b where Estado<>'Vendida'
+select Nro,b.Ubicacion from mm.Butacas b where Estado<>'Vendida' and viaje=@viaje
 return
 end
 
 
 go
-
 
 
