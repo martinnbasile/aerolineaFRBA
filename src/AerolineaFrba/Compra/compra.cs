@@ -75,7 +75,7 @@ namespace AerolineaFrba.Compra
                 String origen = comboBox1.Text;  //primitive obsesion, where?
                 String destino = comboBox2.Text;
                 String fechaSalida = textBox1.Text;
-                //new viajesDisponibles(viajeAComprar).Show();
+                new viajesDisponibles(origen,destino,fechaSalida).Show();
                 this.Close();
             }
         }

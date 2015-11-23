@@ -383,6 +383,9 @@
     <EmbeddedResource Include="Compra\compra.resx">
       <DependentUpon>compra.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Compra\viajesDisponibles.resx">
+      <DependentUpon>viajesDisponibles.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Devolucion\elegirCliente.resx">
       <DependentUpon>elegirCliente.cs</DependentUpon>
     </EmbeddedResource>
