@@ -193,7 +193,9 @@ Create table MM.Viajes(
 Id int identity(1,1) primary key ,
 Matricula varchar(10) foreign key references MM.Aeronaves(Matricula),
 Ruta int,
-constraint Ruta foreign key (Ruta) references MM.Rutas_Aereas(Id)
+constraint Ruta foreign key (Ruta) references MM.Rutas_Aereas(Id),
+kgDisponibles int,
+butacasDisponibles int
 )
 go
 
@@ -430,8 +432,7 @@ alter table MM.Viajes
 add Fecha_Salida date not null
 go
 alter table MM.Viajes
-add Fecha_Estimada_llegada date not null
-go
+add Fecha_Estimada_llegada date
 alter table MM.Viajes
 add Fecha_llegada date
 go 
@@ -1308,8 +1309,11 @@ declare @salida datetime
 declare @llegada datetime
 set @llegada=convert(date,@fechaLlegada,20)
 set @salida=convert(date,@fechaSalida,20)
-
-insert into mm.Viajes(Matricula,Ruta,Fecha_salida,Fecha_llegada) values (@matricula,@ruta,@salida,@llegada)
+declare @kg int
+declare @but int
+select @but=count(*),@kg=mo.Kg from mm.aeronaves a join mm.modeloAvion mo on mo.id=a.modelo and a.matricula=@matricula join mm.Butacas_Avion b on b.modeloAvion=mo.id
+group by mo.Kg
+insert into mm.Viajes(Matricula,Ruta,Fecha_salida,Fecha_llegada,KgDisponibles,ButacasDisponibles) values (@matricula,@ruta,@salida,@llegada,@kg,@but)
 declare @a int
 select @a=max(Id) from mm.Viajes
 insert into mm.Butacas (Viaje,Nro,Ubicacion,Estado)
@@ -1338,3 +1342,79 @@ group by a.Matricula
 return 
 end
 go
+
+
+create trigger decrementarButacas on mm.Pasajes
+for insert
+as
+begin transaction
+declare micursor cursor for
+select viaje,count(*) from inserted 
+group by viaje
+declare @viaje int
+declare @cantidad int
+open micursor
+fetch next from micursor into @viaje,@cantidad
+while @@FETCH_STATUS=0
+begin
+update mm.viajes
+set butacasdisponibles=butacasdisponibles-@cantidad
+where id=@viaje
+
+fetch next from micursor into @viaje,@cantidad
+
+end
+close micursor
+deallocate micursor
+commit
+go
+create trigger decrementarKg on mm.Paquetes
+for insert
+as
+begin transaction
+declare micursor cursor for
+select viaje,sum(Kg) from inserted 
+group by viaje
+declare @viaje int
+declare @cantidad int
+open micursor
+fetch next from micursor into @viaje,@cantidad
+while @@FETCH_STATUS=0
+begin
+update mm.viajes
+set kgdisponibles=kgdisponibles-@cantidad
+where id=@viaje
+
+fetch next from micursor into @viaje,@cantidad
+
+end
+close micursor
+deallocate micursor
+commit
+
+
+go
+
+create function mm.viajesDisponibles(@fecha varchar(15),@origen varchar(30),@destino varchar(30))
+returns @jaja table
+(
+idViaje int,
+butacasLibres int,
+kgLibres int,
+tipoServicio varchar(15))
+as
+begin
+
+declare @llegada datetime
+set @llegada=convert(date,@fecha,20)
+insert into @jaja
+
+select v.Id,butacasDisponibles,kgDisponibles,t.Descripcion from mm.viajes v join mm.Rutas_Aereas r on r.Id=v.Ruta join Tipos_Servicio t on t.Id=r.Tipo_servicio
+where v.fecha_salida = @llegada and r.Ciudad_Destino=@destino and r.Ciudad_Origen=@origen
+ 
+ return 
+ end
+
+ go
+
+
