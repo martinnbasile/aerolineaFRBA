@@ -95,7 +95,8 @@ namespace AerolineaFrba.Compra
                 }
                 else
                 {
-                    //CREO QUE MANDAR A TARJETA
+                    new seleccionarMedioPago(compraRecibida).Show();
+                    this.Close();
                 }
 
 
