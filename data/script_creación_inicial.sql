@@ -23,8 +23,8 @@ drop Procedure MM.agregarFuncionalidadesRol
 drop Procedure MM.darDeBajaRol
 drop function MM.devuelveIDD
 drop function MM.fechaDeHoy
-drop procedure crearRuta
-drop procedure actualizarRuta
+drop procedure mm.crearRuta
+drop procedure mm.actualizarRuta
 drop function MM.devuelveRutaaa
 drop Procedure MM.aeronavesSustitutas
 drop function MM.devuelveTipoServicio
@@ -71,6 +71,8 @@ drop function MM.top5LugaresConMasPasajes
 drop procedure mm.generarViaje
 drop function mm.aeronavesDisponibles
 drop procedure mm.limpiarBase
+DROP FUNCTION MM.BUTACASDISPONIBLES
+DROP FUNCTION MM.VIAJESDISPONIBLES
 drop schema MM
 
 
@@ -215,7 +217,8 @@ Id int identity(1,1) primary key,
 Viaje int,
 Kg int not null,
 Fecha_Compra smalldatetime,
-Cliente int)
+Cliente int,
+cod_compra int)
 go
 
 alter table MM.Paquetes
@@ -231,7 +234,8 @@ Id int identity(1,1) primary key,
 Viaje int,
 Numero_Butaca int not null,
 Fecha_Compra smalldatetime,
-Cliente int)
+Cliente int,
+cod_compra int)
 go
 alter table MM.Pasajes
 add constraint Viaje3 foreign key (Viaje) references MM.Viajes(Id)
@@ -537,7 +541,7 @@ Begin
 END
 go
 
-insert into MM.Viajes
+insert into MM.Viajes(Matricula,ruta,fECHA_SALIDA,Fecha_Estimada_llegada,fecha_llegada)
 select Aeronave_Matricula,r.Id,
 FechaSalida,Fecha_LLegada_Estimada,FechaLlegada
 from gd_esquema.Maestra g join MM.Rutas_Aereas as r on g.Ruta_Codigo=r.Ruta_Codigo join MM.Tipos_Servicio t on t.Id=r.Tipo_Servicio and g.Tipo_Servicio=t.Descripcion join mm.Ciudades o on g.Ruta_Ciudad_Origen=o.Descripcion and r.Ciudad_Origen=o.Id join mm.Ciudades c on c.Descripcion=g.Ruta_Ciudad_Destino and r.Ciudad_Destino=c.Id
@@ -583,17 +587,17 @@ BEGIN
 END
 GO
 
-insert into MM.Pasajes
-select distinct b.Id,a.Butaca_Nro,Paquete_FechaCompra,d.Id  from gd_esquema.Maestra as a join MM.Viajes as b on 
+insert into MM.Pasajes(Viaje,Numero_Butaca,Fecha_Compra,Cliente)
+select distinct b.Id,a.Butaca_Nro,Pasaje_FechaCompra,d.Id  from gd_esquema.Maestra as a join MM.Viajes as b on 
 b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and 
 b.Matricula=a.Aeronave_Matricula join MM.Rutas_Aereas as c on b.Ruta=c.Id and c.Precio_Base=a.Ruta_Precio_BasePasaje 
 /*and c.Precio_Kg=a.Ruta_Precio_BaseKG */join MM.Tipos_Servicio as g on  c.Tipo_Servicio=g.Id and g.Descripcion =a.Tipo_Servicio 
 join MM.Clientes as d on d.DNI=a.Cli_Dni join MM.Ciudades as e on c.Ciudad_Destino=e.Id and e.Descripcion=a.Ruta_Ciudad_Destino 
 join MM.Ciudades as f on c.Ciudad_Origen=f.Id and f.Descripcion=a.Ruta_Ciudad_Origen
 where Pasaje_codigo <>0
-group by b.Id,Butaca_Nro,Paquete_fechaCompra,d.Id
+group by b.Id,Butaca_Nro,Pasaje_fechaCompra,d.Id
 
-insert into MM.Paquetes
+insert into MM.Paquetes(Viaje,Kg,Fecha_Compra,Cliente)
 select distinct b.Id,a.Paquete_KG,Paquete_FechaCompra,d.Id  from gd_esquema.Maestra as a join MM.Viajes as b on b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada 
 and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and b.Matricula=a.Aeronave_Matricula join MM.Rutas_Aereas 
 as c on b.Ruta=c.Id /*and c.Precio_Base=a.Ruta_Precio_BasePasaje*/ and c.Precio_Kg=a.Ruta_Precio_BaseKG join MM.Tipos_Servicio as 
@@ -1412,8 +1416,8 @@ declare @llegada datetime
 set @llegada=convert(date,@fecha,20)
 insert into @jaja
 
-select v.Id,butacasDisponibles,kgDisponibles,t.Descripcion from mm.viajes v join mm.Rutas_Aereas r on r.Id=v.Ruta join Tipos_Servicio t on t.Id=r.Tipo_servicio
-where v.fecha_salida = @llegada and r.Ciudad_Destino=@destino and r.Ciudad_Origen=@origen
+select v.Id,butacasDisponibles,kgDisponibles,t.Descripcion from mm.viajes v join mm.Rutas_Aereas r on r.Id=v.Ruta join Tipos_Servicio t on t.Id=r.Tipo_servicio join mm.Ciudades d on d.id=r.Ciudad_Destino join mm.Ciudades o on o.Id=r.Ciudad_Origen
+where v.fecha_salida = @llegada and d.Descripcion=@destino and o.Descripcion=@origen
  
  return 
  end
@@ -1424,14 +1428,14 @@ where v.fecha_salida = @llegada and r.Ciudad_Destino=@destino and r.Ciudad_Orige
 create procedure mm.ingresarCompraPasaje @viaje int,@cliente int,@butaca int,@codigoCompra int --vamos a tener que agregar un codigo de compra
 as 
 
-insert into mm.pasajes(Viaje,Numero_Butaca,Fecha_Compra,Cliente) values (@viaje,@butaca,mm.fechaDeHoy(),@cliente)
+insert into mm.pasajes(Viaje,Numero_Butaca,Fecha_Compra,Cliente,cod_compra) values (@viaje,@butaca,mm.fechaDeHoy(),@cliente,@codigoCompra)
 
 
 go
 
-create procedure mm.ingresarCompraPaquete @viaje int,@cliente int,@kg int
+create procedure mm.ingresarCompraPaquete @viaje int,@cliente int,@kg int,@compra int
 as 
-insert into mm.paquetes(viaje,kg,Fecha_Compra,Cliente) values(@viaje,@kg,mm.fechaDeHoy(),@cliente)
+insert into mm.paquetes(viaje,kg,Fecha_Compra,Cliente,cod_compra) values(@viaje,@kg,mm.fechaDeHoy(),@cliente,@compra)
 go
 
 create function mm.butacasDisponibles(@viaje int) 
