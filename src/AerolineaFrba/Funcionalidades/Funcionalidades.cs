@@ -52,7 +52,8 @@ namespace AerolineaFrba.Funcionalidades
                         this.Close();
                         break;
                     case "COMPRAS":
-                        MessageBox.Show("Todavia no implementado");
+                        new Compra.compra().Show();
+                        this.Close();
                         break;
                     case "DEVOLUCIONES Y CANCELACIONES":
                         MessageBox.Show("Todavia no implementado");
