@@ -23,6 +23,8 @@ drop Procedure MM.agregarFuncionalidadesRol
 drop Procedure MM.darDeBajaRol
 drop function MM.devuelveIDD
 drop function MM.fechaDeHoy
+drop procedure crearRuta
+drop procedure actualizarRuta
 drop function MM.devuelveRutaaa
 drop Procedure MM.aeronavesSustitutas
 drop function MM.devuelveTipoServicio
@@ -66,6 +68,8 @@ drop table MM.modeloAvion
 drop function MM.top5ClientesConMasMillas
 drop function MM.millasClienteEnUnPeriodo
 drop function MM.top5LugaresConMasPasajes
+drop procedure mm.generarViaje
+drop function mm.aeronavesDisponibles
 drop procedure mm.limpiarBase
 drop schema MM
 
@@ -975,7 +979,7 @@ begin
 update MM.Viajes 
 set Fecha_llegada=@hora
 where Id=@viaje
-exec MM.asentarMillas @viajeault 
+exec MM.asentarMillas @viaje
 delete from MM.Butacas where Viaje=@viaje
 commit
 end
@@ -1296,8 +1300,6 @@ set Ciudad_Destino=@dest, Ciudad_Origen=@ori,Tipo_Servicio=(select Id from Tipos
 where Id=@id  
 end
 go
-
-
 create procedure mm.generarViaje @matricula varchar(10),@ruta int,@fechaSalida varchar(15),@fechaLlegada varchar(15)--FORMATO DE FECHAS aaaa-mm-dd hh:mi:ss(24h)
 as
 begin
