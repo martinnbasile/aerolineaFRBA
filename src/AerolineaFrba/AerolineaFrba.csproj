@@ -196,11 +196,42 @@
     <Compile Include="Compra\calendario.Designer.cs">
       <DependentUpon>calendario.cs</DependentUpon>
     </Compile>
+    <Compile Include="Compra\calendario2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compra\calendario2.Designer.cs">
+      <DependentUpon>calendario2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Compra\compra.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Compra\compra.Designer.cs">
       <DependentUpon>compra.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compra\datosDelCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compra\datosDelCliente.Designer.cs">
+      <DependentUpon>datosDelCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compra\DNI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compra\DNI.Designer.cs">
+      <DependentUpon>DNI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compra\elegirButaca.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compra\elegirButaca.Designer.cs">
+      <DependentUpon>elegirButaca.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compra\LaCompra.cs" />
+    <Compile Include="Compra\seleccionarMedioPago.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compra\seleccionarMedioPago.Designer.cs">
+      <DependentUpon>seleccionarMedioPago.cs</DependentUpon>
     </Compile>
     <Compile Include="Compra\viajesDisponibles.cs">
       <SubType>Form</SubType>
@@ -380,8 +411,23 @@
     <EmbeddedResource Include="Compra\calendario.resx">
       <DependentUpon>calendario.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Compra\calendario2.resx">
+      <DependentUpon>calendario2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Compra\compra.resx">
       <DependentUpon>compra.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compra\datosDelCliente.resx">
+      <DependentUpon>datosDelCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compra\DNI.resx">
+      <DependentUpon>DNI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compra\elegirButaca.resx">
+      <DependentUpon>elegirButaca.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compra\seleccionarMedioPago.resx">
+      <DependentUpon>seleccionarMedioPago.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Compra\viajesDisponibles.resx">
       <DependentUpon>viajesDisponibles.cs</DependentUpon>

@@ -61,7 +61,7 @@ namespace AerolineaFrba.Abm_Aeronave
                 }
                 else
                 {
-                    string queryParaMandarFueraDeServicio = "UPDATE MM.Aeronaves set Fecha_baja_Fuera_Servicio='" + fechaActual + "',Fecha_alta_fuera_Servicio='" + fechaReinicioDeServicio + "' where matricula='" + aeronaveAfectada.getMatricula() + "'";
+                    string queryParaMandarFueraDeServicio = "exec MM.CancelarAeronaveFueraDeServicio @matricula='"+aeronaveAfectada.getMatricula()+"', @hasta='"+aeronaveAfectada.getFechaAltaFueraServicio()+"'";
                     ConexionALaBase.Conexion.ejecutarNonQuery(queryParaMandarFueraDeServicio);
                     MessageBox.Show("Se ha pasado la aeronave a estado fuera de servicio entre la fecha "+fechaActual+" y la fecha "+fechaReinicioDeServicio+" ");
                     new buscarAeronave().Show();

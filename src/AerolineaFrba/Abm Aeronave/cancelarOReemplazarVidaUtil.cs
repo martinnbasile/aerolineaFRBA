@@ -55,6 +55,7 @@ namespace AerolineaFrba.Abm_Aeronave
             String fechaMuyFutura = (new DateTime(2030, 01, 01)).ToString("yyyy-MM-dd");
             aeronaveAfectada.setFechaBajaFueraServicio(fechaActual);
             aeronaveAfectada.setFechaAltaFueraServicio(fechaMuyFutura);
+            
             String procedureParaBuscarReemplazos = "exec MM.aeronavesSustitutas @matricula='" + aeronaveAfectada.getMatricula() + "',@fechaBaja='" + aeronaveAfectada.getFechaBajaFueraServicio() + "',@fechaAlta='" + aeronaveAfectada.getFechaAltaFueraServicio() + "'";
             SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase(procedureParaBuscarReemplazos);
             if (consulta.HasRows)
