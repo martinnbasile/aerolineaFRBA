@@ -35,22 +35,72 @@ namespace AerolineaFrba.Compra
             try
             {
                 DataRow filaCliente = dt.Rows[0];
-                textBox2.Text = filaCliente["Apellido"].ToString() + ", " + filaCliente["Nombre"].ToString();
-                textBox3.Text = filaCliente["Direccion"].ToString();
-                textBox4.Text = filaCliente["Telefono"].ToString();
-                textBox5.Text = filaCliente["Mail"].ToString();
-                textBox6.Text = ((DateTime)filaCliente["Fecha_Nacimiento"]).ToString("yyyy-MM-dd");
+                textBox2.Text = filaCliente["Nombre"].ToString();
+                textBox3.Text = filaCliente["Apellido"].ToString();
+                textBox4.Text = filaCliente["Direccion"].ToString();
+                textBox5.Text = filaCliente["Telefono"].ToString();
+                textBox6.Text = filaCliente["Mail"].ToString();
+                textBox7.Text = ((DateTime)filaCliente["Fecha_Nacimiento"]).ToString("yyyy-MM-dd");
             }
             catch(Exception ex)
             {
-                MessageBox.Show("NOESTABA");
                 estabaEnBase = false;
             }
         }
 
+        private bool validarTodo(){
+            if (Validaciones.Validaciones.validarTextBox(textBox2,"Ingrese un nombre"))
+            {
+                if (Validaciones.Validaciones.validarTextBox(textBox3,"Ingrese apellido"))
+                {
+                    if (Validaciones.Validaciones.validarTextBox(textBox4,"Ingrese direccion"))
+                    {
+                         if (Validaciones.Validaciones.validarTextBox(textBox5,"Ingrese telefono"))
+                         {
+                             if (Validaciones.Validaciones.validarTextBox(textBox7,"Elija fecha de nacimiento"))
+                             {
+                                 return true;
+                             }
+                         }
+                    }
+                }
+            }
+
+
+            return false;
+        }
+
+        public void recibirFecha(DateTime laFecha)
+        {
+            String fecha;
+            fecha = laFecha.ToString("yyyy-MM-dd");
+            textBox7.Text = fecha;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {//NEXT
-            //SI YA ESTABA ES UN UPDATE, ELSE ES UN INSERT
+            if (this.validarTodo())
+            {
+                if (estabaEnBase)
+                {//update
+
+                }
+                else { } //insert ;
+                new elegirButaca(compraRecibida).Show();
+                this.Close();
+
+            }
+         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new calendario2(this);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new compra().Show();
+            this.Close();
         }
     }
 }
