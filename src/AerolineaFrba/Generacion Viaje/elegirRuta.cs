@@ -14,9 +14,9 @@ namespace AerolineaFrba.Generacion_Viaje
     {
         Viaje elViajeElegido;
 
-        public elegirRuta(/*Viaje elViaje*/)
+        public elegirRuta(Viaje elViaje)
         {
-            //elViajeElegido = elViaje;
+            elViajeElegido = elViaje;
             InitializeComponent();
         }
 
@@ -33,6 +33,13 @@ namespace AerolineaFrba.Generacion_Viaje
 
         private void button2_Click(object sender, EventArgs e)
         {//SIGUIENTE
+            if (Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija una ruta"))
+            {
+                DataGridViewRow rutaSeleccionada = this.dataGridView1.SelectedRows[0];
+                elViajeElegido.servicio=rutaSeleccionada.Cells["Servicio"].Value.ToString();
+                new elegirAeronave(elViajeElegido).Show();
+                this.Close();
+            }
 
 
         }
