@@ -39,13 +39,10 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             if (Validaciones.Validaciones.validarMatricula(maskedTextBox2, "Completar la matrícula"))
             {
-               if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown1, "Completar la cantidad de butacas con un valor mayor a cero"))
-               {
-                     if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown2, "Completar la cantidad de kilogramos con un valor mayor a cero"))
-                     {
-                         return true;
-                     }
-               }                
+                if (Validaciones.Validaciones.validarDataGridView(dataGridView1, "Seleccione un modelo"))
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -61,31 +58,29 @@ namespace AerolineaFrba.Abm_Aeronave
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {   /*
+        {   
             if (estaCompleto())
             {
-                Aeronave nuevaAeronave = new Aeronave();
+               
+                DataGridViewRow modeloSeleccionado = this.dataGridView1.SelectedRows[0];
                 String nuevaAeronaveMatricula = maskedTextBox2.Text;
-                String nuevaAeronaveModelo = "jojo";
-                String nuevaAeronaveFabricante = comboBox2.SelectedItem.ToString();
-                String nuevaAeronaveTipoDeServicio = comboBox1.SelectedItem.ToString();
-                int nuevaAeronaveCantidadDeButacas = Convert.ToInt32(numericUpDown1.Value);
-                int nuevaAeronaveCantidadKgs = Convert.ToInt32(numericUpDown2.Value);
-                nuevaAeronave.setMatricula(nuevaAeronaveMatricula);
-                nuevaAeronave.setModelo(nuevaAeronaveModelo);
-                nuevaAeronave.setFabricante(nuevaAeronaveFabricante);
-                nuevaAeronave.setTipoDeServicio(nuevaAeronaveTipoDeServicio);
-                nuevaAeronave.setCantidadButacas(nuevaAeronaveCantidadDeButacas);
-                nuevaAeronave.setCantidadKgs(nuevaAeronaveCantidadKgs);
-                
-                SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Tipos_Servicio where Descripcion='" + nuevaAeronave.getTipoDeServicio() + "'");
+                String nuevaAeronaveFabricante = modeloSeleccionado.Cells["Fabricante"].Value.ToString();
+                String nuevaAeronaveTipoDeServicio = modeloSeleccionado.Cells["Tipo de servicio"].Value.ToString();
+                int nuevaAeronaveCantidadDeKgs = Convert.ToInt32(modeloSeleccionado.Cells["Cantidad de Kgs disponibles para realizar encomiendas"].Value.ToString());
+
+                              
+                SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Tipos_Servicio where Descripcion='" + nuevaAeronaveTipoDeServicio + "'");
                 int idTipoServicio = new int();
                 if (consulta.Read()) { idTipoServicio = consulta.GetInt32(consulta.GetOrdinal("id")); }
-                consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Fabricantes where Descripcion='" + nuevaAeronave.getFabricante() + "'");
+                consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Fabricantes where Descripcion='" + nuevaAeronaveFabricante + "'");
                 int idFabricante = new int();
                 if (consulta.Read()) { idFabricante = consulta.GetInt32(consulta.GetOrdinal("id")); }
+                consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.modeloAvion where fabricante="+idFabricante+" and tipoServicio="+idTipoServicio+" and Kg="+nuevaAeronaveCantidadDeKgs+"");
+                int idModelo = new int();
+                if (consulta.Read()) { idModelo = consulta.GetInt32(consulta.GetOrdinal("id")); }
 
-                String queryValidarMatricula = "select * from MM.Aeronaves where Matricula='" + nuevaAeronave.getMatricula() + "'";
+
+                String queryValidarMatricula = "select * from MM.Aeronaves where Matricula='" + nuevaAeronaveMatricula + "'";
                 SqlDataReader consultaValidarMatricula = ConexionALaBase.Conexion.consultarBase(queryValidarMatricula);
                 if (consultaValidarMatricula.HasRows)
                 {
@@ -93,15 +88,15 @@ namespace AerolineaFrba.Abm_Aeronave
                 }
                 else
                 {
-                    String fechaActual = DateTime.Now.ToString("yyyy-MM-dd");
-                    ConexionALaBase.Conexion.ejecutarNonQuery("INSERT INTO MM.Aeronaves (matricula,Fecha_alta,Modelo,Fabricante,Tipo_Servicio,Cantidad_Butacas,Cantidad_Kg) VALUES ('" + nuevaAeronave.getMatricula() + "','" + fechaActual + "','" + nuevaAeronave.getModelo() + "','" + idFabricante + "'," + idTipoServicio + "," + nuevaAeronave.getCantidadButacas() + "," + nuevaAeronave.getCantidadKgs() + ")");
+                    String noQueryCrearAeronave = "exec MM.crearAeronave @matricula='"+nuevaAeronaveMatricula+"',@id_Modelo="+idModelo+"";
+                    ConexionALaBase.Conexion.ejecutarNonQuery(noQueryCrearAeronave);
                     MessageBox.Show("Se ha creado la Aeronave satisfactoriamente");
                     new buscarAeronave().Show();
                     this.Close();
                 }
            
             }
-             */
+             
         }
 
         private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
@@ -117,6 +112,7 @@ namespace AerolineaFrba.Abm_Aeronave
         private void button3_Click_1(object sender, EventArgs e)
         {
             new crearModelo().Show();
+            this.Close();
         }
 
     }
