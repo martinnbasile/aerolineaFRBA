@@ -17,8 +17,26 @@ namespace AerolineaFrba.Generacion_Viaje
         {
             InitializeComponent();
             elViajeElegido=elViaje;
-            MessageBox.Show(elViajeElegido.fechaLlegada);
-            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "Select * from mm.aeronavesDisponibles(" + elViajeElegido.fechaSalida + "," + elViajeElegido.fechaLlegada + "," + elViajeElegido.servicio + ")");
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "Select * from mm.aeronavesDisponibles ('"+elViajeElegido.fechaSalida+"','"+elViajeElegido.fechaLlegada+"','"+elViajeElegido.servicio+"')");
+        }
+
+        private void button2_Click(object sender, EventArgs e)//VOLVER
+        {
+            new generarViaje().Show();
+            this.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)//CONFIMAR
+        {
+            if (Validaciones.Validaciones.validarDataGridView(dataGridView1, "Elija una aeronave"))
+            {
+                DataGridViewRow aeronaveElegida = this.dataGridView1.SelectedRows[0];
+                String matriculaElegida = aeronaveElegida.Cells["Matricula"].Value.ToString();
+                ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.generarViaje '" + matriculaElegida + "', " + elViajeElegido.ruta + ",'" + elViajeElegido.fechaSalida + "','" + elViajeElegido.fechaLlegada + "'");
+                MessageBox.Show("El viaje se genero exitosamente");
+                new Funcionalidades.Funcionalidades().Show();
+                this.Close();
+            }    
         }
     }
 }

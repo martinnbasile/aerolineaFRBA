@@ -37,6 +37,7 @@ namespace AerolineaFrba.Generacion_Viaje
             {
                 DataGridViewRow rutaSeleccionada = this.dataGridView1.SelectedRows[0];
                 elViajeElegido.servicio=rutaSeleccionada.Cells["Servicio"].Value.ToString();
+                elViajeElegido.ruta = int.Parse(rutaSeleccionada.Cells["Codigo"].Value.ToString()); 
                 new elegirAeronave(elViajeElegido).Show();
                 this.Close();
             }

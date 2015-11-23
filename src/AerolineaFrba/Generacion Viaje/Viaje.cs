@@ -11,5 +11,6 @@ namespace AerolineaFrba.Generacion_Viaje
         public string servicio;
         public String fechaSalida;
         public String fechaLlegada;
+        public int ruta;
     }
 }
