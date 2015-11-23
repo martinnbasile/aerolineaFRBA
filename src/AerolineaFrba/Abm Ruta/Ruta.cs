@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace AerolineaFrba.Abm_Ruta
 {
+
     
     public class Ruta
     {

@@ -222,12 +222,25 @@
     <Compile Include="Generacion Viaje\calendario.Designer.cs">
       <DependentUpon>calendario.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generacion Viaje\elegirAeronave.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generacion Viaje\elegirAeronave.Designer.cs">
+      <DependentUpon>elegirAeronave.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generacion Viaje\elegirRuta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generacion Viaje\elegirRuta.Designer.cs">
+      <DependentUpon>elegirRuta.cs</DependentUpon>
+    </Compile>
     <Compile Include="Generacion Viaje\generarViaje.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Generacion Viaje\generarViaje.Designer.cs">
       <DependentUpon>generarViaje.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generacion Viaje\Viaje.cs" />
     <Compile Include="Listado Estadistico\elegirFecha.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -360,6 +373,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Generacion Viaje\calendario.resx">
       <DependentUpon>calendario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generacion Viaje\elegirAeronave.resx">
+      <DependentUpon>elegirAeronave.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generacion Viaje\elegirRuta.resx">
+      <DependentUpon>elegirRuta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Generacion Viaje\generarViaje.resx">
       <DependentUpon>generarViaje.cs</DependentUpon>

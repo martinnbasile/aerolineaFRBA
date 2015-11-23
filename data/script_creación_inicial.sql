@@ -23,6 +23,8 @@ drop Procedure MM.agregarFuncionalidadesRol
 drop Procedure MM.darDeBajaRol
 drop function MM.devuelveIDD
 drop function MM.fechaDeHoy
+drop procedure crearRuta
+drop procedure actualizarRuta
 drop function MM.devuelveRutaaa
 drop Procedure MM.aeronavesSustitutas
 drop function MM.devuelveTipoServicio
@@ -66,6 +68,8 @@ drop table MM.modeloAvion
 drop function MM.top5ClientesConMasMillas
 drop function MM.millasClienteEnUnPeriodo
 drop function MM.top5LugaresConMasPasajes
+drop procedure mm.generarViaje
+drop function mm.aeronavesDisponibles
 drop procedure mm.limpiarBase
 drop schema MM
 
@@ -189,7 +193,9 @@ Create table MM.Viajes(
 Id int identity(1,1) primary key ,
 Matricula varchar(10) foreign key references MM.Aeronaves(Matricula),
 Ruta int,
-constraint Ruta foreign key (Ruta) references MM.Rutas_Aereas(Id)
+constraint Ruta foreign key (Ruta) references MM.Rutas_Aereas(Id),
+kgDisponibles int,
+butacasDisponibles int
 )
 go
 
@@ -426,8 +432,7 @@ alter table MM.Viajes
 add Fecha_Salida date not null
 go
 alter table MM.Viajes
-add Fecha_Estimada_llegada date not null
-go
+add Fecha_Estimada_llegada date
 alter table MM.Viajes
 add Fecha_llegada date
 go 
@@ -620,7 +625,7 @@ create view MM.vista_rutas_aereas as
 select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
 from MM.Rutas_Aereas r join MM.Ciudades c1 on (r.Ciudad_Origen=c1.Id)
 					join MM.Ciudades c2 on (r.Ciudad_Destino=c2.Id)
-					join MM.Tipos_Servicio t on (r.Tipo_Servicio=t.Id)
+					join MM.Tipos_Servicio t on (r.Tipo_Servicio=t.Id) and r.Estado<>2
 go
 
 create view MM.vista_aeronaves as
@@ -796,6 +801,7 @@ where
 		or  v.Fecha_Estimada_llegada between @fechaBaja and @fechaAlta) 
 		and a.matricula=v.Matricula
 	)
+	and a.fecha_baja_definitiva is not null
 	and a.Modelo=@Modelo
 	and mo.Fabricante=@Fabricante
 	and mo.TipoServicio=@Tipo_Servicio
@@ -978,7 +984,7 @@ begin
 update MM.Viajes 
 set Fecha_llegada=@hora
 where Id=@viaje
-exec MM.asentarMillas @viajeault 
+exec MM.asentarMillas @viaje
 delete from MM.Butacas where Viaje=@viaje
 commit
 end
@@ -1299,18 +1305,152 @@ set Ciudad_Destino=@dest, Ciudad_Origen=@ori,Tipo_Servicio=(select Id from Tipos
 where Id=@id  
 end
 go
-
-
-create procedure mm.generarViaje @matricula varchar(10),@ruta int,@fechaSalida varchar(15),@fechaLlegada vaarchar(15)--FORMATO DE FECHAS aaaa-mm-dd hh:mi:ss(24h)
+create procedure mm.generarViaje @matricula varchar(10),@ruta int,@fechaSalida varchar(15),@fechaLlegada varchar(15)--FORMATO DE FECHAS aaaa-mm-dd hh:mi:ss(24h)
 as
 begin
 declare @salida datetime
 declare @llegada datetime
 set @llegada=convert(date,@fechaLlegada,20)
 set @salida=convert(date,@fechaSalida,20)
-
-insert into mm.Viajes(Matricula,Ruta,Fecha_salida,Fecha_llegada) values (@matricula,@ruta,@salida,@llegada)
+declare @kg int
+declare @but int
+select @but=count(*),@kg=mo.Kg from mm.aeronaves a join mm.modeloAvion mo on mo.id=a.modelo and a.matricula=@matricula join mm.Butacas_Avion b on b.modeloAvion=mo.id
+group by mo.Kg
+insert into mm.Viajes(Matricula,Ruta,Fecha_salida,Fecha_llegada,KgDisponibles,ButacasDisponibles) values (@matricula,@ruta,@salida,@llegada,@kg,@but)
 declare @a int
 select @a=max(Id) from mm.Viajes
 insert into mm.Butacas (Viaje,Nro,Ubicacion,Estado)
 select @a,b.butacaNum,b.butacaTipo,'Libre' from mm.Butacas_Avion b join mm.modeloAvion m on m.id=b.modeloAvion join mm.aeronaves a on a.modelo=m.Id and a.matricula=@matricula
+
+end
+go
+
+create function mm.aeronavesDisponibles(@fechaSalida varchar(15),@fechaLlegada varchar(15),@TipoServicio varchar(15))
+returns @tabla table
+(matricula varchar(10))
+as
+begin
+
+declare @salida datetime
+declare @llegada datetime
+set @llegada=convert(date,@fechaLlegada,20)
+set @salida=convert(date,@fechaSalida,20)
+
+insert into @tabla
+select a.matricula  from mm.aeronaves a join mm.Viajes v on v.Matricula=a.matricula join modeloAvion m on m.id=a.modelo join mm.Tipos_Servicio t on t.Id=m.tipoServicio
+where t.Descripcion=@TipoServicio and not((v.Fecha_llegada between @salida and @llegada  ) or (v.Fecha_salida between @salida and @llegada  ) )
+and a.fecha_baja_definitiva is not null
+group by a.Matricula
+
+return 
+end
+go
+
+
+create trigger decrementarButacas on mm.Pasajes
+for insert
+as
+begin transaction
+declare micursor cursor for
+select viaje,Numero_Butaca from inserted 
+declare @viaje int
+declare @butaca int
+open micursor
+fetch next from micursor into @viaje,@butaca
+while @@FETCH_STATUS=0
+begin
+update mm.viajes
+set butacasdisponibles=butacasdisponibles-1
+where id=@viaje
+
+update mm.butacas
+set Estado='Vendida'
+where Viaje=@viaje and Nro=@butaca
+
+fetch next from micursor into @viaje,@butaca
+
+end
+close micursor
+deallocate micursor
+commit
+go
+create trigger decrementarKg on mm.Paquetes
+for insert
+as
+begin transaction
+declare micursor cursor for
+select viaje,sum(Kg) from inserted 
+group by viaje
+declare @viaje int
+declare @cantidad int
+open micursor
+fetch next from micursor into @viaje,@cantidad
+while @@FETCH_STATUS=0
+begin
+update mm.viajes
+set kgdisponibles=kgdisponibles-@cantidad
+where id=@viaje
+
+fetch next from micursor into @viaje,@cantidad
+
+end
+close micursor
+deallocate micursor
+commit
+
+
+go
+
+create function mm.viajesDisponibles(@fecha varchar(15),@origen varchar(30),@destino varchar(30))
+returns @jaja table
+(
+idViaje int,
+butacasLibres int,
+kgLibres int,
+tipoServicio varchar(15))
+as
+begin
+
+declare @llegada datetime
+set @llegada=convert(date,@fecha,20)
+insert into @jaja
+
+select v.Id,butacasDisponibles,kgDisponibles,t.Descripcion from mm.viajes v join mm.Rutas_Aereas r on r.Id=v.Ruta join Tipos_Servicio t on t.Id=r.Tipo_servicio
+where v.fecha_salida = @llegada and r.Ciudad_Destino=@destino and r.Ciudad_Origen=@origen
+ 
+ return 
+ end
+
+ go
+
+
+create procedure mm.ingresarCompraPasaje @viaje int,@cliente int,@butaca int,@codigoCompra int --vamos a tener que agregar un codigo de compra
+as 
+
+insert into mm.pasajes(Viaje,Numero_Butaca,Fecha_Compra,Cliente) values (@viaje,@butaca,mm.fechaDeHoy(),@cliente)
+
+
+go
+
+create procedure mm.ingresarCompraPaquete @viaje int,@cliente int,@kg int
+as 
+insert into mm.paquetes(viaje,kg,Fecha_Compra,Cliente) values(@viaje,@kg,mm.fechaDeHoy(),@cliente)
+go
+
+create function mm.butacasDisponibles(@viaje int) 
+returns 
+@jaja table
+(nroButaca int,
+tipoButaca varchar(20))
+as
+begin
+insert into @jaja
+select Nro,b.Ubicacion from mm.Butacas b where Estado<>'Vendida'
+return
+end
+
+
+go
+
+
+

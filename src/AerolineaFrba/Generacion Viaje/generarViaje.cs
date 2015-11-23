@@ -12,6 +12,7 @@ namespace AerolineaFrba.Generacion_Viaje
 {
     public partial class generarViaje : Form
     {
+        Viaje unViaje = new Viaje();
         public generarViaje()
         {
             InitializeComponent();
@@ -27,7 +28,7 @@ namespace AerolineaFrba.Generacion_Viaje
         private void button3_Click(object sender, EventArgs e) //Elegir fecha de salida
         {
             new calendario(this, 1).Show() ;
-            
+           
         }
 
         private void button4_Click(object sender, EventArgs e) //elegir fecha Estimada de llegada
@@ -49,6 +50,25 @@ namespace AerolineaFrba.Generacion_Viaje
 
         public bool validarTodo()
         {
+            if (Validaciones.Validaciones.validarTextBox(textBox1, "Complete la fecha de Salida"))
+            {
+                if (Validaciones.Validaciones.validarTextBox(textBox2, "Complete la fecha de llegada"))
+                {
+                    unViaje.fechaSalida=textBox1.Text+" "+dateTimePicker1.Value.ToString("HH:mm:ss");
+                    unViaje.fechaLlegada =textBox2.Text+" "+dateTimePicker2.Value.ToString("HH:mm:ss");
+                    TimeSpan ts = DateTime.Parse(unViaje.fechaLlegada) - DateTime.Parse(unViaje.fechaSalida);
+                    int diferenciaEnDias = ts.Days;
+                    if (diferenciaEnDias <= 1)
+                        {
+                            if (DateTime.Parse(unViaje.fechaLlegada) > DateTime.Parse(unViaje.fechaSalida))
+                            {
+                                return true;
+                            }
+                            else MessageBox.Show("La fecha de llegada debe ser posterior a la de salida");
+                        }
+                    else MessageBox.Show("Ningun viaje puede durar más de 1 día");
+                }
+            }
             return false;
         }
 
@@ -58,17 +78,15 @@ namespace AerolineaFrba.Generacion_Viaje
             this.Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e) //OK
         {
             if (this.validarTodo())
             {
-                new elegirRuta().Show();
-                this.close();
+                new elegirRuta(unViaje).Show();
+                this.Close();
             }
 
         }
-
-
 
     }
 }
