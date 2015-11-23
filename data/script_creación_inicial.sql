@@ -624,7 +624,7 @@ create view MM.vista_rutas_aereas as
 select r.Id as 'Codigo',  c1.descripcion as 'Ciudad origen',c2.descripcion as 'Ciudad destino',t.Descripcion as 'Servicio', r.Precio_Base as 'Precio base',r.Precio_Kg as 'Precio base encomienda'
 from MM.Rutas_Aereas r join MM.Ciudades c1 on (r.Ciudad_Origen=c1.Id)
 					join MM.Ciudades c2 on (r.Ciudad_Destino=c2.Id)
-					join MM.Tipos_Servicio t on (r.Tipo_Servicio=t.Id)
+					join MM.Tipos_Servicio t on (r.Tipo_Servicio=t.Id) and r.Estado<>2
 go
 
 create view MM.vista_aeronaves as
@@ -797,6 +797,7 @@ where
 		or  v.Fecha_Estimada_llegada between @fechaBaja and @fechaAlta) 
 		and a.matricula=v.Matricula
 	)
+	and a.fecha_baja_definitiva is not null
 	and a.Modelo=@Modelo
 	and mo.Fabricante=@Fabricante
 	and mo.TipoServicio=@Tipo_Servicio
@@ -1331,7 +1332,7 @@ set @salida=convert(date,@fechaSalida,20)
 insert into @tabla
 select a.matricula  from mm.aeronaves a join mm.Viajes v on v.Matricula=a.matricula join modeloAvion m on m.id=a.modelo join mm.Tipos_Servicio t on t.Id=m.tipoServicio
 where t.Descripcion=@TipoServicio and not((v.Fecha_llegada between @salida and @llegada  ) or (v.Fecha_salida between @salida and @llegada  ) )
-
+and a.fecha_baja_definitiva is not null
 group by a.Matricula
 
 return 
