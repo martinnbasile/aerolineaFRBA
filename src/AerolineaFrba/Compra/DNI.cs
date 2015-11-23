@@ -33,7 +33,7 @@ namespace AerolineaFrba.Compra
             if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1,"Ingrese su DNI"))
             {
                 compraRecibida.dniCliente =int.Parse(maskedTextBox1.Text);
-                new datosDelCliente(compraRecibida);
+                new datosDelCliente(compraRecibida).Show(); ;
                 this.Close();
             }
             
