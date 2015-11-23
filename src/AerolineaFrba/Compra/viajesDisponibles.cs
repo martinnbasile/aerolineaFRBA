@@ -34,14 +34,13 @@ namespace AerolineaFrba.Compra
 
         private void viajesDisponibles_Load(object sender, EventArgs e)
         {
-            MessageBox.Show("Ale tiene que arreglar la function para cargar el dataGrid");
-            //ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1,"select * from mm.viajesDisponibles('"+fechaRecibida+"','"+origenRecibido+"','"+destinoRecibido+"')");
+           ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1,"select * from mm.viajesDisponibles('"+fechaRecibida+"','"+origenRecibido+"','"+destinoRecibido+"')");
         }
 
 
         private bool validarTodo()
         {
-            if (true/*Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija una fila")*/)
+            if (Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija una fila"))
             {
                 if (numericUpDown2.Value != 0 || numericUpDown1.Value != 0)
                 {
@@ -57,8 +56,8 @@ namespace AerolineaFrba.Compra
             {
                 unaCompra.cantidadPasajes = int.Parse(numericUpDown1.Value.ToString());
                 unaCompra.cantidadKgs = int.Parse(numericUpDown2.Value.ToString());
-                //DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
-                unaCompra.idViaje = 1; // viajeSeleccionado.Cells["idViaje"].Value;
+                DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
+                unaCompra.idViaje = int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString());
 
                 new DNI(unaCompra).Show();
                 this.Close();

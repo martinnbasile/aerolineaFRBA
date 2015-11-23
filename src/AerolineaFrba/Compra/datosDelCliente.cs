@@ -12,9 +12,29 @@ namespace AerolineaFrba.Compra
 {
     public partial class datosDelCliente : Form
     {
+        LaCompra compraRecibida;
         public datosDelCliente(LaCompra unaCompra)
         {
             InitializeComponent();
+            compraRecibida = unaCompra;
+        }
+
+        private void datosDelCliente_Load(object sender, EventArgs e)
+        
+        {
+            DataGridView unDataGrid = new DataGridView();
+
+            try
+            {
+                ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(unDataGrid, "Select * from mm.clientes where DNI=" + compraRecibida.dniCliente);
+                //DataGridViewRow cliente = unDataGrid.sel
+               // estaba = true;
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                //EL CLIENTE NO ESTABA, DEBE SER INGRESADO
+                //ESstaba=false
+            }
         }
     }
 }
