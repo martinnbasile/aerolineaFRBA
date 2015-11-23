@@ -28,7 +28,7 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             if (estaCompleto())
             {
-                if (ConexionALaBase.Conexion.consultarBase("Select * from vista_modelos where Modelo='" + textBox2.Text + "'").HasRows)
+                if (ConexionALaBase.Conexion.consultarBase("Select * from MM.vista_modelos where Modelo='" + textBox2.Text + "'").HasRows)
                 {
                     MessageBox.Show("Ya existe un modelo con el nombre ingresado, ingrese uno diferente");
                 }
@@ -110,6 +110,12 @@ namespace AerolineaFrba.Abm_Aeronave
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void crearModelo_Load(object sender, EventArgs e)
+        {
+            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.Fabricantes"));
+            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.Tipos_Servicio"));
         }
     }
 }

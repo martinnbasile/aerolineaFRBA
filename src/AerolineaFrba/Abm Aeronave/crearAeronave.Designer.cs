@@ -50,7 +50,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(11, 238);
+            this.button2.Location = new System.Drawing.Point(11, 381);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(116, 40);
             this.button2.TabIndex = 40;
@@ -60,7 +60,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(483, 238);
+            this.button1.Location = new System.Drawing.Point(643, 381);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(131, 40);
             this.button1.TabIndex = 39;
@@ -93,12 +93,12 @@
             this.dataGridView1.Location = new System.Drawing.Point(11, 69);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(479, 150);
+            this.dataGridView1.Size = new System.Drawing.Size(645, 292);
             this.dataGridView1.TabIndex = 45;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(502, 69);
+            this.button3.Location = new System.Drawing.Point(662, 69);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(112, 29);
             this.button3.TabIndex = 46;
@@ -110,7 +110,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(623, 291);
+            this.ClientSize = new System.Drawing.Size(786, 433);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label4);

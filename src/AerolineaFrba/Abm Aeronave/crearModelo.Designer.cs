@@ -67,9 +67,6 @@
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
-            "Habilitado\t",
-            "Deshabilitado"});
             this.comboBox2.Location = new System.Drawing.Point(100, 65);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(205, 21);
@@ -88,9 +85,6 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Habilitado\t",
-            "Deshabilitado"});
             this.comboBox1.Location = new System.Drawing.Point(100, 98);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(205, 21);
@@ -198,6 +192,7 @@
             this.Controls.Add(this.label2);
             this.Name = "crearModelo";
             this.Text = "Modelo:";
+            this.Load += new System.EventHandler(this.crearModelo_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
