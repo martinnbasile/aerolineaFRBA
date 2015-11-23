@@ -82,19 +82,29 @@ namespace AerolineaFrba.Compra
             if (this.validarTodo())
             {
                 if (estabaEnBase)
-                {//update
+                {
+                    MessageBox.Show("UPDATE");
 
                 }
-                else { } //insert ;
-                new elegirButaca(compraRecibida).Show();
-                this.Close();
+                else { MessageBox.Show("INSERT"); } 
+
+                if (compraRecibida.cantidadPasajes > 1)
+                {
+                    new elegirButaca(compraRecibida).Show();
+                    this.Close();
+                }
+                else
+                {
+                    //CREO QUE MANDAR A TARJETA
+                }
+
 
             }
          }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            new calendario2(this);
+            new calendario2(this).Show() ;
         }
 
         private void button3_Click(object sender, EventArgs e)
