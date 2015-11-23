@@ -36,18 +36,32 @@ namespace AerolineaFrba.Abm_Aeronave
                 }
                 else
                 {   
+
                     String matriculaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Matrícula"].Value.ToString();
                     String modeloAeronaveSeleccionada = aeronaveSeleccionada.Cells["Modelo"].Value.ToString();
                     String fabricanteAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fabricante"].Value.ToString();
                     String tipoDeServicioAeronaveSeleccionada = aeronaveSeleccionada.Cells["Tipo de Servicio"].Value.ToString();
+                    int cantidadDeKgs = Convert.ToInt32(aeronaveSeleccionada.Cells["Cantidad de Kgs disponibles para realizar encomiendas"].Value.ToString());
                     Aeronave unaAeronave = new Aeronave();
                     unaAeronave.setMatricula(matriculaAeronaveSeleccionada);
                     unaAeronave.setModelo(modeloAeronaveSeleccionada);
                     unaAeronave.setFabricante(fabricanteAeronaveSeleccionada);
                     unaAeronave.setTipoDeServicio(tipoDeServicioAeronaveSeleccionada);
-                    
-                    new cancelarOReemplazarVidaUtil(unaAeronave).Show();
-                    this.Close();
+                    unaAeronave.setCantidadKgs(cantidadDeKgs);
+
+                    if (!ConexionALaBase.Conexion.consultarBase("select * from MM.Viajes where Matricula ='" + unaAeronave.getMatricula() + "'").HasRows)
+                    {
+                        String noQuery = "exec MM.CancelarAeronaveVidaUtil '" + unaAeronave.getMatricula() + "'";
+                        ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
+                        MessageBox.Show("Se ha dado de baja la aeronave (no tenia pasajes, encomiendas o viajes asociados)");
+                        new buscarAeronave().Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        new cancelarOReemplazarVidaUtil(unaAeronave).Show();
+                        this.Close();
+                    }
 
                }
            }
@@ -73,11 +87,13 @@ namespace AerolineaFrba.Abm_Aeronave
                    String modeloAeronaveSeleccionada = aeronaveSeleccionada.Cells["Modelo"].Value.ToString();
                    String fabricanteAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fabricante"].Value.ToString();
                    String tipoDeServicioAeronaveSeleccionada = aeronaveSeleccionada.Cells["Tipo de Servicio"].Value.ToString();
+                   int cantidadDeKgs = Convert.ToInt32(aeronaveSeleccionada.Cells["Cantidad de Kgs disponibles para realizar encomiendas"].Value.ToString());
                    Aeronave unaAeronave = new Aeronave();
                    unaAeronave.setMatricula(matriculaAeronaveSeleccionada);
                    unaAeronave.setModelo(modeloAeronaveSeleccionada);
                    unaAeronave.setFabricante(fabricanteAeronaveSeleccionada);
                    unaAeronave.setTipoDeServicio(tipoDeServicioAeronaveSeleccionada);
+                   unaAeronave.setCantidadKgs(cantidadDeKgs);
    
                    new bajaFueraDeServicio(unaAeronave).Show();
                    this.Close();

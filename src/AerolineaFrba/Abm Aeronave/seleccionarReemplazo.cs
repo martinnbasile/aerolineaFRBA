@@ -40,6 +40,8 @@ namespace AerolineaFrba.Abm_Aeronave
                 String matriculaAeronaveReemplazante = aeronaveReemplazante.Cells["Matrícula"].Value.ToString();
                 String noQuery = "update MM.viajes set viajes.Matricula='"+matriculaAeronaveReemplazante+"' where viajes.Matricula='"+aeronaveAfectada.getMatricula()+"' and (viajes.Fecha_salida between '"+aeronaveAfectada.getFechaBajaFueraServicio()+"' and '"+aeronaveAfectada.getFechaAltaFueraServicio()+"' or  viajes.Fecha_Estimada_llegada between '"+aeronaveAfectada.getFechaBajaFueraServicio()+"' and '"+aeronaveAfectada.getFechaAltaFueraServicio()+"')";
                 ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
+                noQuery = "UPDATE MM.Aeronaves set fecha_baja_definitiva=mm.fechaDeHoy() where matricula='" + aeronaveAfectada.getMatricula() + "'";
+                ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
                 MessageBox.Show("Se ha realizado el reemplazo correctamente");
                 new buscarAeronave().Show(); 
                 this.Close();

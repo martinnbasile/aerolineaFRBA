@@ -25,7 +25,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void crearAeronave_Load(object sender, EventArgs e)
         {
-
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1,"select * from MM.vista_modelos where Fabricante='"+aeronaveAReemplazar.getFabricante()+"' and [Tipo de servicio]='"+aeronaveAReemplazar.getTipoDeServicio()+"' and [Cantidad de Kgs disponibles para realizar encomiendas]="+aeronaveAReemplazar.getCantidadKgs()+"");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -46,24 +46,15 @@ namespace AerolineaFrba.Abm_Aeronave
             if (estaCompleto())
             {
 
-                Aeronave nuevaAeronave = new Aeronave();
-                String nuevaAeronaveMatricula = maskedTextBox2.Text;
-                int nuevaAeronaveCantidadDeButacas = Convert.ToInt32(numericUpDown1.Value);
-                int nuevaAeronaveCantidadKgs = Convert.ToInt32(numericUpDown2.Value);
-                nuevaAeronave.setMatricula(nuevaAeronaveMatricula);
-                nuevaAeronave.setCantidadButacas(nuevaAeronaveCantidadDeButacas);
-                nuevaAeronave.setCantidadKgs(nuevaAeronaveCantidadKgs);
-                nuevaAeronave.setModelo(aeronaveAReemplazar.getModelo());
-                nuevaAeronave.setFabricante(aeronaveAReemplazar.getFabricante());
-                nuevaAeronave.setTipoDeServicio(aeronaveAReemplazar.getTipoDeServicio());
-                SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Tipos_Servicio where Descripcion='" + nuevaAeronave.getTipoDeServicio() + "'");
-                int idTipoServicio = new int();
-                if (consulta.Read()) { idTipoServicio = consulta.GetInt32(consulta.GetOrdinal("id")); }
-                consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Fabricantes where Descripcion='" + nuevaAeronave.getFabricante() + "'");
-                int idFabricante = new int();
-                if (consulta.Read()) { idFabricante = consulta.GetInt32(consulta.GetOrdinal("id")); }
                 
-                String queryValidarMatricula = "select * from MM.Aeronaves where Matricula='" + nuevaAeronave.getMatricula() + "'";
+                String nuevaAeronaveMatricula = maskedTextBox2.Text;
+        
+
+                SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("select modelo from MM.Aeronaves where matricula='"+aeronaveAReemplazar.getMatricula()+"'");
+                int idModelo = new int();
+                if (consulta.Read()) { idModelo = consulta.GetInt32(consulta.GetOrdinal("modelo")); }
+
+                String queryValidarMatricula = "select * from MM.Aeronaves where Matricula='" + nuevaAeronaveMatricula + "'";
                 SqlDataReader consultaValidarMatricula = ConexionALaBase.Conexion.consultarBase(queryValidarMatricula);
                 if (consultaValidarMatricula.HasRows)
                 {
@@ -71,10 +62,15 @@ namespace AerolineaFrba.Abm_Aeronave
                 }
                 else
                 {
-                    String fechaActual = DateTime.Now.ToString("yyyy-MM-dd");
-                    ConexionALaBase.Conexion.ejecutarNonQuery("INSERT INTO MM.Aeronaves (matricula,Fecha_alta,Modelo,Fabricante,Tipo_Servicio,Cantidad_Butacas,Cantidad_Kg) VALUES ('" + nuevaAeronave.getMatricula() + "','"+fechaActual+"','" + nuevaAeronave.getModelo() + "','" + idFabricante + "'," + idTipoServicio + "," + nuevaAeronave.getCantidadButacas() + "," + nuevaAeronave.getCantidadKgs() + ")");
-                    String noQueryActualizarViajes = "update MM.viajes set MM.viajes.Matricula='" + nuevaAeronave.getMatricula() + "' where MM.viajes.Matricula='" + aeronaveAReemplazar.getMatricula() + "' and (MM.viajes.Fecha_salida between '" + aeronaveAReemplazar.getFechaBajaFueraServicio() + "' and '" + aeronaveAReemplazar.getFechaAltaFueraServicio() + "' or  MM.viajes.Fecha_Estimada_llegada between '" + aeronaveAReemplazar.getFechaBajaFueraServicio() + "' and '" + aeronaveAReemplazar.getFechaAltaFueraServicio() + "')";
+
+                    String noQueryCrearAeronave = "exec MM.crearAeronave @matricula='" + nuevaAeronaveMatricula + "',@id_Modelo=" + idModelo + "";
+                    ConexionALaBase.Conexion.ejecutarNonQuery(noQueryCrearAeronave);
+                    String noQueryActualizarViajes = "update MM.viajes set MM.viajes.Matricula='" + nuevaAeronaveMatricula + "' where MM.viajes.Matricula='" + aeronaveAReemplazar.getMatricula() + "' and (MM.viajes.Fecha_salida between '" + aeronaveAReemplazar.getFechaBajaFueraServicio() + "' and '" + aeronaveAReemplazar.getFechaAltaFueraServicio() + "' or  MM.viajes.Fecha_Estimada_llegada between '" + aeronaveAReemplazar.getFechaBajaFueraServicio() + "' and '" + aeronaveAReemplazar.getFechaAltaFueraServicio() + "')";
                     ConexionALaBase.Conexion.ejecutarNonQuery(noQueryActualizarViajes);
+                    String noQueryBaja;
+                    if(deQueBajaVengo=="Tempo")noQueryBaja="UPDATE MM.Aeronaves set fecha_baja_fuera_servicio=mm.fechaDeHoy(),fecha_alta_fuera_servicio='"+aeronaveAReemplazar.getFechaAltaFueraServicio()+"' where matricula='" + aeronaveAReemplazar.getMatricula() + "'";
+                    else noQueryBaja = "UPDATE MM.Aeronaves set fecha_baja_definitiva=mm.fechaDeHoy() where matricula='" + aeronaveAReemplazar.getMatricula() + "'";
+                    ConexionALaBase.Conexion.ejecutarNonQuery(noQueryBaja);
                     MessageBox.Show("La aeronave a sido dada de baja y se ha asignado la aeronave creada para que la reemplace en los vuelos correspondientes");
                     new buscarAeronave().Show();
                     this.Close();
@@ -84,16 +80,11 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private bool estaCompleto()
         {
-            if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown1, "Completar la cantidad de butacas con un valor mayor a cero"))
-            {
-                if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown2, "Completar la cantidad de kilogramos con un valor mayor a cero"))
-                {
-                    if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox2, "Completar la matrícula"))
+             if (Validaciones.Validaciones.validarMatricula(maskedTextBox2, "Completar la matrícula"))
                     {
                         return true;
                     }
-                }
-            }  
+                  
             return false;
         }
 
@@ -118,6 +109,11 @@ namespace AerolineaFrba.Abm_Aeronave
         }
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
