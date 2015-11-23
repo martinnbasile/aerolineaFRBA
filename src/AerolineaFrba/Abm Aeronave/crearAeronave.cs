@@ -39,13 +39,10 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             if (Validaciones.Validaciones.validarMatricula(maskedTextBox2, "Completar la matrícula"))
             {
-               if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown1, "Completar la cantidad de butacas con un valor mayor a cero"))
-               {
-                     if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown2, "Completar la cantidad de kilogramos con un valor mayor a cero"))
-                     {
-                         return true;
-                     }
-               }                
+                if (Validaciones.Validaciones.validarDataGridView(dataGridView1, "Seleccione un modelo"))
+                {
+                    return true;
+                }
             }
             return false;
         }
