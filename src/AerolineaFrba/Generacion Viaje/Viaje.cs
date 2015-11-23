@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace AerolineaFrba.Generacion_Viaje
 {
-    class Viaje
+    public class Viaje
     {
+        public string servicio;
         public String fechaSalida;
         public String fechaLlegada;
+        public int ruta;
     }
 }

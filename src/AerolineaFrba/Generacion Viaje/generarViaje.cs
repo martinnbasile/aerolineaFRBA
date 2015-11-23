@@ -12,7 +12,7 @@ namespace AerolineaFrba.Generacion_Viaje
 {
     public partial class generarViaje : Form
     {
-        //Viaje unViaje = new Viaje();
+        Viaje unViaje = new Viaje();
         public generarViaje()
         {
             InitializeComponent();
@@ -54,15 +54,19 @@ namespace AerolineaFrba.Generacion_Viaje
             {
                 if (Validaciones.Validaciones.validarTextBox(textBox2, "Complete la fecha de llegada"))
                 {
-                    //unViaje.fechaSalida=textBox1.Text+" "+dateTimePicker1.Value.ToString("hh:mm:ss");
-                    //unViaje.fechaLlegada =textBox2.Text+" "+dateTimePicker2.Value.ToString("hh:mm:ss");
-                    //TimeSpan ts = DateTime.Parse(unViaje.fechaLlegada) - DateTime.Parse(unViaje.fechaSalida);
-                    //int diferenciaEnDias = ts.Days;
-                    //if (diferenciaEnDias < 1)
-                    //    {
-                            return true;
-                    //    }
-                    //else MessageBox.Show("Ningun viaje puede durar más de 1 día");
+                    unViaje.fechaSalida=textBox1.Text+" "+dateTimePicker1.Value.ToString("HH:mm:ss");
+                    unViaje.fechaLlegada =textBox2.Text+" "+dateTimePicker2.Value.ToString("HH:mm:ss");
+                    TimeSpan ts = DateTime.Parse(unViaje.fechaLlegada) - DateTime.Parse(unViaje.fechaSalida);
+                    int diferenciaEnDias = ts.Days;
+                    if (diferenciaEnDias <= 1)
+                        {
+                            if (DateTime.Parse(unViaje.fechaLlegada) > DateTime.Parse(unViaje.fechaSalida))
+                            {
+                                return true;
+                            }
+                            else MessageBox.Show("La fecha de llegada debe ser posterior a la de salida");
+                        }
+                    else MessageBox.Show("Ningun viaje puede durar más de 1 día");
                 }
             }
             return false;
@@ -78,9 +82,7 @@ namespace AerolineaFrba.Generacion_Viaje
         {
             if (this.validarTodo())
             {
-                //unViaje.fechaSalida=
-                //unViaje.fechaLlegada
-                new elegirRuta(/*unViaje*/).Show();
+                new elegirRuta(unViaje).Show();
                 this.Close();
             }
 
