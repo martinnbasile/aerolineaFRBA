@@ -47,7 +47,11 @@ namespace AerolineaFrba.Compra
         {//CONFIRMA
             if (this.validarSeleccionDeButacas())
             {
-                //Ciclo for desde 1 hasta cantidadDePasajes mandandole a la base el id de la butaca
+                for (int contador = 1; contador <= unaCompra.cantidadPasajes; contador++)
+                {
+                    // mandandole a la base el id de la butaca
+                }
+                
                 //ABRIR PANTALLA PARA COBRAR
             }
         }

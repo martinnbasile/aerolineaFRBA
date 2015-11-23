@@ -17,6 +17,7 @@ namespace AerolineaFrba.Compra
         String fechaRecibida;
 
         LaCompra unaCompra = new LaCompra();
+        int cantidadPasajes;
 
         public viajesDisponibles(String origen, String destino, String fecha)
         {
@@ -54,11 +55,13 @@ namespace AerolineaFrba.Compra
         {
             if (this.validarTodo())
             {
+                
                 unaCompra.cantidadPasajes = int.Parse(numericUpDown1.Value.ToString());
                 unaCompra.cantidadKgs = int.Parse(numericUpDown2.Value.ToString());
                 //DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
                 unaCompra.idViaje = 1;// int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString());
-
+                
+                
                 new DNI(unaCompra).Show();
                 this.Close();
             }
@@ -70,5 +73,7 @@ namespace AerolineaFrba.Compra
             new compra().Show();
             this.Close();
         }
+
+       
     }
 }

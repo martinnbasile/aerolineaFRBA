@@ -15,6 +15,7 @@ namespace AerolineaFrba.Compra
     {
         bool estabaEnBase;
         LaCompra compraRecibida;
+        
         public datosDelCliente(LaCompra unaCompra)
         {
             InitializeComponent();
@@ -77,6 +78,8 @@ namespace AerolineaFrba.Compra
             textBox7.Text = fecha;
         }
 
+        
+
         private void button1_Click(object sender, EventArgs e)
         {//NEXT
             if (this.validarTodo())
@@ -86,20 +89,12 @@ namespace AerolineaFrba.Compra
                     MessageBox.Show("UPDATE");
 
                 }
-                else { MessageBox.Show("INSERT"); } 
+                else { MessageBox.Show("INSERT"); }
 
-                if (compraRecibida.cantidadPasajes > 1)
-                {
-                    new elegirButaca(compraRecibida).Show();
-                    this.Close();
-                }
-                else
-                {
-                    new seleccionarMedioPago(compraRecibida).Show();
-                    this.Close();
-                }
-
-
+                
+                compraRecibida.seIngresoUnCliente(compraRecibida); //PORQUE TE PIDE QUE INGRESES UN CLIENTE POR PASAJE
+                this.Close();
+       
             }
          }
 

@@ -12,5 +12,26 @@ namespace AerolineaFrba.Compra
         public int cantidadPasajes;
         public int cantidadKgs;
         public int dniCliente;
+        private int pasajesProcesados = 0;
+
+
+        public void seIngresoUnCliente(LaCompra unaCompra)
+        {
+
+            pasajesProcesados++;
+            
+            if (pasajesProcesados < cantidadPasajes)
+            {
+                new DNI(unaCompra).Show();
+                
+            }
+            else
+            {
+                new elegirButaca(unaCompra).Show();
+                
+            }
+        }
     }
+
+
 }
