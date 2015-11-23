@@ -1349,19 +1349,22 @@ for insert
 as
 begin transaction
 declare micursor cursor for
-select viaje,count(*) from inserted 
-group by viaje
+select viaje,Numero_Butaca from inserted 
 declare @viaje int
-declare @cantidad int
+declare @butaca int
 open micursor
-fetch next from micursor into @viaje,@cantidad
+fetch next from micursor into @viaje,@butaca
 while @@FETCH_STATUS=0
 begin
 update mm.viajes
-set butacasdisponibles=butacasdisponibles-@cantidad
+set butacasdisponibles=butacasdisponibles-1
 where id=@viaje
 
-fetch next from micursor into @viaje,@cantidad
+update mm.butacas
+set Estado='Vendida'
+where Viaje=@viaje and Nro=@butaca
+
+fetch next from micursor into @viaje,@butaca
 
 end
 close micursor
@@ -1416,5 +1419,35 @@ where v.fecha_salida = @llegada and r.Ciudad_Destino=@destino and r.Ciudad_Orige
  end
 
  go
+
+
+create procedure mm.ingresarCompraPasaje @viaje int,@cliente int,@butaca int,@codigoCompra int --vamos a tener que agregar un codigo de compra
+as 
+
+insert into mm.pasajes(Viaje,Numero_Butaca,Fecha_Compra,Cliente) values (@viaje,@butaca,mm.fechaDeHoy(),@cliente)
+
+
+go
+
+create procedure mm.ingresarCompraPaquete @viaje int,@cliente int,@kg int
+as 
+insert into mm.paquetes(viaje,kg,Fecha_Compra,Cliente) values(@viaje,@kg,mm.fechaDeHoy(),@cliente)
+go
+
+create function mm.butacasDisponibles(@viaje int) 
+returns 
+@jaja table
+(nroButaca int,
+tipoButaca varchar(20))
+as
+begin
+insert into @jaja
+select Nro,b.Ubicacion from mm.Butacas b where Estado<>'Vendida'
+return
+end
+
+
+go
+
 
 
