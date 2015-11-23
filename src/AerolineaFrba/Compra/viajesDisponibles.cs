@@ -62,7 +62,7 @@ namespace AerolineaFrba.Compra
                 //DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
                 idViaje = 1; // viajeSeleccionado.Cells["idViaje"].Value;
 
-                new ingresarDatosCliente(idViaje, cantidadPasajes, cantidadKilos).Show();
+                new DNI(idViaje, cantidadPasajes, cantidadKilos).Show();
                 this.Close();
             }
 
