@@ -778,26 +778,24 @@ go
 
 CREATE PROCEDURE MM.aeronavesSustitutas @matricula varchar(10),@fechaBaja smalldatetime,@fechaAlta smalldatetime
 
+
 AS
 
-	DECLARE @Modelo varchar(30)		
-	DECLARE @Fabricante int
-	DECLARE @Tipo_Servicio int
+	DECLARE @Modelo int		
+	SELECT @Modelo = Modelo from MM.Aeronaves a where a.matricula=@matricula 
 	
-	SELECT @Modelo = Modelo,@Fabricante = Fabricante,@Tipo_Servicio = TipoServicio
-	from MM.Aeronaves a join mm.modeloAvion mo on (a.modelo=mo.id) where 
-	a.matricula=@matricula 
 	
 
-
-SELECT a.Fecha_alta as 'Fecha de alta',  a.Modelo as 'Modelo',a.matricula as 'Matrícula',
+SELECT a.Fecha_alta as 'Fecha de alta',  mo.Modelo_descripcion as 'Modelo',a.matricula as 'Matrícula',
 f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',
 a.fecha_baja_fuera_servicio as 'Fecha de fuera de servicio',a.fecha_alta_fuera_servicio as 'Fecha de reinicio de servicio',
-a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
+a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas',
+Count(DISTINCT ba.butacaPiso) as 'Cantidad de pisos',COUNT(ba.id) as 'Cantidad de asientos'
 from MM.aeronaves a
 join mm.modeloAvion mo on (a.modelo=mo.id)
-join MM.Fabricantes f on (mo.Fabricante=f.Id)
+join MM.Fabricantes f on (mo.fabricante=f.Id)
 join MM.Tipos_Servicio ts on (mo.TipoServicio=ts.Id)
+join MM.Butacas_Avion ba on (mo.id=ba.modeloAvion)	
 where  
 	not exists (
 		select * from MM.Viajes v
@@ -805,12 +803,15 @@ where
 		or  v.Fecha_Estimada_llegada between @fechaBaja and @fechaAlta) 
 		and a.matricula=v.Matricula
 	)
-	and a.fecha_baja_definitiva is not null
+	and a.fecha_baja_definitiva is null
+	and (((a.fecha_baja_fuera_servicio not between @fechaBaja and @fechaAlta) and (a.fecha_alta_fuera_servicio not between @fechaBaja and @fechaAlta)) or ((a.fecha_baja_fuera_servicio is null) and (a.fecha_alta_fuera_servicio is null)))
 	and a.Modelo=@Modelo
-	and mo.Fabricante=@Fabricante
-	and mo.TipoServicio=@Tipo_Servicio
 	and a.matricula!=@matricula			 
-GO
+	 group by Modelo_descripcion,f.Descripcion,ts.Descripcion,mo.Kg,
+	 a.fecha_alta,a.modelo,a.matricula,a.fecha_baja_fuera_servicio,
+	 fecha_alta_fuera_servicio,a.fecha_baja_definitiva
+
+go
 
 create function MM.convertirFecha (@fecha varchar(10))
 returns Date
