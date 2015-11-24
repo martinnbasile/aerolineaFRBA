@@ -60,9 +60,9 @@ namespace AerolineaFrba.Compra
                 unaCompra.cantidadKgs = int.Parse(numericUpDown2.Value.ToString());
                 //DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
                 unaCompra.idViaje = 1;// int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString());
-                
-                
-                new DNI(unaCompra).Show();
+
+                MessageBox.Show("A continuación, ingrese los datos de los pasajeros");
+                new DNI(unaCompra,"").Show();
                 this.Close();
             }
 

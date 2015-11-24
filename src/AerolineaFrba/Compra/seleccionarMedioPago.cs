@@ -39,10 +39,14 @@ namespace AerolineaFrba.Compra
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {
+        { //NEXT
             if (Validaciones.Validaciones.validarComboBox(comboBox1, "Elija el medio de pago"))
             {
-                //new datosDelCliente
+                
+                MessageBox.Show("A continuación, ingrese los datos de la persona que abona");
+                
+                new DNI(unaCompra,comboBox1.Text).Show();
+                this.Close();
             }
 
         }

@@ -15,11 +15,13 @@ namespace AerolineaFrba.Compra
     {
         bool estabaEnBase;
         LaCompra compraRecibida;
+        String instanciaDeOperacion;
         
-        public datosDelCliente(LaCompra unaCompra)
+        public datosDelCliente(LaCompra unaCompra,String instance)
         {
             InitializeComponent();
             compraRecibida = unaCompra;
+            instanciaDeOperacion = instance;
         }
 
         private void datosDelCliente_Load(object sender, EventArgs e)
@@ -91,9 +93,24 @@ namespace AerolineaFrba.Compra
                 }
                 else { MessageBox.Show("INSERT"); }
 
-                
-                compraRecibida.seIngresoUnCliente(compraRecibida); //PORQUE TE PIDE QUE INGRESES UN CLIENTE POR PASAJE
-                this.Close();
+                if (instanciaDeOperacion == "")
+                {
+                    compraRecibida.seIngresoUnCliente(compraRecibida); //PORQUE TE PIDE QUE INGRESES UN CLIENTE POR PASAJE
+                    this.Close();
+                }
+                else 
+                {
+                    if (instanciaDeOperacion == "Tarjeta de credito")
+                    {
+                        MessageBox.Show("Ingrese los datos de la tarjeta de credito");
+                        new ingresarDatosTC(compraRecibida).Show();
+                        this.Close();
+                    }
+                    else
+                    {//SE PAGO EN EFECTIVO ==> ASENTAR CON COMMIT
+                        MessageBox.Show("EFECTIVO");
+                    }
+                }
        
             }
          }
