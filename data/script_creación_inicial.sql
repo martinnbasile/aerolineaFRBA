@@ -199,7 +199,9 @@ Matricula varchar(10) foreign key references MM.Aeronaves(Matricula),
 Ruta int,
 constraint Ruta foreign key (Ruta) references MM.Rutas_Aereas(Id),
 kgDisponibles int,
-butacasDisponibles int
+butacasDisponibles int,
+check(kgdisponibles>=0),
+check(butacasdisponibles>=0)
 )
 go
 
@@ -1400,7 +1402,7 @@ commit
 
 go
 
-create function mm.viajesDisponibles(@fecha varchar(15),@origen varchar(30),@destino varchar(30))
+create  function mm.viajesDisponibles(@fecha varchar(15),@origen varchar(30),@destino varchar(30))
 returns @jaja table
 (
 idViaje int,
@@ -1414,9 +1416,9 @@ declare @llegada datetime
 set @llegada=convert(date,@fecha,20)
 insert into @jaja
 
-select v.Id,butacasDisponibles,kgDisponibles,t.Descripcion from mm.viajes v join mm.Rutas_Aereas r on r.Id=v.Ruta join Tipos_Servicio t on t.Id=r.Tipo_servicio join mm.Ciudades d on d.id=r.Ciudad_Destino join mm.Ciudades o on o.Id=r.Ciudad_Origen
+select v.Id,butacasDisponibles,kgDisponibles,t.Descripcion from mm.viajes v join mm.Rutas_Aereas r on r.Id=v.Ruta join mm.Tipos_Servicio t on t.Id=r.Tipo_servicio join mm.Ciudades d on d.id=r.Ciudad_Destino join mm.Ciudades o on o.Id=r.Ciudad_Origen
 where datepart(dayofyear,v.fecha_salida) = datepart(dayofyear,@llegada) and year(v.Fecha_salida)=year(@llegada) and d.Descripcion=@destino and o.Descripcion=@origen
- 
+and (kgDisponibles>0 or butacasDisponibles>0) 
  return 
  end
 
@@ -1451,4 +1453,38 @@ end
 
 go
 
+create  table mm.TC(
+NRO_TC numeric(18) primary key,
+cod_seg int,
+anio_venc int,
+mes_venc int 
+
+
+)
+go
+
+create table mm.compras(
+cod_compra int identity(1000000,1) primary key,
+cliente int foreign key references mm.clientes,
+TC numeric(18) foreign key references mm.TC
+
+
+)
+go
+
+create  function mm.ultimacompra() returns int
+as
+begin 
+declare @a int
+select @a=max(cod_compra) from mm.compras
+return @a
+end
+
+go
+
+create procedure mm.nuevaCoompra
+as
+insert into mm.compras(cliente) values(null)
+
+go
 
