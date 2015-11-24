@@ -13,12 +13,14 @@ namespace AerolineaFrba.Compra
     public partial class DNI : Form
     {
         LaCompra compraRecibida;
-        public DNI(LaCompra unaCompra)
+        String instanciaDeOperacion;
+        public DNI(LaCompra unaCompra,String instancia)
         {
             InitializeComponent();
             label1.Text = "Ingrese DNI";
             maskedTextBox1.Mask = "9999999";
             compraRecibida = unaCompra;
+            instanciaDeOperacion = instancia;
             
         }
 
@@ -32,9 +34,10 @@ namespace AerolineaFrba.Compra
         {//NEXT
             if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1,"Ingrese su DNI"))
             {
-                compraRecibida.dniCliente =int.Parse(maskedTextBox1.Text);
-                new datosDelCliente(compraRecibida).Show(); ;
-                this.Close();
+               
+                    compraRecibida.dniCliente = int.Parse(maskedTextBox1.Text);
+                    new datosDelCliente(compraRecibida,instanciaDeOperacion).Show(); ;
+                    this.Close();
             }
             
         }

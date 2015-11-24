@@ -22,7 +22,7 @@ namespace AerolineaFrba.Compra
             
             if (pasajesProcesados < cantidadPasajes)
             {
-                new DNI(unaCompra).Show();
+                new DNI(unaCompra,"").Show();
                 
             }
             else

@@ -226,6 +226,12 @@
     <Compile Include="Compra\elegirButaca.Designer.cs">
       <DependentUpon>elegirButaca.cs</DependentUpon>
     </Compile>
+    <Compile Include="Compra\ingresarDatosTC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compra\ingresarDatosTC.Designer.cs">
+      <DependentUpon>ingresarDatosTC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Compra\LaCompra.cs" />
     <Compile Include="Compra\seleccionarMedioPago.cs">
       <SubType>Form</SubType>
@@ -425,6 +431,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Compra\elegirButaca.resx">
       <DependentUpon>elegirButaca.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compra\ingresarDatosTC.resx">
+      <DependentUpon>ingresarDatosTC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Compra\seleccionarMedioPago.resx">
       <DependentUpon>seleccionarMedioPago.cs</DependentUpon>

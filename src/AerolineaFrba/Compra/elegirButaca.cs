@@ -28,7 +28,7 @@ namespace AerolineaFrba.Compra
 
         private bool validarSeleccionDeButacas()
         {
-            if (dataGridView1.SelectedRows.Count != unaCompra.cantidadPasajes)
+            if (false)//dataGridView1.SelectedRows.Count != unaCompra.cantidadPasajes)
             {
                 MessageBox.Show("Debe elegir "+unaCompra.cantidadPasajes+" pasajes");
                 return false;
@@ -51,8 +51,9 @@ namespace AerolineaFrba.Compra
                 {
                     // mandandole a la base el id de la butaca
                 }
-                
-                //ABRIR PANTALLA PARA COBRAR
+
+                new seleccionarMedioPago(unaCompra).Show();
+                this.Close();
             }
         }
     }
