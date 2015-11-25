@@ -343,9 +343,8 @@ go
 insert into mm.modeloAvion(Modelo_descripcion,Kg,fabricante,tipoServicio)
 select distinct Aeronave_Modelo,Aeronave_KG_Disponibles,f.Id,s.Id from gd_esquema.Maestra as m join mm.Fabricantes as f on f.Descripcion=m.Aeronave_Fabricante join mm.Tipos_Servicio as s on s.Descripcion=m.Tipo_Servicio 
 go
-
 insert into mm.Butacas_Avion (butacaNum,butacaPiso,butacaTipo,modeloAvion)
-select ma.Butaca_Nro,ma.Butaca_Piso,ma.Butaca_Tipo,mo.id
+select distinct  ma.Butaca_Nro,ma.Butaca_Piso,ma.Butaca_Tipo,mo.id
 from gd_esquema.Maestra ma join mm.modeloAvion mo on (ma.Aeronave_KG_Disponibles=mo.Kg and ma.Aeronave_Modelo=mo.Modelo_descripcion and ma.Butaca_Nro<>0) join mm.Fabricantes f on f.Id=mo.fabricante and f.Descripcion=ma.Aeronave_Fabricante join mm.Tipos_Servicio t on t.Id=mo.tipoServicio and t.Descripcion=ma.Tipo_Servicio
 go
 
@@ -539,12 +538,12 @@ Begin
 END
 go
 
-insert into MM.Viajes(Matricula,ruta,fECHA_SALIDA,Fecha_Estimada_llegada,fecha_llegada)
+insert into MM.Viajes(Matricula,ruta,fECHA_SALIDA,Fecha_Estimada_llegada,fecha_llegada,kgdisponibles,butacasdidponibles)
 select Aeronave_Matricula,r.Id,
-FechaSalida,Fecha_LLegada_Estimada,FechaLlegada
+FechaSalida,Fecha_LLegada_Estimada,FechaLlegada,Aeronave_KG_Disponibles-sum(paquete_KG),0
 from gd_esquema.Maestra g join MM.Rutas_Aereas as r on g.Ruta_Codigo=r.Ruta_Codigo join MM.Tipos_Servicio t on t.Id=r.Tipo_Servicio and g.Tipo_Servicio=t.Descripcion join mm.Ciudades o on g.Ruta_Ciudad_Origen=o.Descripcion and r.Ciudad_Origen=o.Id join mm.Ciudades c on c.Descripcion=g.Ruta_Ciudad_Destino and r.Ciudad_Destino=c.Id
 group by Aeronave_Matricula,
-FechaSalida,FechaLLegada,Fecha_LLegada_Estimada,r.Id
+FechaSalida,FechaLLegada,Fecha_LLegada_Estimada,r.Id,Aeronave_KG_Disponibles
 go
 
 Create FUNCTION MM.devuelveNumeroCliente
