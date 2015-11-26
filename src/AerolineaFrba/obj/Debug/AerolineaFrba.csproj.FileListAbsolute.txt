@@ -49,3 +49,7 @@ C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Compr
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Compra.viajesDisponibles.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Compra.datosDelCliente.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Compra.DNI.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Compra.calendario2.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Compra.elegirButaca.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Compra.ingresarDatosTC.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Compra.seleccionarMedioPago.resources

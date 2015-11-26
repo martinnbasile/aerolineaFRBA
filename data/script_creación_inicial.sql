@@ -75,7 +75,8 @@ DROP FUNCTION MM.BUTACASDISPONIBLES
 DROP FUNCTION MM.VIAJESDISPONIBLES
 drop procedure mm.ingresarCompraPaquete
 drop procedure mm.ingresarCompraPasaje
-
+drop procedure MM.pasajesCliente
+drop procedure MM.paquetesCliente
 drop schema MM
 
 
@@ -1486,4 +1487,38 @@ as
 insert into mm.compras(cliente) values(null)
 
 go
+
+
+CREATE PROCEDURE MM.pasajesCliente @idCliente int
+AS
+BEGIN TRAN
+select pas.Fecha_Compra as 'Fecha de compra',ra.Precio_Base as 'Precio',ra.Ciudad_Origen as 'Origen',ra.Ciudad_Destino as 'Destino',
+v.Fecha_salida as 'Fecha salida',v.Fecha_llegada as 'Fecha llegada',ts.Descripcion as 'Tipo de servicio',ba.butacaTipo as 'Tipo de Asiento'
+from MM.Pasajes pas 
+join MM.Viajes v on pas.Viaje=v.Id 
+join MM.Rutas_Aereas ra on v.Ruta=ra.Id
+join MM.Butacas bu on bu.Nro=pas.Numero_Butaca
+join MM.Butacas_Avion ba on bu.Nro=ba.butacaNum 
+join MM.Tipos_Servicio ts on ra.Tipo_Servicio=ts.Id
+where cliente=@idCliente
+and v.Fecha_salida>MM.fechaDeHoy()
+COMMIT TRAN
+
+go
+
+CREATE PROCEDURE MM.paquetesCliente @idCliente int
+AS
+BEGIN TRAN
+select paq.Fecha_Compra as 'Fecha de compra',paq.Kg as 'Kilogramos',ra.Precio_Kg 'Precio por Kg',
+paq.Kg * ra.Precio_Kg as 'Precio total' ,ra.Ciudad_Origen as 'Origen',ra.Ciudad_Destino as 'Destino',
+v.Fecha_salida as 'Fecha salida',v.Fecha_llegada as 'Fecha llegada'
+from MM.Paquetes paq 
+join MM.Viajes v on paq.Viaje=v.Id 
+join MM.Rutas_Aereas ra on v.Ruta=ra.Id 
+where cliente=@idCliente
+and v.Fecha_salida>MM.fechaDeHoy()
+COMMIT TRAN
+
+go
+
 
