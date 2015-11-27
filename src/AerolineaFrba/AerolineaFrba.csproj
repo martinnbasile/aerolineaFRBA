@@ -248,11 +248,11 @@
     </Compile>
     <Compile Include="ConexionALaBase\CargadorDeEstructura.cs" />
     <Compile Include="ConexionALaBase\Conexion.cs" />
-    <Compile Include="Devolucion\elegirCliente.cs">
+    <Compile Include="Devolucion\ingresarCodigoDeCompra.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Devolucion\elegirCliente.Designer.cs">
-      <DependentUpon>elegirCliente.cs</DependentUpon>
+    <Compile Include="Devolucion\ingresarCodigoDeCompra.Designer.cs">
+      <DependentUpon>ingresarCodigoDeCompra.cs</DependentUpon>
     </Compile>
     <Compile Include="Devolucion\seleccionarPasajesEncomiendas.cs">
       <SubType>Form</SubType>
@@ -448,8 +448,8 @@
     <EmbeddedResource Include="Compra\viajesDisponibles.resx">
       <DependentUpon>viajesDisponibles.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Devolucion\elegirCliente.resx">
-      <DependentUpon>elegirCliente.cs</DependentUpon>
+    <EmbeddedResource Include="Devolucion\ingresarCodigoDeCompra.resx">
+      <DependentUpon>ingresarCodigoDeCompra.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Devolucion\seleccionarPasajesEncomiendas.resx">
       <DependentUpon>seleccionarPasajesEncomiendas.cs</DependentUpon>

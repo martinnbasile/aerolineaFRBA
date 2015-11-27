@@ -76,12 +76,17 @@ drop function mm.aeronavesDisponibles
 drop procedure mm.limpiarBase
 DROP FUNCTION MM.BUTACASDISPONIBLES
 DROP FUNCTION MM.VIAJESDISPONIBLES
+drop function MM.paquetesCancelables
+drop function MM.pasajesCancelables
+drop procedure MM.cancelacionPaquete
+drop procedure MM.cancelacionPasaje
 drop procedure mm.ingresarCompraPaquete
 drop procedure mm.ingresarCompraPasaje
 drop procedure MM.pasajesCliente
 drop procedure MM.paquetesCliente
+drop procedure MM.vista_paquetes_cancelables
+drop procedure MM.vista_pasajes_cancelables
 drop schema MM
-
 
 go
 create Table MM.Ciudades(
@@ -1499,45 +1504,44 @@ create procedure mm.nuevaCompra as
 insert into mm.compras(fecha) values(mm.fechaDeHoy())
 
 go
-/*
 
-create PROCEDURE MM.pasajesCliente @idCliente int
+
+create procedure MM.vista_pasajes_cancelables (@idCompra int)
 AS
 BEGIN TRAN
-select pas.cod_compra as 'Codigo de compra', pas.Fecha_Compra as 'Fecha de compra',
-ra.Precio_Base as 'Precio',ra.Ciudad_Origen as 'Origen',ra.Ciudad_Destino as 'Destino',
-v.Fecha_salida as 'Fecha salida',v.Fecha_llegada as 'Fecha llegada',pas.Numero_Butaca as 'Numero de butaca',
+select 
+pc.cod_pasaje as 'Codigo de pasaje', ra.Precio_Base as 'Precio',c1.Descripcion as 'Origen',c2.Descripcion as 'Destino',
+v.Fecha_salida as 'Fecha salida',v.Fecha_llegada as 'Fecha llegada',pc.butaca_nro as 'Numero de butaca',
 ts.Descripcion as 'Tipo de servicio',ba.butacaTipo as 'Tipo de Asiento'
-from MM.Pasajes pas 
-join MM.Viajes v on pas.Viaje=v.Id 
+from MM.pasajesCancelables(@idCompra) pc
+join MM.Viajes v on pc.Viaje=v.Id 
 join MM.Rutas_Aereas ra on v.Ruta=ra.Id
-join MM.Butacas bu on bu.Nro=pas.Numero_Butaca
+join MM.Butacas bu on bu.Nro=pc.butaca_nro
 join MM.Butacas_Avion ba on bu.Nro=ba.butacaNum 
 join MM.Tipos_Servicio ts on ra.Tipo_Servicio=ts.Id
-where cliente=@idCliente
-and v.Fecha_salida>MM.fechaDeHoy()
-and pas.Id not in (select Codigo_Pasaje from MM.Cancelaciones)
+join MM.Ciudades c1 on ra.Ciudad_Origen=c1.Id
+join MM.Ciudades c2 on ra.Ciudad_Destino=c2.Id
 COMMIT TRAN
 
 go
 
-CREATE PROCEDURE MM.paquetesCliente @idCliente int
+create PROCEDURE MM.vista_paquetes_cancelables @idCompra int
 AS
 BEGIN TRAN
-select paq.cod_compra as 'Codigo de compra', paq.Fecha_Compra as 'Fecha de compra',paq.Kg as 'Kilogramos',
-ra.Precio_Kg 'Precio por Kg', paq.Kg * ra.Precio_Kg as 'Precio total' ,
-ra.Ciudad_Origen as 'Origen',ra.Ciudad_Destino as 'Destino',
+select
+pc.cod_paquete as 'Codigo de paquete',pc.Kg as 'Kilogramos',ra.Precio_Kg 'Precio por Kg', pc.kg * ra.Precio_Kg as 'Precio total' ,
+c1.Descripcion as 'Origen',c2.Descripcion as 'Destino',
 v.Fecha_salida as 'Fecha salida',v.Fecha_llegada as 'Fecha llegada'
-from MM.Paquetes paq 
-join MM.Viajes v on paq.Viaje=v.Id 
+from MM.paquetesCancelables(@idCompra) pc
+join MM.Viajes v on pc.Viaje=v.Id 
 join MM.Rutas_Aereas ra on v.Ruta=ra.Id 
-where cliente=@idCliente
-and v.Fecha_salida>MM.fechaDeHoy()
-and paq.Id not in (select Codigo_Encomienda from MM.Cancelaciones)
+join MM.Ciudades c1 on ra.Ciudad_Origen=c1.Id
+join MM.Ciudades c2 on ra.Ciudad_Destino=c2.Id
 COMMIT TRAN
 
 go
 
+/*
 
 CREATE procedure MM.cancelarCompraPasaje @codigoCompra int,@butaca int, @motivo varchar
 AS

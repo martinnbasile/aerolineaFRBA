@@ -1,6 +1,6 @@
 ﻿namespace AerolineaFrba.Devolucion
 {
-    partial class elegirCliente
+    partial class ingresarCodigoDeCompra
     {
         /// <summary>
         /// Required designer variable.
