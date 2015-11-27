@@ -45,5 +45,10 @@ namespace AerolineaFrba.Canje_Millas
                 }
             }
         }
+
+        private void ingresarDniCanjeMillas_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

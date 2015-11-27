@@ -72,7 +72,7 @@
             this.maskedTextBox1.TabIndex = 4;
             this.maskedTextBox1.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
             // 
-            // canjeMillas
+            // ingresarDniCanjeMillas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -81,8 +81,9 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.maskedTextBox1);
-            this.Name = "canjeMillas";
+            this.Name = "ingresarDniCanjeMillas";
             this.Text = "canjeMillas";
+            this.Load += new System.EventHandler(this.ingresarDniCanjeMillas_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
