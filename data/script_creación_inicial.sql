@@ -47,6 +47,10 @@ Drop table MM.Inhabilitados
 Drop table MM.Millas
 Drop table MM.Paquetes
 Drop table MM.Pasajes
+drop table mm.compras
+drop table mm.TC
+drop function mm.ultimacompra
+drop procedure mm.nuevaCompra
 Drop table MM.Roles_Funcionalidades
 Drop table MM.Productos_Milla
 Drop table MM.Intentos_login
@@ -540,7 +544,7 @@ Begin
 END
 go
 
-insert into MM.Viajes(Matricula,ruta,fECHA_SALIDA,Fecha_Estimada_llegada,fecha_llegada,kgdisponibles,butacasdidponibles)
+insert into MM.Viajes(Matricula,ruta,fECHA_SALIDA,Fecha_Estimada_llegada,fecha_llegada,kgdisponibles,butacasdisponibles)
 select Aeronave_Matricula,r.Id,
 FechaSalida,Fecha_LLegada_Estimada,FechaLlegada,Aeronave_KG_Disponibles-sum(paquete_KG),0
 from gd_esquema.Maestra g join MM.Rutas_Aereas as r on g.Ruta_Codigo=r.Ruta_Codigo join MM.Tipos_Servicio t on t.Id=r.Tipo_Servicio and g.Tipo_Servicio=t.Descripcion join mm.Ciudades o on g.Ruta_Ciudad_Origen=o.Descripcion and r.Ciudad_Origen=o.Id join mm.Ciudades c on c.Descripcion=g.Ruta_Ciudad_Destino and r.Ciudad_Destino=c.Id
@@ -1463,11 +1467,11 @@ mes_venc int
 
 )
 go
-
 create table mm.compras(
 cod_compra int identity(1000000,1) primary key,
 cliente int foreign key references mm.clientes,
-TC numeric(18) foreign key references mm.TC
+medioPago varchar(10)
+
 
 
 )
@@ -1483,7 +1487,7 @@ end
 
 go
 
-create procedure mm.nuevaCoompra
+create procedure mm.nuevaCompra
 as
 insert into mm.compras(cliente) values(null)
 
