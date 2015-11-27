@@ -52,7 +52,7 @@ namespace AerolineaFrba.Compra
                 // mandandole a la base el id de la butaca
                 //TMB TENGO QUE MANDARLE EL PASAJERO
                 //MANDARLE A LaCompra que se ingreso un pasajero, alla se decide si quedan mas o si hay que pagar
-                //unaCompra.seIngresoUnCliente
+                unaCompra.seProcesoUnPasaje();
                 //new seleccionarMedioPago(unaCompra).Show();   --> SE QUEDA?
                 //this.Close();  ---> SE QUEDA?
             }

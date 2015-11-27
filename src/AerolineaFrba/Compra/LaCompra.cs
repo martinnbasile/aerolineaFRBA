@@ -18,22 +18,33 @@ namespace AerolineaFrba.Compra
         public int cantidadKgs;
         public int dniCliente;
         private int pasajesProcesados = 0;
-        private int sumaPrecio = 0;
+        private int sumaPrecio;
 
-        public void seProcesoUnPasaje(LaCompra unaCompra)
+         public LaCompra()
+         {
+            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase(
+                "select precio_kg from mm.viajes V JOIN mm.rutas_aereas r on v.ruta=r.id"+
+                "where v.id="+idViaje);
+            int precioBaseEncomienda = reader.GetInt32(0);
+            reader.Dispose();
+            reader = ConexionALaBase.Conexion.consultarBase(
+                "select precio_base from mm.viajes V JOIN mm.rutas_aereas r on v.ruta=r.id"+
+                            "where v.id=" + idViaje);
+            int precioPasaje = reader.GetInt32(0);
+            sumaPrecio = precioBaseEncomienda * cantidadKgs+precioPasaje*cantidadPasajes;
+         }
+        
+        
+        public void seProcesoUnPasaje()
         {
-
             pasajesProcesados++;
-            
             if (pasajesProcesados < cantidadPasajes)
-            {
-               // new DNI(unaCompra,"").Show();
-                
+            { //Todavia quedan pasajes por procesar
+                new DNI(this).Show();
             }
             else
-            {
-               // new elegirButaca(unaCompra, unPasajero).Show();
-                
+            { //YA HAY QUE PAGAR
+                new seleccionarMedioPago(this).Show();
             }
         }
     }
