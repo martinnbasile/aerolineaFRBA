@@ -13,23 +13,23 @@ namespace AerolineaFrba.ConexionALaBase
     {
         public static SqlConnection conexxxxx = conectarBase();
        
-
+        private static SqlCommand commandTran;
+        static SqlConnection cone;
         public static SqlConnection conectarBase()
         {
-            SqlConnection cone = new SqlConnection(AerolineaFrba.Properties.Settings.Default.GD2C2015ConnectionString);
+            cone = new SqlConnection(AerolineaFrba.Properties.Settings.Default.GD2C2015ConnectionString);
             cone.Open();
             return cone;
         }
         public static SqlCommand getComando()
         {
-            SqlCommand comandoo = conseguirComando(); 
-            return comandoo;
+             
+            return conseguirComando();
         }
-        public static SqlCommand conseguirComando()
+       public static SqlCommand conseguirComando()
         {
             SqlCommand comand = new SqlCommand();
-            SqlConnection conexxxxx = conectarBase();
-            comand.Connection = conexxxxx;
+            comand.Connection = conectarBase();
             return comand;
         }
 
@@ -48,15 +48,20 @@ namespace AerolineaFrba.ConexionALaBase
             return;
         }
 
+        
+        
+
         public static void verificarConexion()
         {
-            try { ConexionALaBase.Conexion.consultarBase("Select 10"); }
+            try { ConexionALaBase.Conexion.conectarBase(); }
             catch (SqlException exc)
             {
                 MessageBox.Show("Error de conexion"); //verifica la contraseña del user gd
                 MessageBox.Show(exc.Message);
             }
         }
+
+        
 
     }
 }

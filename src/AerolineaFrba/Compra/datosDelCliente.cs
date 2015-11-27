@@ -91,22 +91,11 @@ namespace AerolineaFrba.Compra
         {
             if (estabaEnBaseElCliente)
             {
-                ConexionALaBase.Conexion.ejecutarNonQuery("Update mm.clientes" +
-                "set Nombre='" + elPasajero.nombre + "'" +
-                "set Apellido='" + elPasajero.apellido + "'" +
-                "set direccion='" + elPasajero.direccion + "'" +
-                "set telefono='" + elPasajero.telefono + "'" +
-                "set mail='" + elPasajero.mail + "'" +
-                "set fecha_nacimiento='" + elPasajero.fechaNacimiento + "'" +
-                "where dni=" + elPasajero.dni + " and apellido='" + elPasajero.apellido + "'");
+                ConexionALaBase.Conexion.ejecutarNonQuery("Update mm.clientes set Nombre='" + textBox2.Text + "', Apellido='" + textBox3.Text + "', direccion='" + textBox4.Text + "', telefono='" + textBox5.Text + "', mail='" + textBox6.Text + "', fecha_nacimiento='" + textBox7.Text + "'where dni=" + elPasajero.dni + " and apellido='" + elPasajero.apellido + "'");
             }
             else
             {
-                ConexionALaBase.Conexion.ejecutarNonQuery("Insert into mm.clientes (DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_nacimiento)" +
-                    "values (" + elPasajero.dni + ",'" + elPasajero.nombre + "','" +
-                    elPasajero.apellido + "','" + elPasajero.direccion + "','" +
-                    elPasajero.telefono + "','" + elPasajero.mail +
-                    "','" + elPasajero.fechaNacimiento + "'");
+                ConexionALaBase.Conexion.ejecutarNonQuery("Insert into mm.clientes (DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_nacimiento) values (" + elPasajero.dni + ",'" + textBox2.Text + "','" + textBox3.Text + "','" + textBox4.Text + "','" + textBox5.Text + "','" + textBox6.Text + "','" + textBox7.Text + "'");
 
             }
 
@@ -126,13 +115,14 @@ namespace AerolineaFrba.Compra
                 {
                     if (laCompra.instanciaDeCompra == "Tarjeta de credito")
                     {
-                        MessageBox.Show("Ingrese los datos de la tarjeta de credito");
                         new ingresarDatosTC(laCompra).Show();
                         this.Close();
                     }
                     else
                     {//SE PAGO EN EFECTIVO ==> ASENTAR CON COMMIT
-                        MessageBox.Show("EFECTIVO");
+                        MessageBox.Show("Total: " + laCompra.totalPasaje());
+                        MessageBox.Show("Operacion exitosa. Codigo de compra: " + laCompra.codigoCompra);
+                        ConexionALaBase.Conexion.ejecutarNonQuery("Commit transaction compra");
                     }
                 }
        

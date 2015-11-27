@@ -34,14 +34,14 @@ namespace AerolineaFrba.Compra
         private bool validarTodo()
         {
             
-            DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
-            if (true)//Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija una fila"))
+            if (Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija un viaje"))
             {
+                DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
                 if (numericUpDown2.Value != 0 || numericUpDown1.Value != 0)
                 {
-                    if (numericUpDown1.Value < int.Parse(viajeSeleccionado.Cells["butacasLibres"].Value.ToString()))
+                    if (numericUpDown1.Value <= int.Parse(viajeSeleccionado.Cells["butacasLibres"].Value.ToString()))
                     {
-                        if (numericUpDown2.Value < int.Parse(viajeSeleccionado.Cells["kgLibres"].Value.ToString()))
+                        if (numericUpDown2.Value <= int.Parse(viajeSeleccionado.Cells["kgLibres"].Value.ToString()))
                         {
                             return true;
                         }
@@ -60,10 +60,15 @@ namespace AerolineaFrba.Compra
                 unaCompra.cantidadPasajes = int.Parse(numericUpDown1.Value.ToString());
                 unaCompra.cantidadKgs = int.Parse(numericUpDown2.Value.ToString());
                 DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
-                unaCompra.idViaje = 1;// int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString());
-                MessageBox.Show("A continuación, ingrese los datos de los pasajeros");
-                unaCompra.instanciaDeCompra = "Pasajeros";
-                new DNI(unaCompra).Show();
+                unaCompra.viajeElegido(int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString()));
+                
+                if (unaCompra.cantidadPasajes > 0)
+                {
+                    MessageBox.Show("Ingrese los datos de los pasajeros:");
+                    unaCompra.instanciaDeCompra = "Pasajeros";
+                }
+
+                unaCompra.iniciarProcesamiento();
                 this.Close();
             }
 
