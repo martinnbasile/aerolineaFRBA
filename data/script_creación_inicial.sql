@@ -1604,16 +1604,26 @@ go
 
 create procedure mm.cancelacionPaquete @codPaquete int,@codCancelacion int
 as
+declare @viaje int
+declare @kg int
 update mm.Paquetes
-set cod_cancelacion=@codCancelacion
+set cod_cancelacion=@codCancelacion,@viaje=viaje,@kg=kg
 where Id=@codPaquete
 
-
+update mm.Viajes set kgDisponibles=kgDisponibles+@kg where Id=@viaje
 go
 
 create procedure mm.cancelacionPasaje @codPasaje int,@codCancelacion int
 as
+declare @viaje int
+declare @num int
 update mm.Pasajes
-set cod_cancelacion=@codCancelacion
+set cod_cancelacion=@codCancelacion,@viaje=viaje,@num=numero_butaca
 where Id=@codPasaje
+update mm.Viajes
+set butacasDisponibles=butacasDisponibles-1
+where Id=@viaje
+update mm.Butacas
+set Estado='Libre'
+where Viaje=@viaje and Nro=@num
 go
