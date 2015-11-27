@@ -11,13 +11,13 @@ using System.Data.SqlClient;
 
 namespace AerolineaFrba.Devolucion
 {
-    public partial class elegirCliente : Form
+    public partial class ingresarCodigoDeCompra : Form
     {
-        public elegirCliente()
+        public ingresarCodigoDeCompra()
         {
             InitializeComponent();
-            label1.Text = "Ingrese DNI";
-            maskedTextBox1.Mask = "9999999";
+            label1.Text = "Ingrese Codigo de compra";
+            maskedTextBox1.Mask = "99999999999";
 
         }
 
@@ -34,19 +34,19 @@ namespace AerolineaFrba.Devolucion
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int dni = int.Parse(maskedTextBox1.Text);
-            SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("Select id from MM.clientes where DNI=" + dni);
+            int codigoDeCompra = int.Parse(maskedTextBox1.Text);
+            SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("Select cod_compra from MM.compras where cod_compra="+ codigoDeCompra +"");
                
             if (consulta.HasRows)
             {
-                int idCliente = new int();
-                if (consulta.Read()) { idCliente = consulta.GetInt32(consulta.GetOrdinal("id")); }
-                new seleccionarPasajesEncomiendas(idCliente).Show();
+                //int idCliente = new int();
+                //if (consulta.Read()) { idCliente = consulta.GetInt32(consulta.GetOrdinal("id")); }
+                new seleccionarPasajesEncomiendas(codigoDeCompra).Show();
                 this.Close();
             }
             else
             {
-                MessageBox.Show("El DNI ingresado es incorrecto");
+                MessageBox.Show("El codigo de compra ingresado no existe, vuelva a intentarlo");
             }
   
         }

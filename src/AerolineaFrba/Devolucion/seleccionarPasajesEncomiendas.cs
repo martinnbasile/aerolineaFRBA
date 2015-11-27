@@ -7,41 +7,52 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
+
 
 namespace AerolineaFrba.Devolucion
 {
     public partial class seleccionarPasajesEncomiendas : Form
     {
-        int idCliente;
-        public seleccionarPasajesEncomiendas(int unIdCliente)
+        int codigoDeCompra;
+        public seleccionarPasajesEncomiendas(int unCodigoDeCompra)
         {
             InitializeComponent();
-            idCliente = unIdCliente;
+            codigoDeCompra = unCodigoDeCompra;
         }
 
         private void seleccionarPasajesEncomiendas_Load(object sender, EventArgs e)
         {
-            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "exec MM.pasajesCliente @idCliente=" + idCliente + "");
-            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView2, "exec MM.paquetesCliente @idCliente=" + idCliente + "");
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "exec MM.vista_pasajes_cancelables @idCompra="+codigoDeCompra+"");
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView2, "exec MM.vista_paquetes_cancelables @idCompra="+codigoDeCompra+"");
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (estadoValido())
-            {           //@codigoCompra int,@butaca int, @motivo varchar
+            {
+                String motivo = textBox1.Text;
+                //ConexionALaBase.Conexion.ejecutarNonQuery("Begin transaction cancelacion");
+                //ConexionALaBase.Conexion.ejecutarNonQuery("set transaction isolation level serializable");
+                ConexionALaBase.Conexion.ejecutarNonQuery("mm.nuevaCancelacion @motivo='"+motivo+"',@codCompra="+codigoDeCompra+"");
+                SqlCommand comando = ConexionALaBase.Conexion.getComando();
+                comando.CommandText = "SELECT mm.ultimacancelacion()";
+                int codigoDeCancelacion = (Int32) comando.ExecuteScalar();
+                
                 foreach (DataGridViewRow row in dataGridView1.SelectedRows)
                 {
-                    int codigoDeCompraDePasaje = Convert.ToInt32(row.Cells["Codigo de compra"].Value.ToString());
-                    int numeroDeButaca = Convert.ToInt32(row.Cells["Numero de butaca"].Value.ToString());
-                    String motivo = textBox1.Text;
-                    ConexionALaBase.Conexion.ejecutarNonQuery("exec MM.cancelarCompraPasaje @codigoCompra=" + codigoDeCompraDePasaje + ", @butaca=" + numeroDeButaca + ", @motivo='" + motivo + "'");              
+                    int codigoDePasaje = Convert.ToInt32(row.Cells["Codigo de pasaje"].Value.ToString());
+                    ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.cancelacionPasaje @codPasaje="+codigoDePasaje+",@codCancelacion="+codigoDeCancelacion+"");              
                 }
                 foreach (DataGridViewRow row in dataGridView2.SelectedRows)
                 {
-                    int codigoDeCompraDePaquete = Convert.ToInt32(row.Cells["Codigo de compra"].Value.ToString());
-                    String motivo = textBox1.Text;
-                    ConexionALaBase.Conexion.ejecutarNonQuery("exec MM.cancelarCompraPaquete @codigoCompra="+codigoDeCompraDePaquete+", @motivo='"+motivo+"'");
-                }          
+                    int codigoDePaquete = Convert.ToInt32(row.Cells["Codigo de paquete"].Value.ToString());
+                    ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.cancelacionPaquete @codPaquete="+codigoDePaquete+",@codCancelacion="+codigoDeCancelacion+"");
+                }
+               // ConexionALaBase.Conexion.ejecutarNonQuery("commit transaction cancelacion");
+                MessageBox.Show("Se han cancelado satisfactoriamente los pasajes y paquetes seleccionados");
+                new seleccionarPasajesEncomiendas(codigoDeCompra).Show();
+                this.Close();
            }          
         }
 
@@ -56,25 +67,13 @@ namespace AerolineaFrba.Devolucion
                 return false;
             }
 
-            if (seleccionoAlgunPasaje)
+            bool ingresoMotivoCancelacion = textBox1.Text.Length != 0;
+            if (!ingresoMotivoCancelacion)
             {
-                bool ingresoMotivoCancelacionPasajes = textBox1.Text.Length != 0;
-                if (!ingresoMotivoCancelacionPasajes)
-                {
-                    MessageBox.Show("Ingrese el motivo por el cual quiere cancelar los pasajes seleccionados");
-                    return false;
-                }
+                MessageBox.Show("Ingrese el motivo de la cancelacion");
+                return false;
             }
-            if (seleccionoAlgunPaquete)
-            {
-                bool ingresoMotivoCancelacionPaquetes = textBox2.Text.Length != 0;
-                if (!ingresoMotivoCancelacionPaquetes)
-                {
-                    MessageBox.Show("Ingrese el motivo por el cual quiere cancelar los paquetes seleccionados");
-                    return false;
-
-                }
-            }
+            
             return true;
         }
 
@@ -86,6 +85,17 @@ namespace AerolineaFrba.Devolucion
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new ingresarCodigoDeCompra().Show();
+            this.Close();
         }
     }
 }

@@ -56,7 +56,7 @@ namespace AerolineaFrba.Funcionalidades
                         this.Close();
                         break;
                     case "DEVOLUCIONES Y CANCELACIONES":
-                        new Devolucion.elegirCliente().Show();
+                        new Devolucion.ingresarCodigoDeCompra().Show();
                         this.Close();
                        break;
                     case "GENERAR VIAJE":

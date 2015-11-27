@@ -4,6 +4,8 @@ create schema MM
 go
 Create Procedure MM.limpiarBase as
 
+drop procedure mm.cancelacionPaquete
+drop procedure mm.cancelacionPasaje
 drop procedure mm.nuevaCancelacion
 drop function mm.ultimacancelacion
 drop procedure mm.crearAeronave
@@ -74,12 +76,17 @@ drop function mm.aeronavesDisponibles
 drop procedure mm.limpiarBase
 DROP FUNCTION MM.BUTACASDISPONIBLES
 DROP FUNCTION MM.VIAJESDISPONIBLES
+drop function MM.paquetesCancelables
+drop function MM.pasajesCancelables
+drop procedure MM.cancelacionPaquete
+drop procedure MM.cancelacionPasaje
 drop procedure mm.ingresarCompraPaquete
 drop procedure mm.ingresarCompraPasaje
 drop procedure MM.pasajesCliente
 drop procedure MM.paquetesCliente
+drop procedure MM.vista_paquetes_cancelables
+drop procedure MM.vista_pasajes_cancelables
 drop schema MM
-
 
 go
 create Table MM.Ciudades(
@@ -1186,11 +1193,12 @@ end
 insert into @table  
 
 select top 5 e.Descripcion
-from MM.Cancelaciones a,MM.Pasajes b, MM.Viajes c, MM.Rutas_Aereas d, MM.Ciudades e
-where	a.Codigo_Pasaje=b.Id and
+from MM.Pasajes b, MM.Viajes c, MM.Rutas_Aereas d, MM.Ciudades e
+where	
 		b.Viaje=c.Id and
 		c.Ruta=d.Id and
-		d.Ciudad_Destino=e.Id 
+		d.Ciudad_Destino=e.Id
+		and b.cod_cancelacion is not null 
 		and c.Fecha_salida 
 between @anio+@desde and @anio+@hasta 
 group by e.Descripcion 
@@ -1332,13 +1340,13 @@ as
 begin
 declare @salida datetime
 declare @llegada datetime
-set @llegada=convert(date,@fechaLlegada,20)
-set @salida=convert(date,@fechaSalida,20)
+set @llegada=convert(datetime,@fechaLlegada,20)
+set @salida=convert(datetime,@fechaSalida,20)
 declare @kg int
 declare @but int
 select @but=count(*),@kg=mo.Kg from mm.aeronaves a join mm.modeloAvion mo on mo.id=a.modelo and a.matricula=@matricula join mm.Butacas_Avion b on b.modeloAvion=mo.id
 group by mo.Kg
-insert into mm.Viajes(Matricula,Ruta,Fecha_salida,Fecha_llegada,KgDisponibles,ButacasDisponibles) values (@matricula,@ruta,@salida,@llegada,@kg,@but)
+insert into mm.Viajes(Matricula,Ruta,Fecha_salida,Fecha_Estimada_llegada,KgDisponibles,ButacasDisponibles) values (@matricula,@ruta,@salida,@llegada,@kg,@but)
 declare @a int
 select @a=max(Id) from mm.Viajes
 insert into mm.Butacas (Viaje,Nro,Ubicacion,Estado)
@@ -1355,13 +1363,13 @@ begin
 
 declare @salida datetime
 declare @llegada datetime
-set @llegada=convert(date,@fechaLlegada,20)
-set @salida=convert(date,@fechaSalida,20)
+set @llegada=convert(datetime,@fechaLlegada,20)
+set @salida=convert(datetime,@fechaSalida,20)
 
 insert into @tabla
-select a.matricula  from mm.aeronaves a join mm.Viajes v on v.Matricula=a.matricula join modeloAvion m on m.id=a.modelo join mm.Tipos_Servicio t on t.Id=m.tipoServicio
-where t.Descripcion=@TipoServicio and not((v.Fecha_llegada between @salida and @llegada  ) or (v.Fecha_salida between @salida and @llegada  ) )
-and a.fecha_baja_definitiva is not null
+select a.matricula  from mm.aeronaves a left join mm.Viajes v on v.Matricula=a.matricula join mm.modeloAvion m on m.id=a.modelo join mm.Tipos_Servicio t on t.Id=m.tipoServicio
+where t.Descripcion=@TipoServicio and (not((v.Fecha_Estimada_llegada between @salida and @llegada  ) or (v.Fecha_salida between @salida and @llegada  ) ) or v.Id is null)
+and (a.fecha_baja_definitiva >@llegada or a.fecha_baja_definitiva is null)
 group by a.Matricula
 
 return 
@@ -1496,45 +1504,44 @@ create procedure mm.nuevaCompra as
 insert into mm.compras(fecha) values(mm.fechaDeHoy())
 
 go
-/*
 
-create PROCEDURE MM.pasajesCliente @idCliente int
+
+create procedure MM.vista_pasajes_cancelables (@idCompra int)
 AS
 BEGIN TRAN
-select pas.cod_compra as 'Codigo de compra', pas.Fecha_Compra as 'Fecha de compra',
-ra.Precio_Base as 'Precio',ra.Ciudad_Origen as 'Origen',ra.Ciudad_Destino as 'Destino',
-v.Fecha_salida as 'Fecha salida',v.Fecha_llegada as 'Fecha llegada',pas.Numero_Butaca as 'Numero de butaca',
+select 
+pc.cod_pasaje as 'Codigo de pasaje', ra.Precio_Base as 'Precio',c1.Descripcion as 'Origen',c2.Descripcion as 'Destino',
+v.Fecha_salida as 'Fecha salida',v.Fecha_llegada as 'Fecha llegada',pc.butaca_nro as 'Numero de butaca',
 ts.Descripcion as 'Tipo de servicio',ba.butacaTipo as 'Tipo de Asiento'
-from MM.Pasajes pas 
-join MM.Viajes v on pas.Viaje=v.Id 
+from MM.pasajesCancelables(@idCompra) pc
+join MM.Viajes v on pc.Viaje=v.Id 
 join MM.Rutas_Aereas ra on v.Ruta=ra.Id
-join MM.Butacas bu on bu.Nro=pas.Numero_Butaca
+join MM.Butacas bu on bu.Nro=pc.butaca_nro
 join MM.Butacas_Avion ba on bu.Nro=ba.butacaNum 
 join MM.Tipos_Servicio ts on ra.Tipo_Servicio=ts.Id
-where cliente=@idCliente
-and v.Fecha_salida>MM.fechaDeHoy()
-and pas.Id not in (select Codigo_Pasaje from MM.Cancelaciones)
+join MM.Ciudades c1 on ra.Ciudad_Origen=c1.Id
+join MM.Ciudades c2 on ra.Ciudad_Destino=c2.Id
 COMMIT TRAN
 
 go
 
-CREATE PROCEDURE MM.paquetesCliente @idCliente int
+create PROCEDURE MM.vista_paquetes_cancelables @idCompra int
 AS
 BEGIN TRAN
-select paq.cod_compra as 'Codigo de compra', paq.Fecha_Compra as 'Fecha de compra',paq.Kg as 'Kilogramos',
-ra.Precio_Kg 'Precio por Kg', paq.Kg * ra.Precio_Kg as 'Precio total' ,
-ra.Ciudad_Origen as 'Origen',ra.Ciudad_Destino as 'Destino',
+select
+pc.cod_paquete as 'Codigo de paquete',pc.Kg as 'Kilogramos',ra.Precio_Kg 'Precio por Kg', pc.kg * ra.Precio_Kg as 'Precio total' ,
+c1.Descripcion as 'Origen',c2.Descripcion as 'Destino',
 v.Fecha_salida as 'Fecha salida',v.Fecha_llegada as 'Fecha llegada'
-from MM.Paquetes paq 
-join MM.Viajes v on paq.Viaje=v.Id 
+from MM.paquetesCancelables(@idCompra) pc
+join MM.Viajes v on pc.Viaje=v.Id 
 join MM.Rutas_Aereas ra on v.Ruta=ra.Id 
-where cliente=@idCliente
-and v.Fecha_salida>MM.fechaDeHoy()
-and paq.Id not in (select Codigo_Encomienda from MM.Cancelaciones)
+join MM.Ciudades c1 on ra.Ciudad_Origen=c1.Id
+join MM.Ciudades c2 on ra.Ciudad_Destino=c2.Id
 COMMIT TRAN
 
 go
 
+/*
 
 CREATE procedure MM.cancelarCompraPasaje @codigoCompra int,@butaca int, @motivo varchar
 AS
@@ -1586,7 +1593,6 @@ return
 end
 
 go
-
 create function mm.pasajesCancelables (@codCompra int)
 returns @mitabla table(
 cod_pasaje int,
@@ -1613,6 +1619,7 @@ where Id=@codPaquete
 update mm.Viajes set kgDisponibles=kgDisponibles+@kg where Id=@viaje
 go
 
+
 create procedure mm.cancelacionPasaje @codPasaje int,@codCancelacion int
 as
 declare @viaje int
@@ -1626,4 +1633,27 @@ where Id=@viaje
 update mm.Butacas
 set Estado='Libre'
 where Viaje=@viaje and Nro=@num
+go
+
+
+create  trigger noPuedeHaber2PasajesAlMismoTiempo on mm.Pasajes
+for insert
+as
+begin transaction
+if(exists(select v1.Id 
+from mm.Pasajes as p1 
+ 
+join mm.Viajes v1 on p1.viaje=v1.Id 
+join mm.Pasajes p2 on p2.cliente=p1.Cliente  
+join mm.viajes as v2 on v2.Id=p2.viaje 
+and
+(v1.Fecha_salida between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v1.Fecha_Estimada_llegada between v2.Fecha_salida and v2.Fecha_Estimada_llegada)
+))
+begin 
+	raiserror ('Un Pasajero no puede estar haciendo 2 viajes a la vez',16,150)
+	rollback
+end
+
+commit
+
 go
