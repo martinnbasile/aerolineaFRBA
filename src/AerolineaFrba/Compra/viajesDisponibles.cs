@@ -41,11 +41,21 @@ namespace AerolineaFrba.Compra
 
         private bool validarTodo()
         {
-            if (true)//Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija una fila"))
+            
+            DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
+            if (Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija una fila"))
             {
                 if (numericUpDown2.Value != 0 || numericUpDown1.Value != 0)
                 {
-                    return true;
+                    if (numericUpDown1.Value < int.Parse(viajeSeleccionado.Cells["butacasLibres"].Value.ToString()))
+                    {
+                        if (numericUpDown2.Value < int.Parse(viajeSeleccionado.Cells["kgLibres"].Value.ToString()))
+                        {
+                            return true;
+                        }
+                        else MessageBox.Show("No hay espacio suficiente para su encomienda en el viaje");
+                    }
+                    else MessageBox.Show("No hay suficientes butacas en el viaje");
                 }
                 else MessageBox.Show("Ingresa cantidad de pasajes o Kgs de encomienda");
               }
@@ -58,8 +68,8 @@ namespace AerolineaFrba.Compra
                 
                 unaCompra.cantidadPasajes = int.Parse(numericUpDown1.Value.ToString());
                 unaCompra.cantidadKgs = int.Parse(numericUpDown2.Value.ToString());
-                //DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
-                unaCompra.idViaje = 1;// int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString());
+                DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
+                int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString());
 
                 MessageBox.Show("A continuación, ingrese los datos de los pasajeros");
                 new DNI(unaCompra,"").Show();
