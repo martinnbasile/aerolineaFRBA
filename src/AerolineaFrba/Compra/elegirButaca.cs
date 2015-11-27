@@ -13,10 +13,12 @@ namespace AerolineaFrba.Compra
     public partial class elegirButaca : Form
     {
         LaCompra unaCompra;
-        public elegirButaca(LaCompra compraRecibida)
+        Pasajero unPasajero;
+        public elegirButaca(LaCompra compraRecibida,Pasajero pasajeroRecibido)
         {
             InitializeComponent();
             unaCompra = compraRecibida;
+            unPasajero = pasajeroRecibido;
         }
 
         private void elegirButaca_Load(object sender, EventArgs e)
@@ -26,34 +28,33 @@ namespace AerolineaFrba.Compra
             button2.Text = "Cancelar";
         }
 
-        private bool validarSeleccionDeButacas()
+        private bool validarSeleccionDeButaca()
         {
-            if (false)//dataGridView1.SelectedRows.Count != unaCompra.cantidadPasajes)
+            if (Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija su butaca"))
             {
-                MessageBox.Show("Debe elegir "+unaCompra.cantidadPasajes+" pasajes");
-                return false;
+                return true;
             }
-            return true;
-            
+            return false;
         }
 
         private void button2_Click(object sender, EventArgs e)
-        {
+        {//CANCELAR
+            ConexionALaBase.Conexion.ejecutarNonQuery("Rollback transaction compra");
             new compra().Show();
             this.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {//CONFIRMA
-            if (this.validarSeleccionDeButacas())
+            if (this.validarSeleccionDeButaca())
             {
-                for (int contador = 1; contador <= unaCompra.cantidadPasajes; contador++)
-                {
-                    // mandandole a la base el id de la butaca
-                }
-
-                new seleccionarMedioPago(unaCompra).Show();
-                this.Close();
+                //ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.ingresarCompraPasaje codigoViaje, dni, codigoCompra");
+                // mandandole a la base el id de la butaca
+                //TMB TENGO QUE MANDARLE EL PASAJERO
+                //MANDARLE A LaCompra que se ingreso un pasajero, alla se decide si quedan mas o si hay que pagar
+                //unaCompra.seIngresoUnCliente
+                //new seleccionarMedioPago(unaCompra).Show();   --> SE QUEDA?
+                //this.Close();  ---> SE QUEDA?
             }
         }
     }

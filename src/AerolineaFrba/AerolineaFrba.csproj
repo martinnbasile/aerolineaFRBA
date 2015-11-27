@@ -233,6 +233,7 @@
       <DependentUpon>ingresarDatosTC.cs</DependentUpon>
     </Compile>
     <Compile Include="Compra\LaCompra.cs" />
+    <Compile Include="Compra\Pasajero.cs" />
     <Compile Include="Compra\seleccionarMedioPago.cs">
       <SubType>Form</SubType>
     </Compile>

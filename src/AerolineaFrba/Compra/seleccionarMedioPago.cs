@@ -45,7 +45,7 @@ namespace AerolineaFrba.Compra
                 
                 MessageBox.Show("A continuación, ingrese los datos de la persona que abona");
                 
-                new DNI(unaCompra,comboBox1.Text).Show();
+                //new DNI(unaCompra,comboBox1.Text).Show();
                 this.Close();
             }
 

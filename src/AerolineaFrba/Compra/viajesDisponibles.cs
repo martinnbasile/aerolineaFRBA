@@ -12,30 +12,22 @@ namespace AerolineaFrba.Compra
 {
     public partial class viajesDisponibles : Form
     {
-        String origenRecibido;
-        String destinoRecibido;
-        String fechaRecibida;
+        LaCompra unaCompra;
 
-        LaCompra unaCompra = new LaCompra();
-        int cantidadPasajes;
-
-        public viajesDisponibles(String origen, String destino, String fecha)
+        public viajesDisponibles(LaCompra compraRecibida)
         {
             InitializeComponent();
-            origenRecibido = origen;
-            destinoRecibido = destino;
-            fechaRecibida = fecha;
+            unaCompra = compraRecibida;
             label1.Text = "Viajes disponibles:";
             label2.Text = "Cantidad pasajes";
             label3.Text = "Kilos de encomienda";
             button1.Text = "Siguiente";
             button2.Text = "Volver";
-            
         }
 
         private void viajesDisponibles_Load(object sender, EventArgs e)
         {
-           ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1,"select * from mm.viajesDisponibles('"+fechaRecibida+"','"+origenRecibido+"','"+destinoRecibido+"')");
+           ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1,"select * from mm.viajesDisponibles('"+unaCompra.fechaSalida+"','"+unaCompra.origen+"','"+unaCompra.destino+"')");
         }
 
 
@@ -43,7 +35,7 @@ namespace AerolineaFrba.Compra
         {
             
             DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
-            if (Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija una fila"))
+            if (true)//Validaciones.Validaciones.validarDataGridView(dataGridView1,"Elija una fila"))
             {
                 if (numericUpDown2.Value != 0 || numericUpDown1.Value != 0)
                 {
@@ -65,14 +57,13 @@ namespace AerolineaFrba.Compra
         {
             if (this.validarTodo())
             {
-                
                 unaCompra.cantidadPasajes = int.Parse(numericUpDown1.Value.ToString());
                 unaCompra.cantidadKgs = int.Parse(numericUpDown2.Value.ToString());
                 DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
-                int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString());
-
+                unaCompra.idViaje = 1;// int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString());
                 MessageBox.Show("A continuación, ingrese los datos de los pasajeros");
-                new DNI(unaCompra,"").Show();
+                unaCompra.instanciaDeCompra = "Pasajeros";
+                new DNI(unaCompra).Show();
                 this.Close();
             }
 
