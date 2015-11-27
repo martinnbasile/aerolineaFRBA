@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace AerolineaFrba.Compra
 {
     public class LaCompra
     {
+        public SqlCommand comandoT;
         public string instanciaDeCompra;
         public string origen;
         public string destino;
@@ -18,22 +20,32 @@ namespace AerolineaFrba.Compra
         public int cantidadKgs;
         public int dniCliente;
         private int pasajesProcesados = 0;
-        private int sumaPrecio;
+        private float precioTotal;
 
          public LaCompra()
          {
-            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase(
-                "select precio_kg from mm.viajes V JOIN mm.rutas_aereas r on v.ruta=r.id"+
-                "where v.id="+idViaje);
-            int precioBaseEncomienda = reader.GetInt32(0);
-            reader.Dispose();
-            reader = ConexionALaBase.Conexion.consultarBase(
-                "select precio_base from mm.viajes V JOIN mm.rutas_aereas r on v.ruta=r.id"+
-                            "where v.id=" + idViaje);
-            int precioPasaje = reader.GetInt32(0);
-            sumaPrecio = precioBaseEncomienda * cantidadKgs+precioPasaje*cantidadPasajes;
+            
          }
-        
+
+         public void viajeElegido(int viajeElegido)
+         {
+             idViaje = viajeElegido;
+             System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase(
+                "select precio_kg from mm.viajes v JOIN mm.rutas_aereas r on v.ruta=r.id where v.id=" + idViaje);
+             reader.Read();
+             float precioBaseEncomienda = float.Parse(reader.GetSqlValue(0).ToString());
+             reader.Dispose();
+             reader = ConexionALaBase.Conexion.consultarBase(
+                 "select precio_base from mm.viajes v JOIN mm.rutas_aereas r on v.ruta=r.id where v.id=" + idViaje);
+             reader.Read();
+             float precioPasaje = float.Parse(reader.GetSqlValue(0).ToString());
+             precioTotal = precioBaseEncomienda * cantidadKgs + precioPasaje * cantidadPasajes;
+         }
+
+         public float totalPasaje()
+         {
+             return precioTotal;
+         }
         
         public void seProcesoUnPasaje()
         {
@@ -46,6 +58,19 @@ namespace AerolineaFrba.Compra
             { //YA HAY QUE PAGAR
                 new seleccionarMedioPago(this).Show();
             }
+        }
+
+        public void iniciarProcesamiento()
+        {
+            if (pasajesProcesados < cantidadPasajes)
+            {
+                new DNI(this).Show();
+            }
+            else //YA HAY QUE PAGAR 
+            {
+                new seleccionarMedioPago(this).Show();
+            }
+
         }
     }
 
