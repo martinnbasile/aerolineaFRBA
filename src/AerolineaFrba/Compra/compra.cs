@@ -12,12 +12,18 @@ namespace AerolineaFrba.Compra
 {
     public partial class compra : Form
     {
+        LaCompra nuevaCompra = new LaCompra();
+                
         public compra()
         {
             InitializeComponent();
             ConexionALaBase.Conexion.ejecutarNonQuery("Begin transaction compra");
             ConexionALaBase.Conexion.ejecutarNonQuery("set transaction isolation level serializable");
-
+            ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.nuevaCompra");
+            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("select * from mm.ultimaCompra");
+            if (reader.Read()){
+                nuevaCompra.codigoCompra = reader.GetInt32(0);
+            }
         }
 
         private void compra_Load(object sender, EventArgs e)
@@ -76,14 +82,12 @@ namespace AerolineaFrba.Compra
         {
             if (this.validarTodo())
             {
-                String origen = comboBox1.Text;  //primitive obsesion, where?
-                String destino = comboBox2.Text;
-                String fechaSalida = textBox1.Text;
-                new viajesDisponibles(origen,destino,fechaSalida).Show();
+                nuevaCompra.origen= comboBox1.Text;  //primitive obsesion, where?
+                nuevaCompra.destino = comboBox2.Text;
+                nuevaCompra.fechaSalida = textBox1.Text;
+                new viajesDisponibles(nuevaCompra).Show();
                 this.Close();
             }
         }
-
-
     }
 }
