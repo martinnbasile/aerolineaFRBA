@@ -287,6 +287,7 @@ Codigo_Pasaje int,
 Codigo_Encomienda int,
 Fecha smalldatetime not null,
 Motivo varchar(200))
+
 go
 alter table MM.Cancelaciones
 add constraint Pasaje foreign key (Codigo_Pasaje) references MM.Pasajes(Id)
@@ -955,11 +956,11 @@ create procedure MM.asentarMillas @viaje int
 as
 begin transaction
 insert into MM.Millas(Cliente,Millas,Fecha_movimiento,Descripcion)
-select Cliente,r.Precio_Base/10,MM.fechaDeHoy(),'COMPRA PASAJE' from MM.Pasajes p join MM.Viajes v on v.Id=p.Viaje and v.Id=@viaje join MM.Rutas_Aereas r 
-on r.Id=v.Ruta
+select Cliente,r.Precio_Base/10,MM.fechaDeHoy(),'COMPRA PASAJE' from MM.Pasajes pas join MM.Viajes v on v.Id=pas.Viaje and v.Id=@viaje join MM.Rutas_Aereas r 
+on r.Id=v.Ruta where pas.Id not in (select Codigo_Pasaje from MM.Cancelaciones)
 union
-select p.Cliente,(p.Kg*r.Precio_Kg)/10,MM.fechaDeHoy(),'COMPRA PAQUETE' from MM.Paquetes p join MM.Viajes v on v.Id=p.Viaje and v.Id=@viaje join MM.Rutas_Aereas 
-r on r.Id=v.Ruta 
+select paq.Cliente,(paq.Kg*r.Precio_Kg)/10,MM.fechaDeHoy(),'COMPRA PAQUETE' from MM.Paquetes paq join MM.Viajes v on v.Id=paq.Viaje and v.Id=@viaje join MM.Rutas_Aereas 
+r on r.Id=v.Ruta where paq.Id not in (select Codigo_Encomienda from MM.Cancelaciones) 
 
 
 commit
@@ -1489,11 +1490,13 @@ insert into mm.compras(cliente) values(null)
 go
 
 
-CREATE PROCEDURE MM.pasajesCliente @idCliente int
+create PROCEDURE MM.pasajesCliente @idCliente int
 AS
 BEGIN TRAN
-select pas.Fecha_Compra as 'Fecha de compra',ra.Precio_Base as 'Precio',ra.Ciudad_Origen as 'Origen',ra.Ciudad_Destino as 'Destino',
-v.Fecha_salida as 'Fecha salida',v.Fecha_llegada as 'Fecha llegada',ts.Descripcion as 'Tipo de servicio',ba.butacaTipo as 'Tipo de Asiento'
+select pas.cod_compra as 'Codigo de compra', pas.Fecha_Compra as 'Fecha de compra',
+ra.Precio_Base as 'Precio',ra.Ciudad_Origen as 'Origen',ra.Ciudad_Destino as 'Destino',
+v.Fecha_salida as 'Fecha salida',v.Fecha_llegada as 'Fecha llegada',pas.Numero_Butaca as 'Numero de butaca',
+ts.Descripcion as 'Tipo de servicio',ba.butacaTipo as 'Tipo de Asiento'
 from MM.Pasajes pas 
 join MM.Viajes v on pas.Viaje=v.Id 
 join MM.Rutas_Aereas ra on v.Ruta=ra.Id
@@ -1502,6 +1505,7 @@ join MM.Butacas_Avion ba on bu.Nro=ba.butacaNum
 join MM.Tipos_Servicio ts on ra.Tipo_Servicio=ts.Id
 where cliente=@idCliente
 and v.Fecha_salida>MM.fechaDeHoy()
+and pas.Id not in (select Codigo_Pasaje from MM.Cancelaciones)
 COMMIT TRAN
 
 go
@@ -1509,16 +1513,38 @@ go
 CREATE PROCEDURE MM.paquetesCliente @idCliente int
 AS
 BEGIN TRAN
-select paq.Fecha_Compra as 'Fecha de compra',paq.Kg as 'Kilogramos',ra.Precio_Kg 'Precio por Kg',
-paq.Kg * ra.Precio_Kg as 'Precio total' ,ra.Ciudad_Origen as 'Origen',ra.Ciudad_Destino as 'Destino',
+select paq.cod_compra as 'Codigo de compra', paq.Fecha_Compra as 'Fecha de compra',paq.Kg as 'Kilogramos',
+ra.Precio_Kg 'Precio por Kg', paq.Kg * ra.Precio_Kg as 'Precio total' ,
+ra.Ciudad_Origen as 'Origen',ra.Ciudad_Destino as 'Destino',
 v.Fecha_salida as 'Fecha salida',v.Fecha_llegada as 'Fecha llegada'
 from MM.Paquetes paq 
 join MM.Viajes v on paq.Viaje=v.Id 
 join MM.Rutas_Aereas ra on v.Ruta=ra.Id 
 where cliente=@idCliente
 and v.Fecha_salida>MM.fechaDeHoy()
+and paq.Id not in (select Codigo_Encomienda from MM.Cancelaciones)
 COMMIT TRAN
 
 go
 
+
+CREATE procedure MM.cancelarCompraPasaje @codigoCompra int,@butaca int, @motivo varchar
+AS
+BEGIN TRANSACTION
+	DECLARE @idPasaje int		
+	SELECT @idPasaje = id from MM.pasajes p where p.cod_compra=@codigoCompra and p.Numero_Butaca=@butaca
+	INSERT INTO MM.Cancelaciones (Codigo_Pasaje,Fecha,Motivo) values (@idPasaje,MM.fechaDeHoy(),@motivo)
+COMMIT TRANSACTION
+
+go
+
+CREATE procedure MM.cancelarCompraPaquete @codigoCompra int, @motivo varchar
+AS
+BEGIN TRANSACTION
+	DECLARE @idPaquete int		
+	SELECT @idPaquete = id from MM.Paquetes p where p.cod_compra=@codigoCompra 
+	INSERT INTO MM.Cancelaciones (Codigo_Encomienda,Fecha,Motivo) values (@idPaquete,MM.fechaDeHoy(),@motivo)
+COMMIT TRANSACTION
+
+go
 

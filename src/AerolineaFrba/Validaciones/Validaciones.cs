@@ -82,6 +82,15 @@ namespace AerolineaFrba.Validaciones
             }
             return true;
         }
+        public static bool validarDataGridViewSeleccionMultiple(DataGridView unDataGridView, String unMensajeDeAlerta)
+        {
+            if (unDataGridView.SelectedRows.Count == 0)
+            {
+                MessageBox.Show(unMensajeDeAlerta);
+                return false;
+            }
+            return true;
+        }
         public static bool validarNumericUpDown(NumericUpDown unNumericUpDown, String unMensajeDeAlerta)
         {
             

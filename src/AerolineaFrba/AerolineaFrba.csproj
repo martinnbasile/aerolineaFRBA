@@ -253,6 +253,12 @@
     <Compile Include="Devolucion\elegirCliente.Designer.cs">
       <DependentUpon>elegirCliente.cs</DependentUpon>
     </Compile>
+    <Compile Include="Devolucion\seleccionarPasajesEncomiendas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Devolucion\seleccionarPasajesEncomiendas.Designer.cs">
+      <DependentUpon>seleccionarPasajesEncomiendas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -443,6 +449,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Devolucion\elegirCliente.resx">
       <DependentUpon>elegirCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devolucion\seleccionarPasajesEncomiendas.resx">
+      <DependentUpon>seleccionarPasajesEncomiendas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Funcionalidades\Funcionalidades.resx">
       <DependentUpon>Funcionalidades.cs</DependentUpon>
