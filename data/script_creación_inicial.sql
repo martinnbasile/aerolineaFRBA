@@ -1335,13 +1335,13 @@ as
 begin
 declare @salida datetime
 declare @llegada datetime
-set @llegada=convert(date,@fechaLlegada,20)
-set @salida=convert(date,@fechaSalida,20)
+set @llegada=convert(datetime,@fechaLlegada,20)
+set @salida=convert(datetime,@fechaSalida,20)
 declare @kg int
 declare @but int
 select @but=count(*),@kg=mo.Kg from mm.aeronaves a join mm.modeloAvion mo on mo.id=a.modelo and a.matricula=@matricula join mm.Butacas_Avion b on b.modeloAvion=mo.id
 group by mo.Kg
-insert into mm.Viajes(Matricula,Ruta,Fecha_salida,Fecha_llegada,KgDisponibles,ButacasDisponibles) values (@matricula,@ruta,@salida,@llegada,@kg,@but)
+insert into mm.Viajes(Matricula,Ruta,Fecha_salida,Fecha_Estimada_llegada,KgDisponibles,ButacasDisponibles) values (@matricula,@ruta,@salida,@llegada,@kg,@but)
 declare @a int
 select @a=max(Id) from mm.Viajes
 insert into mm.Butacas (Viaje,Nro,Ubicacion,Estado)
@@ -1358,8 +1358,8 @@ begin
 
 declare @salida datetime
 declare @llegada datetime
-set @llegada=convert(date,@fechaLlegada,20)
-set @salida=convert(date,@fechaSalida,20)
+set @llegada=convert(datetime,@fechaLlegada,20)
+set @salida=convert(datetime,@fechaSalida,20)
 
 insert into @tabla
 select a.matricula  from mm.aeronaves a left join mm.Viajes v on v.Matricula=a.matricula join mm.modeloAvion m on m.id=a.modelo join mm.Tipos_Servicio t on t.Id=m.tipoServicio
