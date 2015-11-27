@@ -4,6 +4,8 @@ create schema MM
 go
 Create Procedure MM.limpiarBase as
 
+drop procedure mm.cancelacionPaquete
+drop procedure mm.cancelacionPasaje
 drop procedure mm.nuevaCancelacion
 drop function mm.ultimacancelacion
 drop procedure mm.crearAeronave
@@ -1186,11 +1188,12 @@ end
 insert into @table  
 
 select top 5 e.Descripcion
-from MM.Cancelaciones a,MM.Pasajes b, MM.Viajes c, MM.Rutas_Aereas d, MM.Ciudades e
-where	a.Codigo_Pasaje=b.Id and
+from MM.Pasajes b, MM.Viajes c, MM.Rutas_Aereas d, MM.Ciudades e
+where	
 		b.Viaje=c.Id and
 		c.Ruta=d.Id and
-		d.Ciudad_Destino=e.Id 
+		d.Ciudad_Destino=e.Id
+		and b.cod_cancelacion is not null 
 		and c.Fecha_salida 
 between @anio+@desde and @anio+@hasta 
 group by e.Descripcion 
@@ -1586,7 +1589,6 @@ return
 end
 
 go
-
 create function mm.pasajesCancelables (@codCompra int)
 returns @mitabla table(
 cod_pasaje int,
@@ -1613,6 +1615,7 @@ where Id=@codPaquete
 update mm.Viajes set kgDisponibles=kgDisponibles+@kg where Id=@viaje
 go
 
+
 create procedure mm.cancelacionPasaje @codPasaje int,@codCancelacion int
 as
 declare @viaje int
@@ -1626,4 +1629,27 @@ where Id=@viaje
 update mm.Butacas
 set Estado='Libre'
 where Viaje=@viaje and Nro=@num
+go
+
+
+create  trigger noPuedeHaber2PasajesAlMismoTiempo on mm.Pasajes
+for insert
+as
+begin transaction
+if(exists(select v1.Id 
+from mm.Pasajes as p1 
+ 
+join mm.Viajes v1 on p1.viaje=v1.Id 
+join mm.Pasajes p2 on p2.cliente=p1.Cliente  
+join mm.viajes as v2 on v2.Id=p2.viaje 
+and
+(v1.Fecha_salida between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v1.Fecha_Estimada_llegada between v2.Fecha_salida and v2.Fecha_Estimada_llegada)
+))
+begin 
+	raiserror ('Un Pasajero no puede estar haciendo 2 viajes a la vez',16,150)
+	rollback
+end
+
+commit
+
 go
