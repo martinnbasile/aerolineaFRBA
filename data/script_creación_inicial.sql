@@ -1362,9 +1362,9 @@ set @llegada=convert(date,@fechaLlegada,20)
 set @salida=convert(date,@fechaSalida,20)
 
 insert into @tabla
-select a.matricula  from mm.aeronaves a join mm.Viajes v on v.Matricula=a.matricula join modeloAvion m on m.id=a.modelo join mm.Tipos_Servicio t on t.Id=m.tipoServicio
-where t.Descripcion=@TipoServicio and not((v.Fecha_llegada between @salida and @llegada  ) or (v.Fecha_salida between @salida and @llegada  ) )
-and a.fecha_baja_definitiva is not null
+select a.matricula  from mm.aeronaves a left join mm.Viajes v on v.Matricula=a.matricula join mm.modeloAvion m on m.id=a.modelo join mm.Tipos_Servicio t on t.Id=m.tipoServicio
+where t.Descripcion=@TipoServicio and (not((v.Fecha_Estimada_llegada between @salida and @llegada  ) or (v.Fecha_salida between @salida and @llegada  ) ) or v.Id is null)
+and (a.fecha_baja_definitiva >@llegada or a.fecha_baja_definitiva is null)
 group by a.Matricula
 
 return 
