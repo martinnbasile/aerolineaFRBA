@@ -115,14 +115,17 @@ namespace AerolineaFrba.Compra
                 {
                     if (laCompra.instanciaDeCompra == "Tarjeta de credito")
                     {
-                        new ingresarDatosTC(laCompra).Show();
+                        new ingresarDatosTC(laCompra,elPasajero).Show();
                         this.Close();
                     }
                     else
-                    {//SE PAGO EN EFECTIVO ==> ASENTAR CON COMMIT
+                    {
+                        
+                        ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.ingresarCompraPaquete "+ laCompra.idViaje+", "+ elPasajero.dni +", "+ laCompra.cantidadKgs +" , "+ laCompra.codigoCompra);
                         MessageBox.Show("Total: " + laCompra.totalPasaje());
                         MessageBox.Show("Operacion exitosa. Codigo de compra: " + laCompra.codigoCompra);
-                        ConexionALaBase.Conexion.ejecutarNonQuery("Commit transaction compra");
+                        laCompra.comandoT.CommandText="Commit transaction compra";
+                        laCompra.comandoT.ExecuteNonQuery();
                     }
                 }
        

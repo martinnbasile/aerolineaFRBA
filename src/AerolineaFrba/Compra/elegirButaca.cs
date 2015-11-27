@@ -39,7 +39,8 @@ namespace AerolineaFrba.Compra
 
         private void button2_Click(object sender, EventArgs e)
         {//CANCELAR
-            ConexionALaBase.Conexion.ejecutarNonQuery("Rollback transaction compra");
+            unaCompra.comandoT.CommandText="Rollback transaction compra";
+            unaCompra.comandoT.ExecuteNonQuery();
             new compra().Show();
             this.Close();
         }
@@ -48,13 +49,10 @@ namespace AerolineaFrba.Compra
         {//CONFIRMA
             if (this.validarSeleccionDeButaca())
             {
-                //ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.ingresarCompraPasaje codigoViaje, dni, codigoCompra");
-                // mandandole a la base el id de la butaca
-                //TMB TENGO QUE MANDARLE EL PASAJERO
-                //MANDARLE A LaCompra que se ingreso un pasajero, alla se decide si quedan mas o si hay que pagar
+                int butacaElegida = int.Parse(dataGridView1.SelectedRows[0].Cells["nroButaca"].ToString());
+                ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.ingresarCompraPasaje"+ unaCompra.idViaje +", "+unPasajero.dni+", "+ butacaElegida+", "+ unaCompra.codigoCompra);
                 unaCompra.seProcesoUnPasaje();
-                //new seleccionarMedioPago(unaCompra).Show();   --> SE QUEDA?
-                //this.Close();  ---> SE QUEDA?
+                this.Close(); 
             }
         }
     }
