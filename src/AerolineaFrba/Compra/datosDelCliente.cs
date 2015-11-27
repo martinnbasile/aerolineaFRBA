@@ -16,7 +16,9 @@ namespace AerolineaFrba.Compra
         bool estabaEnBase;
         LaCompra compraRecibida;
         String instanciaDeOperacion;
-        
+        DataTable dt = new DataTable();
+        DataRow filaCliente;
+                
         public datosDelCliente(LaCompra unaCompra,String instance)
         {
             InitializeComponent();
@@ -27,17 +29,17 @@ namespace AerolineaFrba.Compra
         private void datosDelCliente_Load(object sender, EventArgs e)
         
         {
-            DataTable dt = new DataTable();
+            
             textBox1.Text = compraRecibida.dniCliente.ToString() ;
             estabaEnBase = true;
             String consulta = "Select * from mm.clientes where DNI=" + compraRecibida.dniCliente;
             SqlCommand comando = new SqlCommand(consulta, ConexionALaBase.Conexion.conexxxxx);
             SqlDataAdapter adapter = new SqlDataAdapter(comando);
             adapter.Fill(dt);
+            filaCliente = dt.Rows[0];
                       
             try
             {
-                DataRow filaCliente = dt.Rows[0];
                 textBox2.Text = filaCliente["Nombre"].ToString();
                 textBox3.Text = filaCliente["Apellido"].ToString();
                 textBox4.Text = filaCliente["Direccion"].ToString();
@@ -84,18 +86,34 @@ namespace AerolineaFrba.Compra
 
         private void button1_Click(object sender, EventArgs e)
         {//NEXT
+            String fechaNac = ((DateTime)filaCliente["Fecha_Nacimiento"]).ToString("yyyy-MM-dd") ;
             if (this.validarTodo())
             {
                 if (estabaEnBase)
                 {
-                    MessageBox.Show("UPDATE");
+                        ConexionALaBase.Conexion.ejecutarNonQuery("Update mm.clientes" +
+                        "set Nombre='" + filaCliente["Nombre"].ToString() + "'" +
+                        "set Apellido='" + filaCliente["Apellido"].ToString() + "'" +
+                        "set direccion='" + filaCliente["Direccion"].ToString() + "'" +
+                        "set telefono='" + filaCliente["Telefono"].ToString() + "'" +
+                        "set mail='" + filaCliente["Mail"].ToString() + "'" +
+                        "set fecha_nacimiento='" + fechaNac + "'" +
+                        "where dni=" + compraRecibida.dniCliente + " and apellido='" + filaCliente["Apellido"].ToString() + "'");                                      
+                }
+                else
+                {
+                    ConexionALaBase.Conexion.ejecutarNonQuery("Insert into mm.clientes (DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_nacimiento)" +
+                        "values (" + compraRecibida.dniCliente + ",'" + filaCliente["Nombre"].ToString() + "','" +
+                        filaCliente["apellido"].ToString() + "','" + filaCliente["direccion"].ToString() + "','" +
+                        filaCliente["telefono"].ToString() + "','" + filaCliente["mail"].ToString() +
+                        "','" + fechaNac + "'");
 
                 }
-                else { MessageBox.Show("INSERT"); }
 
                 if (instanciaDeOperacion == "")
                 {
-                    compraRecibida.seIngresoUnCliente(compraRecibida); //PORQUE TE PIDE QUE INGRESES UN CLIENTE POR PASAJE
+                    compraRecibida.seIngresoUnCliente(compraRecibida); 
+                    //PORQUE TE PIDE QUE INGRESES UN CLIENTE POR PASAJE
                     this.Close();
                 }
                 else 
@@ -121,7 +139,8 @@ namespace AerolineaFrba.Compra
         }
 
         private void button3_Click(object sender, EventArgs e)
-        {
+        {//VOLVER
+            ConexionALaBase.Conexion.ejecutarNonQuery("Rollback transaction compra");
             new compra().Show();
             this.Close();
         }

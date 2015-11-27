@@ -15,6 +15,9 @@ namespace AerolineaFrba.Compra
         public compra()
         {
             InitializeComponent();
+            ConexionALaBase.Conexion.ejecutarNonQuery("Begin transaction compra");
+            ConexionALaBase.Conexion.ejecutarNonQuery("set transaction isolation level serializable");
+
         }
 
         private void compra_Load(object sender, EventArgs e)
@@ -49,6 +52,7 @@ namespace AerolineaFrba.Compra
 
         private void button2_Click(object sender, EventArgs e) //VOLVER
         {
+            ConexionALaBase.Conexion.ejecutarNonQuery("Rollback transaction compra");
             new Funcionalidades.Funcionalidades().Show();
             this.Close();
         }

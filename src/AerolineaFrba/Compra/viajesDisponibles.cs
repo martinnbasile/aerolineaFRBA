@@ -80,6 +80,7 @@ namespace AerolineaFrba.Compra
 
         private void button2_Click(object sender, EventArgs e)//VOLVER
         {
+            ConexionALaBase.Conexion.ejecutarNonQuery("Rollback transaction compra");
             new compra().Show();
             this.Close();
         }

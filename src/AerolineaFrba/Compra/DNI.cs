@@ -26,6 +26,7 @@ namespace AerolineaFrba.Compra
 
         private void button2_Click(object sender, EventArgs e)
         {//VOLVER
+            ConexionALaBase.Conexion.ejecutarNonQuery("Rollback transaction compra");
             new compra().Show();
             this.Close();
         }
@@ -34,9 +35,8 @@ namespace AerolineaFrba.Compra
         {//NEXT
             if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1,"Ingrese su DNI"))
             {
-               
                     compraRecibida.dniCliente = int.Parse(maskedTextBox1.Text);
-                    new datosDelCliente(compraRecibida,instanciaDeOperacion).Show(); ;
+                    new datosDelCliente(compraRecibida,instanciaDeOperacion).Show(); 
                     this.Close();
             }
             
