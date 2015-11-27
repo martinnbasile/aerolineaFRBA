@@ -301,12 +301,13 @@ mes_venc int
 
 )
 go
-create table mm.compras(
+create  table mm.compras(
 cod_compra int identity(1000000,1) primary key,
 cliente int foreign key references mm.clientes,
 fecha datetime,
+total float,
 medioPago varchar(10)
-
+ 
 
 
 )
@@ -1657,3 +1658,26 @@ end
 commit
 
 go
+
+
+create table pagos_TC(
+cod_compra int,
+cod_TC int
+
+)
+
+go
+
+
+create procedure mm.ingresarTC @nro numeric(18),@cod int,@anio int,@mes int
+as
+begin
+
+if(exists(select NRO_TC from mm.TC where NRO_TC=@nro))
+return
+else insert into mm.TC values(@nro,@cod,@anio,@mes)
+
+
+
+
+end
