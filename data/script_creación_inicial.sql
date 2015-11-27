@@ -4,13 +4,14 @@ create schema MM
 go
 Create Procedure MM.limpiarBase as
 
+drop procedure mm.nuevaCancelacion
+drop function mm.ultimacancelacion
 drop procedure mm.crearAeronave
 drop procedure mm.crearModeloAvion
 drop function mm.semestre
 drop function mm.maximosMilleros
 drop function mm.DestinosMasVendidosPasajes
 drop function mm.DestinosMasCancelados
-drop function mm.AeronavesMasDiasFueraServicio
 drop Procedure MM.CancelarAeronaveFueraDeServicio
 drop Procedure MM.BorrarCiudades
 drop view MM.rolPorUsuario
@@ -31,8 +32,7 @@ drop function MM.devuelveTipoServicio
 drop function MM.devuelveNumeroCliente
 drop function MM.convertirFecha
 drop Procedure MM.actualizarFecha
-drop Procedure MM.DestinosMasVendidosPasajes
-drop Procedure MM.AeronavesMasDiasFueraServicio
+drop function MM.AeronavesMasDiasFueraServicio
 drop Procedure MM.registrarCanje
 drop function MM.devuelveViaje3
 drop view MM.funcionalidadPorRol
@@ -69,9 +69,6 @@ drop table MM.logBajasAeronaves
 drop table MM.Butacas_Avion
 drop table MM.Aeronaves
 drop table MM.modeloAvion
-drop function MM.top5ClientesConMasMillas
-drop function MM.millasClienteEnUnPeriodo
-drop function MM.top5LugaresConMasPasajes
 drop procedure mm.generarViaje
 drop function mm.aeronavesDisponibles
 drop procedure mm.limpiarBase
@@ -227,7 +224,8 @@ Viaje int,
 Kg int not null,
 Fecha_Compra smalldatetime,
 Cliente int,
-cod_compra int)
+cod_compra int,
+cod_cancelacion int)
 go
 
 alter table MM.Paquetes
@@ -244,7 +242,8 @@ Viaje int,
 Numero_Butaca int not null,
 Fecha_Compra smalldatetime,
 Cliente int,
-cod_compra int)
+cod_compra int,
+cod_cancelacion int)
 go
 alter table MM.Pasajes
 add constraint Viaje3 foreign key (Viaje) references MM.Viajes(Id)
@@ -285,19 +284,34 @@ go
 alter table MM.Cambios_Millas
 add constraint Producto foreign key (Producto) references MM.Productos_Milla(Id)
 go
-create table MM.Cancelaciones(
-Id int identity(1,1) primary key,
-Codigo_Pasaje int,
-Codigo_Encomienda int,
-Fecha smalldatetime not null,
-Motivo varchar(200))
 
+create  table mm.TC(
+NRO_TC numeric(18) primary key,
+cod_seg int,
+anio_venc int,
+mes_venc int 
+
+
+)
 go
-alter table MM.Cancelaciones
-add constraint Pasaje foreign key (Codigo_Pasaje) references MM.Pasajes(Id)
+create table mm.compras(
+cod_compra int identity(1000000,1) primary key,
+cliente int foreign key references mm.clientes,
+fecha datetime,
+medioPago varchar(10)
+
+
+
+)
 go
-alter table MM.Cancelaciones
-add constraint Encomienda foreign key (Codigo_Encomienda) references MM.Paquetes(Id)
+create table MM.Cancelaciones(
+Cod_CAncelacion int identity(100000,1) primary key,
+
+Fecha smalldatetime not null,
+Motivo varchar(200),
+Cod_compra int foreign key references mm.compras
+)
+
 go
 create table MM.Tarjetas_Credito(
 Id int identity(1,1) primary key,
@@ -352,6 +366,8 @@ go
 insert into mm.Butacas_Avion (butacaNum,butacaPiso,butacaTipo,modeloAvion)
 select distinct  ma.Butaca_Nro,ma.Butaca_Piso,ma.Butaca_Tipo,mo.id
 from gd_esquema.Maestra ma join mm.modeloAvion mo on (ma.Aeronave_KG_Disponibles=mo.Kg and ma.Aeronave_Modelo=mo.Modelo_descripcion and ma.Butaca_Nro<>0) join mm.Fabricantes f on f.Id=mo.fabricante and f.Descripcion=ma.Aeronave_Fabricante join mm.Tipos_Servicio t on t.Id=mo.tipoServicio and t.Descripcion=ma.Tipo_Servicio
+
+
 go
 
 insert into MM.Aeronaves (matricula,fecha_alta,modelo)
@@ -961,10 +977,10 @@ as
 begin transaction
 insert into MM.Millas(Cliente,Millas,Fecha_movimiento,Descripcion)
 select Cliente,r.Precio_Base/10,MM.fechaDeHoy(),'COMPRA PASAJE' from MM.Pasajes pas join MM.Viajes v on v.Id=pas.Viaje and v.Id=@viaje join MM.Rutas_Aereas r 
-on r.Id=v.Ruta where pas.Id not in (select Codigo_Pasaje from MM.Cancelaciones)
+on r.Id=v.Ruta -- where pas.Id not in (select Codigo_Pasaje from MM.Cancelaciones)
 union
 select paq.Cliente,(paq.Kg*r.Precio_Kg)/10,MM.fechaDeHoy(),'COMPRA PAQUETE' from MM.Paquetes paq join MM.Viajes v on v.Id=paq.Viaje and v.Id=@viaje join MM.Rutas_Aereas 
-r on r.Id=v.Ruta where paq.Id not in (select Codigo_Encomienda from MM.Cancelaciones) 
+r on r.Id=v.Ruta --where paq.Id not in (select Codigo_Encomienda from MM.Cancelaciones) 
 
 
 commit
@@ -1458,25 +1474,6 @@ end
 
 go
 
-create  table mm.TC(
-NRO_TC numeric(18) primary key,
-cod_seg int,
-anio_venc int,
-mes_venc int 
-
-
-)
-go
-create table mm.compras(
-cod_compra int identity(1000000,1) primary key,
-cliente int foreign key references mm.clientes,
-medioPago varchar(10)
-
-
-
-)
-go
-
 create  function mm.ultimacompra() returns int
 as
 begin 
@@ -1487,12 +1484,12 @@ end
 
 go
 
-create procedure mm.nuevaCompra
+create procedure mm.nuevaCompra @cliente int
 as
-insert into mm.compras(cliente) values(null)
+insert into mm.compras(fecha,cliente) values(mm.fechaDeHoy(),@cliente)
 
 go
-
+/*
 
 create PROCEDURE MM.pasajesCliente @idCliente int
 AS
@@ -1541,7 +1538,6 @@ BEGIN TRANSACTION
 COMMIT TRANSACTION
 
 go
-
 CREATE procedure MM.cancelarCompraPaquete @codigoCompra int, @motivo varchar
 AS
 BEGIN TRANSACTION
@@ -1551,4 +1547,66 @@ BEGIN TRANSACTION
 COMMIT TRANSACTION
 
 go
+*/
+create  procedure mm.nuevaCancelacion @motivo varchar(200),@codCompra int
+as
+insert into mm.Cancelaciones(Motivo,Fecha,Cod_compra) values (@motivo,mm.fechaDeHoy(),@codCompra)
+go
 
+
+create  function mm.ultimacancelacion() returns int
+as
+begin 
+declare @a int
+select @a=max(Cod_CAncelacion) from mm.Cancelaciones
+return @a
+end
+
+go
+
+
+create function mm.paquetesCancelables (@codCompra int)
+returns @mitabla table(
+cod_paquete int,
+viaje int,
+kg int)
+as 
+begin
+insert into @mitabla
+select Id,viaje,kg from mm.paquetes
+where cod_compra=@codCompra and cod_cancelacion is null
+return 
+end
+
+go
+
+create function mm.pasajesCancelables (@codCompra int)
+returns @mitabla table(
+cod_pasaje int,
+viaje int,
+butaca_nro int)
+as 
+begin
+insert into @mitabla
+select Id,viaje,Numero_Butaca from mm.pasajes
+where cod_compra=@codCompra and cod_cancelacion is null
+return 
+end
+
+go
+
+create procedure mm.cancelacionPaquete @codPaquete int,@codCancelacion int
+as
+update mm.Paquetes
+set cod_cancelacion=@codCancelacion
+where Id=@codPaquete
+
+
+go
+
+create procedure mm.cancelacionPasaje @codPasaje int,@codCancelacion int
+as
+update mm.Pasajes
+set cod_cancelacion=@codCancelacion
+where Id=@codPasaje
+go
