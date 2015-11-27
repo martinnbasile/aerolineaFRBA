@@ -1446,17 +1446,25 @@ and (kgDisponibles>0 or butacasDisponibles>0)
  go
 
 
-create procedure mm.ingresarCompraPasaje @viaje int,@cliente int,@butaca int,@codigoCompra int --vamos a tener que agregar un codigo de compra
+create procedure mm.ingresarCompraPasaje @viaje int,@dni int,@butaca int,@codigoCompra int --vamos a tener que agregar un codigo de compra
 as 
+begin
+declare @cliente int
+set @cliente=(select max(Id) from mm.clientes where DNI=@dni)
 
 insert into mm.pasajes(Viaje,Numero_Butaca,Fecha_Compra,Cliente,cod_compra) values (@viaje,@butaca,mm.fechaDeHoy(),@cliente,@codigoCompra)
 
-
+end
 go
 
-create procedure mm.ingresarCompraPaquete @viaje int,@cliente int,@kg int,@compra int
-as 
+create procedure mm.ingresarCompraPaquete @viaje int,@dni int,@kg int,@compra int
+as
+begin
+declare @cliente int
+set @cliente=(select max(Id) from mm.clientes where DNI=@dni)
+
 insert into mm.paquetes(viaje,kg,Fecha_Compra,Cliente,cod_compra) values(@viaje,@kg,mm.fechaDeHoy(),@cliente,@compra)
+end
 go
 
 create function mm.butacasDisponibles(@viaje int) 
@@ -1484,9 +1492,8 @@ end
 
 go
 
-create procedure mm.nuevaCompra @cliente int
-as
-insert into mm.compras(fecha,cliente) values(mm.fechaDeHoy(),@cliente)
+create procedure mm.nuevaCompra as
+insert into mm.compras(fecha) values(mm.fechaDeHoy())
 
 go
 /*
