@@ -1008,16 +1008,15 @@ select @destino=id from mm.ciudades where Descripcion=@destinoString
 declare @horas int
 declare @minutos int
 declare @llegada datetime
+
 set @llegada=(convert(datetime,@horaLlegada,20))
 set @horas=datepart(hour,@llegada)
 set @minutos=datepart(minute,@llegada)
 set @hora=cast(MM.fechaDeHoy() as datetime)
-set @hora=dateadd(minute,@horas,@hora)
-set @hora=dateadd(minute,@minutos,@hora)
-
-(select @viaje=v.Id from MM.viajes v join MM.Rutas_Aereas r on v.Ruta=r.Id and r.Ciudad_Destino=@destino and r.Ciudad_Origen=@origen where 
-Matricula=@avion and Fecha_Estimada_llegada between -datediff(hour,1,@hora) and dateadd(hour,1,@hora))
-
+set @hora=dateadd(hour,@horas,@hora)
+(select v.Id from MM.viajes v join MM.Rutas_Aereas r on v.Ruta=r.Id and r.Ciudad_Destino=@destino and r.Ciudad_Origen=@origen 
+where 
+Matricula=@avion and Fecha_Estimada_llegada between dateadd(hour,-1,@hora) and dateadd(hour,1,@hora))
 if(@viaje is null)
 begin	
 raiserror ('No deberia estar llegando alli este avion',16,150)
@@ -1520,7 +1519,7 @@ insert into mm.compras(fecha) values(mm.fechaDeHoy())
 
 go
 
-
+/*
 create procedure MM.vista_pasajes_cancelables (@idCompra int)
 AS
 BEGIN TRAN
@@ -1555,7 +1554,7 @@ join MM.Ciudades c2 on ra.Ciudad_Destino=c2.Id
 COMMIT TRAN
 
 go
-
+*/
 /*
 
 CREATE procedure MM.cancelarCompraPasaje @codigoCompra int,@butaca int, @motivo varchar
