@@ -70,7 +70,7 @@ namespace AerolineaFrba.Abm_Ruta
             else
             { //vino a borrar
                 
-                ConexionALaBase.Conexion.ejecutarNonQuery("update mm.rutas_aereas set estado=2 where id=" + idRutaElegida);
+                ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.eliminarRuta "+ idRutaElegida);
                 MessageBox.Show("La ruta fue borrada");
                 new ABM_RUTA().Show();
                 this.Close();

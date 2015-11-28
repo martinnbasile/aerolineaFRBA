@@ -34,13 +34,17 @@ namespace AerolineaFrba.Abm_Ruta
             return;
         }
 
-        private bool estaCompleto(){
+        private bool validarTodo(){
             if (Validaciones.Validaciones.validarComboBox(comboBox2,"Completar ciudad de destino")){
                 if (Validaciones.Validaciones.validarComboBox(comboBox1,"Completar ciudad de Origen")){
                     if (Validaciones.Validaciones.validarComboBox(comboBox3,"Completar el tipo de servicio")){
                         if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1,"Completar precio base")){
                             if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox2,"Completar precio base de encomienda")){
-                                return true;
+                                if (comboBox2.Text!=comboBox1.Text)
+                                {
+                                    return true;
+                                }
+                                else MessageBox.Show("La ciudade de origen y de destino no puede ser la misma");
                             }
                         }
                     }
@@ -53,7 +57,7 @@ namespace AerolineaFrba.Abm_Ruta
         private void button1_Click(object sender, EventArgs e) //BOTON CONFIRMAR
         {
             //Falta implementar la insercion en la base
-            if (this.estaCompleto())
+            if (this.validarTodo())
             {
                 String ciudadDestino = comboBox2.Text;
                 String ciudadOrigen = comboBox1.Text;

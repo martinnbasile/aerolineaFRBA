@@ -137,7 +137,7 @@
             // maskedTextBox1
             // 
             this.maskedTextBox1.Location = new System.Drawing.Point(162, 95);
-            this.maskedTextBox1.Mask = "9999999999999999999999999999999999999999999999999999999999999999999";
+            this.maskedTextBox1.Mask = "09999999999999999999999999999999999999999999999999999999999999999999";
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(255, 20);
             this.maskedTextBox1.TabIndex = 12;
@@ -145,8 +145,7 @@
             // maskedTextBox2
             // 
             this.maskedTextBox2.Location = new System.Drawing.Point(162, 121);
-            this.maskedTextBox2.Mask = "999999999999999999999999999999999999999999999999999999999999999999999999999999999" +
-    "99999999999999999999999999999999";
+            this.maskedTextBox2.Mask = "099999999999999999999999999999999999999999999999999999999999999";
             this.maskedTextBox2.Name = "maskedTextBox2";
             this.maskedTextBox2.Size = new System.Drawing.Size(255, 20);
             this.maskedTextBox2.TabIndex = 13;
