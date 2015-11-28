@@ -1,9 +1,11 @@
 ﻿Use GD2C2015
 go
+--create index unNombrePonelee on gd_esquema.Maestra(cli_dni)
+--go
 create schema MM
 go
 Create Procedure MM.limpiarBase as
-
+drop table pagos_TC
 drop procedure mm.cancelacionPaquete
 drop procedure mm.cancelacionPasaje
 drop procedure mm.nuevaCancelacion
@@ -60,6 +62,7 @@ Drop table MM.Usuario_rol
 Drop table MM.Viajes
 Drop table MM.Rutas_Aereas
 Drop table MM.Ciudades 
+Drop table MM.Clientes_Repetidos 
 Drop table MM.tarjetas_Credito
 Drop table MM.Clientes 
 Drop table MM.Usuarios 
@@ -275,7 +278,7 @@ create table MM.Productos_Milla(
 Id int identity(1,1) primary key,
 Descripcion varchar not null,
 Cantidad int not null,
-check (Cantidad>0),
+check (Cantidad>=0),
 Millas_Necesarias int not null)
 go
 create table MM.Cambios_Millas(
@@ -320,17 +323,6 @@ Motivo varchar(200),
 Cod_compra int foreign key references mm.compras
 )
 
-go
-create table MM.Tarjetas_Credito(
-Id int identity(1,1) primary key,
-Cliente int,
-Numero_Tarjeta numeric(20) not null,
-Codigo_Seguridad numeric(10) not null,
-Fecha_Vencimiento smalldatetime not null,
-Tipo_Tarjeta varchar(30) not null)
-go
-alter table MM.Tarjetas_Credito
-add constraint Cliente_Tarjetero foreign key(Cliente) references MM.Clientes(Id)
 go
 create table MM.Butacas(
 Viaje int not null,
@@ -449,9 +441,30 @@ go
 insert into MM.Clientes(DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_Nacimiento,Fecha_prox_vencimiento) 
 (select 
 Cli_Dni,Cli_Nombre,Cli_Apellido,Cli_Dir,Cli_Telefono,Cli_Mail,Cli_Fecha_Nac,dateadd(year,1,max(FechaLLegada)) from gd_esquema.Maestra
+where Cli_Dni<>23718649
 group by Cli_Dni,Cli_Nombre,Cli_Apellido,Cli_Dir,Cli_Telefono,Cli_Mail,Cli_Fecha_Nac)
 go
 
+Create  Table MM.Clientes_Repetidos(
+DNI numeric(20) not null,
+Nombre varchar(40) not null,
+Apellido varchar(40) not null,
+Direccion varchar(60) not null,
+Telefono numeric(30) not null,
+Mail varchar(50) not null,
+Fecha_Nacimiento smalldatetime not null,
+Fecha_prox_vencimiento smalldatetime
+)
+go
+
+
+
+insert into MM.Clientes_Repetidos(DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_Nacimiento,Fecha_prox_vencimiento) 
+(select 
+Cli_Dni,Cli_Nombre,Cli_Apellido,Cli_Dir,Cli_Telefono,Cli_Mail,Cli_Fecha_Nac,dateadd(year,1,max(FechaLLegada)) from gd_esquema.Maestra
+where Cli_Dni=23718649
+group by Cli_Dni,Cli_Nombre,Cli_Apellido,Cli_Dir,Cli_Telefono,Cli_Mail,Cli_Fecha_Nac)
+go
 
 alter table MM.Rutas_Aereas
 drop column Fecha_Salida
@@ -661,6 +674,7 @@ create view MM.vista_aeronaves as
 select a.Fecha_alta as 'Fecha de alta',  mo.Modelo_descripcion as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.fecha_baja_fuera_servicio as 'Fecha de fuera de servicio',a.fecha_alta_fuera_servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
 from MM.Aeronaves a join mm.modeloAvion mo on mo.id=a.modelo join MM.Fabricantes f on (mo.Fabricante=f.Id)
 					join MM.Tipos_Servicio ts on (mo.tipoServicio=ts.Id)				
+where a.Fecha_Baja_Definitiva is null
 go
 
 
@@ -911,14 +925,14 @@ create procedure MM.CancelarAeronaveVidaUtil (@matricula varchar(10))
 
   
   
-  delete from MM.Butacas where Viaje in (select Id from MM.Viajes
-  where Fecha_salida>=mm.fechaDeHoy() and Matricula=@matricula)
+  delete b from MM.Butacas b join mm.viajes as v on v.id=b.viaje 
+where v.Fecha_salida>=mm.fechaDeHoy() and v.Matricula=@matricula
 
-  delete from MM.Pasajes where Viaje in (select Id from MM.Viajes
-  where Fecha_salida>=mm.fechaDeHoy() and Matricula=@matricula)
+  delete b from MM.Pasajes b join mm.viajes as v on v.id=b.viaje 
+where v.Fecha_salida>=mm.fechaDeHoy() and v.Matricula=@matricula
 
-  delete from MM.Paquetes where Viaje in (select Id from MM.Viajes
-  where Fecha_salida>=mm.fechaDeHoy() and Matricula=@matricula)
+  delete b from MM.Paquetes b join mm.viajes as v on v.id=b.viaje 
+where v.Fecha_salida>=mm.fechaDeHoy() and v.Matricula=@matricula
 
   delete from MM.Viajes where Matricula=@matricula and Fecha_salida>=mm.fechaDeHoy()
 
@@ -927,6 +941,10 @@ create procedure MM.CancelarAeronaveVidaUtil (@matricula varchar(10))
   COMMIT TRAN
   go
 
+  create index choto on mm.viajes(Matricula)
+  go
+  create index chotos on mm.viajes(Fecha_salida)
+  go
 
 
 create procedure MM.CancelarAeronaveFueraDeServicio(@matricula varchar(10), @hasta datetime)
@@ -1096,6 +1114,7 @@ BEGIN TRANSACTION
 	UPDATE MM.Productos_Milla
 	SET Cantidad=@cantidadActual-@cantidad
 	WHERE Descripcion=@descripcion
+	COMMIT
 	end try
 
 	begin catch
@@ -1103,7 +1122,6 @@ BEGIN TRANSACTION
 			rollback
 	end catch
 
-COMMIT
 GO
 
 alter table MM.Roles
@@ -1706,3 +1724,53 @@ medioPago=@medioPago
 where cod_compra=@codCompra
 end
 go
+
+
+--alter table gd_esquema.Maestra add id int identity(1,1) primary key
+
+/*
+select a.Cli_Dni,count(distinct b.cli_apellido) from gd_esquema.maestra as a  join gd_esquema.maestra as b on a.cli_dni=b.cli_dni and b.id<=a.id
+
+group by a.Cli_Dni
+ order by 2 desc
+ */
+
+ create function [MM].[DestinosAeronavesMenosButacasVendidos]
+(@semestre int,
+@anio char(4))
+returns @table table
+(Description varchar(100))
+as
+begin
+declare @desde char(4)
+declare @hasta char(4)
+if @semestre=1
+begin
+set @desde='0101'
+set @hasta='0530'
+end
+if @semestre=2
+begin
+set @desde='0601'
+set @hasta='1231'
+end
+insert into @table  
+
+select top 5 D.Descripcion
+from
+(select Viaje,count(*) as Cantidad
+from MM.Butacas
+where Estado='vendida'
+group by Viaje)A,
+MM.Viajes B,
+MM.Rutas_Aereas C,
+MM.Ciudades D
+where A.Viaje= B.Id and B.Ruta=C.Id and C.Ciudad_Destino=D.Id 
+and b.Fecha_salida
+between @anio+@desde and @anio+@hasta
+group by D.Descripcion
+order by sum(A.Cantidad) desc
+return
+end
+
+GO
