@@ -23,7 +23,7 @@ namespace AerolineaFrba.Compra
 
         private void elegirButaca_Load(object sender, EventArgs e)
         {
-            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1,"Select * from  mm.butacasDisponibles("+unaCompra.idViaje+")");
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(unaCompra.comandoT,dataGridView1,"Select * from  mm.butacasDisponibles("+unaCompra.idViaje+")");
             button1.Text = "Confirmar";
             button2.Text = "Cancelar";
         }
@@ -39,8 +39,7 @@ namespace AerolineaFrba.Compra
 
         private void button2_Click(object sender, EventArgs e)
         {//CANCELAR
-            unaCompra.comandoT.CommandText="Rollback transaction compra";
-            unaCompra.comandoT.ExecuteNonQuery();
+            unaCompra.comandoT.Transaction.Rollback();
             new compra().Show();
             this.Close();
         }
@@ -50,7 +49,7 @@ namespace AerolineaFrba.Compra
             if (this.validarSeleccionDeButaca())
             {
                 int butacaElegida = int.Parse(dataGridView1.SelectedRows[0].Cells["nroButaca"].ToString());
-                ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.ingresarCompraPasaje"+ unaCompra.idViaje +", "+unPasajero.dni+", "+ butacaElegida+", "+ unaCompra.codigoCompra);
+                ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarCompraPasaje"+ unaCompra.idViaje +", "+unPasajero.dni+", "+ butacaElegida+", "+ unaCompra.codigoCompra);
                 unaCompra.seProcesoUnPasaje();
                 this.Close(); 
             }

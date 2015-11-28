@@ -33,8 +33,7 @@ namespace AerolineaFrba.Compra
 
         private void button2_Click(object sender, EventArgs e)
         {//VOLVER
-            unaCompra.comandoT.CommandText = "Rollback transaction compra";
-            unaCompra.comandoT.ExecuteNonQuery();
+            unaCompra.comandoT.Transaction.Rollback();
             new compra().Show();
             this.Close();
         }
@@ -74,12 +73,11 @@ namespace AerolineaFrba.Compra
 
             if ((this.validarFecha()) & (this.validarTodo()))
             {
-            ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.ingrestarTC "+ maskedTextBox1.Text+", " + maskedTextBox2.Text+", "+numericUpDown2.Value+", "+numericUpDown1.Value);
-            ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.ingresarCompraPaquete " + unaCompra.idViaje + ", " + elPasajero.dni + ", " + unaCompra.cantidadKgs + " , " + unaCompra.codigoCompra);
+            ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingrestarTC "+ maskedTextBox1.Text+", " + maskedTextBox2.Text+", "+numericUpDown2.Value+", "+numericUpDown1.Value);
+            ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarCompraPaquete " + unaCompra.idViaje + ", " + elPasajero.dni + ", " + unaCompra.cantidadKgs + " , " + unaCompra.codigoCompra);
             MessageBox.Show("Total: " + unaCompra.totalPasaje());
             MessageBox.Show("Operacion exitosa. Codigo de compra: " + unaCompra.codigoCompra);
-            unaCompra.comandoT.CommandText = "Commit transaction compra";
-            unaCompra.comandoT.ExecuteNonQuery();
+            unaCompra.comandoT.Transaction.Commit();
             }
 
         }
