@@ -995,12 +995,26 @@ commit
 go
 
 
-create procedure MM.asentarLLegadaAeronave @avion int,@origen int,@destino int,@horaLlegada varchar(20)
+create  procedure MM.asentarLLegadaAeronave @avion varchar(10),@origenString varchar(50),@destinoString varchar(50),@horaLlegada varchar(20)
 as
 begin transaction
 declare @hora datetime
 declare @viaje int
-select @hora=cast(MM.fechaDeHoy() as datetime)+(convert(datetime,@horaLlegada,20))
+declare @origen int
+declare @destino int
+
+select @origen=id from mm.ciudades where Descripcion=@origenString
+select @destino=id from mm.ciudades where Descripcion=@destinoString
+declare @horas int
+declare @minutos int
+declare @llegada datetime
+set @llegada=(convert(datetime,@horaLlegada,20))
+set @horas=datepart(hour,@llegada)
+set @minutos=datepart(minute,@llegada)
+set @hora=cast(MM.fechaDeHoy() as datetime)
+set @hora=dateadd(minute,@horas,@hora)
+set @hora=dateadd(minute,@minutos,@hora)
+
 (select @viaje=v.Id from MM.viajes v join MM.Rutas_Aereas r on v.Ruta=r.Id and r.Ciudad_Destino=@destino and r.Ciudad_Origen=@origen where 
 Matricula=@avion and Fecha_Estimada_llegada between -datediff(hour,1,@hora) and dateadd(hour,1,@hora))
 
@@ -1676,8 +1690,5 @@ begin
 if(exists(select NRO_TC from mm.TC where NRO_TC=@nro))
 return
 else insert into mm.TC values(@nro,@cod,@anio,@mes)
-
-
-
 
 end

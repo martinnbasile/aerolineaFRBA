@@ -33,27 +33,37 @@ namespace AerolineaFrba.Registro_Llegada_Destino
 
         }
 
+        private bool validarTodo()
+        {
+
+            if (Validaciones.Validaciones.validarMatricula(maskedTextBox2, "Complete la matricula"))
+            {
+                if (Validaciones.Validaciones.validarComboBox(comboBox1, "Complete el aeropuerto de origen"))
+                {
+                    if (Validaciones.Validaciones.validarComboBox(comboBox2, "Complete el aeropuerto de destino"))
+                    {
+                        String matricula = maskedTextBox2.Text;
+                        String aeropuertoOrigen = comboBox1.Text;
+                        String aeropuertoDestino = comboBox2.Text;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {   
             //Confirmar
             DateTime date=DateTime.Parse(dateTimePicker1.Value.TimeOfDay.ToString());
             String horaLlegada = date.ToString("HH:mm");
-            if (Validaciones.Validaciones.validarMatricula(maskedTextBox2,"Complete la matricula")){
-                String matricula = maskedTextBox2.Text;
-    
-            }
-            if (Validaciones.Validaciones.validarTextBox(textBox1, "Complete el aeropuerto de origen"))
+            if (this.validarTodo())
             {
-                String aeropuertoOrigen = textBox1.Text;
-                
+                ConexionALaBase.Conexion.ejecutarNonQuery("exec MM.asentarLLegadaAeronave '" + maskedTextBox2.Text + "', '" + comboBox1.Text + "', '"+comboBox2.Text +"', '"+ horaLlegada+"'");
+                MessageBox.Show("Operación exitosa");
+                new Funcionalidades.Funcionalidades().Show();
+                this.Close();
             }
-            if (Validaciones.Validaciones.validarTextBox(textBox2, "Complete el aeropuerto de destino"))
-            {
-                String aeropuertoDestino = textBox2.Text;
-                
-            }
-            //ConexionALaBase.Conexion.ejecutarNonQuery("exec 
-            MessageBox.Show("Falta pegarle a la base");
         }
 
         private void button2_Click(object sender, EventArgs e)
