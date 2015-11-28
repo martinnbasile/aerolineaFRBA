@@ -21,6 +21,22 @@ namespace AerolineaFrba.ConexionALaBase
             cone.Open();
             return cone;
         }
+
+        public SqlDataReader consultarBase(SqlCommand comando,String unaQuery){
+
+            comando.Cancel();
+            comando.CommandText = unaQuery;
+            return comando.ExecuteReader();
+        }
+        public static void ejecutarNonQuery(SqlCommand comandoo, String unaQuery)
+        {
+            comandoo.Cancel(); 
+            comandoo.CommandText = unaQuery;
+            comandoo.CommandTimeout = 21600;
+            comandoo.ExecuteNonQuery();
+            return;
+        }
+
         public static SqlCommand getComando()
         {
              

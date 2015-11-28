@@ -19,10 +19,7 @@ namespace AerolineaFrba.Compra
         {
            InitializeComponent();
            nuevaCompra.comandoT=comandoT;
-           comandoT.Transaction = comandoT.Connection.BeginTransaction(); //iolation level
-           
-           //comandoT.CommandText="set transaction isolation level serializable";
-           //comandoT.ExecuteNonQuery();
+           comandoT.Transaction = comandoT.Connection.BeginTransaction(); //ver asignar iolation level
            comandoT.CommandText = "exec mm.nuevaCompra";
            comandoT.ExecuteNonQuery();
            comandoT.CommandText = "select mm.ultimacompra()";
@@ -30,6 +27,7 @@ namespace AerolineaFrba.Compra
             if (reader.Read()){
                nuevaCompra.codigoCompra = reader.GetInt32(0);
            }
+            reader.Dispose();
         }
 
         private void compra_Load(object sender, EventArgs e)
@@ -39,15 +37,17 @@ namespace AerolineaFrba.Compra
             label3.Text = "Destino:";
             button2.Text = "Volver";
             button1.Text = "Siguiente";
-            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades where estado='Habilitado'");
+            comandoT.CommandText = "Select descripcion from MM.ciudades where estado='Habilitado'";
+            System.Data.SqlClient.SqlDataReader reader = comandoT.ExecuteReader();
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
             reader.Dispose();
-            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades where estado='Habilitado'");
+            comandoT.CommandText = "Select descripcion from MM.ciudades where estado='Habilitado'";
+            reader = comandoT.ExecuteReader();
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, reader);
             reader.Dispose();
-            
 
         }
+        
 
         private void button3_Click(object sender, EventArgs e) //SELECCIONAR FECHA
         {
@@ -65,8 +65,7 @@ namespace AerolineaFrba.Compra
         private void button2_Click(object sender, EventArgs e) //VOLVER
         {
 
-            comandoT.CommandText = "rollback transaction compra";
-            comandoT.ExecuteNonQuery();
+            comandoT.Transaction.Rollback();
             new Funcionalidades.Funcionalidades().Show();
             this.Close();
         }
