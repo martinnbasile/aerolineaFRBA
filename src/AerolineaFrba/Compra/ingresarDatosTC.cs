@@ -23,12 +23,13 @@ namespace AerolineaFrba.Compra
 
         private void ingresarDatosTC_Load(object sender, EventArgs e)
         {
-            numericUpDown1.Value = DateTime.Parse(Properties.Settings.Default.fechaDelSistema).Month;
-            numericUpDown1.Value = DateTime.Parse(Properties.Settings.Default.fechaDelSistema).Year;
             numericUpDown1.Maximum = 12;
             numericUpDown1.Minimum = 1;
             numericUpDown2.Maximum = DateTime.Parse(Properties.Settings.Default.fechaDelSistema).Year + 10;
             numericUpDown2.Minimum = DateTime.Parse(Properties.Settings.Default.fechaDelSistema).Year;
+            numericUpDown1.Value = DateTime.Parse(Properties.Settings.Default.fechaDelSistema).Month;
+            numericUpDown2.Value = DateTime.Parse(Properties.Settings.Default.fechaDelSistema).Year;
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -73,9 +74,9 @@ namespace AerolineaFrba.Compra
 
             if ((this.validarFecha()) & (this.validarTodo()))
             {
-            ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingrestarTC "+ maskedTextBox1.Text+", " + maskedTextBox2.Text+", "+numericUpDown2.Value+", "+numericUpDown1.Value);
+            ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarTC "+ maskedTextBox1.Text+", " + maskedTextBox2.Text+", "+numericUpDown2.Value+", "+numericUpDown1.Value);
             ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarCompraPaquete " + unaCompra.idViaje + ", " + elPasajero.dni + ", " + unaCompra.cantidadKgs + " , " + unaCompra.codigoCompra);
-            ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.asentarCompra "+unaCompra.codigoCompra+", "+elPasajero.dni+", "+unaCompra.totalPasaje
+            ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT, "exec mm.asentarCompra " + unaCompra.codigoCompra + ", " + elPasajero.dni + ", " + unaCompra.totalCompra() + ", 'Tarjeta'");
             MessageBox.Show("Total: " + unaCompra.totalCompra());
             MessageBox.Show("Operacion exitosa. Codigo de compra: " + unaCompra.codigoCompra);
             unaCompra.comandoT.Transaction.Commit();

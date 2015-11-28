@@ -46,7 +46,7 @@ namespace AerolineaFrba.Compra
                 elPasajero.direccion = filaCliente["Direccion"].ToString();
                 textBox4.Text = filaCliente["Direccion"].ToString();
                 elPasajero.telefono = filaCliente["Telefono"].ToString();
-                textBox5.Text = filaCliente["Telefono"].ToString();
+                maskedTextBox1.Text = filaCliente["Telefono"].ToString();
                 elPasajero.mail = filaCliente["Mail"].ToString();
                 textBox6.Text = filaCliente["Mail"].ToString();
                 elPasajero.fechaNacimiento = ((DateTime)filaCliente["Fecha_Nacimiento"]).ToString("yyyy-MM-dd");
@@ -65,7 +65,7 @@ namespace AerolineaFrba.Compra
                 {
                     if (Validaciones.Validaciones.validarTextBox(textBox4,"Ingrese direccion"))
                     {
-                         if (Validaciones.Validaciones.validarTextBox(textBox5,"Ingrese telefono"))
+                         if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1,"Ingrese telefono"))
                          {
                              if (Validaciones.Validaciones.validarTextBox(textBox7,"Elija fecha de nacimiento"))
                              {
@@ -91,11 +91,11 @@ namespace AerolineaFrba.Compra
         {
             if (estabaEnBaseElCliente)
             {
-                ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT,"Update mm.clientes set Nombre='" + textBox2.Text + "', Apellido='" + textBox3.Text + "', direccion='" + textBox4.Text + "', telefono=" + textBox5.Text + ", mail='" + textBox6.Text + "', fecha_nacimiento='" + textBox7.Text + "'where dni=" + elPasajero.dni + " and apellido='" + elPasajero.apellido + "'");
+                ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT,"Update mm.clientes set Nombre='" + textBox2.Text + "', Apellido='" + textBox3.Text + "', direccion='" + textBox4.Text + "', telefono=" + maskedTextBox1.Text + ", mail='" + textBox6.Text + "', fecha_nacimiento='" + textBox7.Text + "'where dni=" + elPasajero.dni + " and apellido='" + elPasajero.apellido + "'");
             }
             else
             {
-                ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT,"Insert into mm.clientes (DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_nacimiento) values (" + elPasajero.dni + ",'" + textBox2.Text + "','" + textBox3.Text + "','" + textBox4.Text + "'," + textBox5.Text + ",'" + textBox6.Text + "','" + textBox7.Text + "')");
+                ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT,"Insert into mm.clientes (DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_nacimiento) values (" + elPasajero.dni + ",'" + textBox2.Text + "','" + textBox3.Text + "','" + textBox4.Text + "'," + maskedTextBox1.Text + ",'" + textBox6.Text + "','" + textBox7.Text + "')");
 
             }
 
@@ -122,7 +122,7 @@ namespace AerolineaFrba.Compra
                     {
                         
                         ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT,"exec mm.ingresarCompraPaquete "+ laCompra.idViaje+", "+ elPasajero.dni +", "+ laCompra.cantidadKgs +" , "+ laCompra.codigoCompra);
-                        ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT, "exec mm.asentarCompra " + unaCompra.codigoCompra + ", " + elPasajero.dni + ", " + unaCompra.totalCompra() + ", 'Efectivo'");
+                        ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT, "exec mm.asentarCompra " + laCompra.codigoCompra + ", " + elPasajero.dni + ", " + laCompra.totalCompra() + ", 'Efectivo'");
                         laCompra.comandoT.Transaction.Commit();
                         MessageBox.Show("Total: " + laCompra.totalCompra());
                         MessageBox.Show("Operacion exitosa. Codigo de compra: " + laCompra.codigoCompra);

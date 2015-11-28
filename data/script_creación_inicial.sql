@@ -1691,3 +1691,18 @@ return
 else insert into mm.TC values(@nro,@cod,@anio,@mes)
 
 end
+go
+
+create procedure mm.asentarCompra @codCompra int, @dni int, @total float, @medioPago varchar(10)
+as
+
+begin
+
+update mm.compras
+set cliente=(select id from mm.clientes where dni=@dni),
+total=@total,
+medioPago=@medioPago
+
+where cod_compra=@codCompra
+end
+go
