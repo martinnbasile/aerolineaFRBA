@@ -66,6 +66,7 @@
             // 
             // comboBox2
             // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Location = new System.Drawing.Point(100, 65);
             this.comboBox2.Name = "comboBox2";
@@ -84,6 +85,7 @@
             // 
             // comboBox1
             // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(100, 98);
             this.comboBox1.Name = "comboBox1";
@@ -104,6 +106,7 @@
             // 
             this.numericUpDown2.Location = new System.Drawing.Point(194, 131);
             this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.ReadOnly = true;
             this.numericUpDown2.Size = new System.Drawing.Size(111, 20);
             this.numericUpDown2.TabIndex = 38;
             this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
@@ -112,6 +115,7 @@
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(194, 160);
             this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.ReadOnly = true;
             this.numericUpDown1.Size = new System.Drawing.Size(111, 20);
             this.numericUpDown1.TabIndex = 37;
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
@@ -138,6 +142,7 @@
             // 
             this.numericUpDown3.Location = new System.Drawing.Point(194, 193);
             this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.ReadOnly = true;
             this.numericUpDown3.Size = new System.Drawing.Size(111, 20);
             this.numericUpDown3.TabIndex = 42;
             this.numericUpDown3.ValueChanged += new System.EventHandler(this.numericUpDown3_ValueChanged);

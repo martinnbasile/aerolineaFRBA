@@ -59,8 +59,15 @@ namespace AerolineaFrba.Registro_Llegada_Destino
             String horaLlegada = date.ToString("HH:mm");
             if (this.validarTodo())
             {
-                ConexionALaBase.Conexion.ejecutarNonQuery("exec MM.asentarLLegadaAeronave '" + maskedTextBox2.Text + "', '" + comboBox1.Text + "', '"+comboBox2.Text +"', '"+ horaLlegada+"'");
-                MessageBox.Show("Operación exitosa");
+                try
+                {
+                    ConexionALaBase.Conexion.ejecutarNonQuery("exec MM.asentarLLegadaAeronave '" + maskedTextBox2.Text + "', '" + comboBox1.Text + "', '" + comboBox2.Text + "', '" + horaLlegada + "'");
+                    MessageBox.Show("Operación exitosa");
+                }
+                catch (System.Data.SqlClient.SqlException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
                 new Funcionalidades.Funcionalidades().Show();
                 this.Close();
             }

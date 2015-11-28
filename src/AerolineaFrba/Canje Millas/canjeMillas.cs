@@ -24,6 +24,7 @@ namespace AerolineaFrba.Canje_Millas
 
         private void canjeMillas_Load(object sender, EventArgs e)
         {
+            numericUpDown1.Minimum = 1;
             ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "select Descripcion,Millas_Necesarias as 'Precio en millas',cantidad from MM.Productos_Milla");
             textBox1.Text = dni.ToString();
             System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select id from MM.clientes where DNI=" + dni);
@@ -70,6 +71,7 @@ namespace AerolineaFrba.Canje_Millas
                 {
                     DataGridViewRow productoSeleccionado = this.dataGridView1.SelectedRows[0];
                     String descripcionProducto = productoSeleccionado.Cells["Descripcion"].Value.ToString();
+                    int stock = int.Parse(productoSeleccionado.Cells["cantidad"].Value.ToString());
                     int precioEnMillasPorUnidad = int.Parse(productoSeleccionado.Cells["Precio en millas"].Value.ToString());
                     int cantidadQueQuiereCanjear = Convert.ToInt32(numericUpDown1.Value);
                     if ((cantidadQueQuiereCanjear * precioEnMillasPorUnidad) > millasDisponibles)
@@ -77,18 +79,24 @@ namespace AerolineaFrba.Canje_Millas
                         MessageBox.Show("No tiene las millas suficientes para realizar ese canje");
                     }
                     else
-                    {
-                        try
+                        if ((cantidadQueQuiereCanjear > stock))
                         {
-                            String noQuery = "exec MM.registrarCanje @numCliente=" + numCliente + ",@cantidad=" + numericUpDown1.Value + ",@descripcion='" + descripcionProducto + "'";
+                             MessageBox.Show("No hay stock suficiente");
+                         }
+                        else
+                         {
+                            try
+                            {
+                            String noQuery = "exec MM.registrarCanje " + numCliente + "," + numericUpDown1.Value + ",'" + descripcionProducto + "'";
                             ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
+                            MessageBox.Show("Operacion exitosa, se descontaron " + cantidadQueQuiereCanjear * precioEnMillasPorUnidad + " millas");
                             new ingresarDniCanjeMillas().Show();
                             this.Close();
-                        }
-                        catch (System.Data.SqlClient.SqlException ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
+                            }
+                            catch (System.Data.SqlClient.SqlException ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }   
 
                     }
                 }
