@@ -1735,7 +1735,7 @@ group by a.Cli_Dni
  order by 2 desc
  */
 
- create function [MM].[DestinosAeronavesMenosButacasVendidos]
+ create   function [MM].[DestinosAeronavesMenosButacasVendidos]
 (@semestre int,
 @anio char(4))
 returns @table table
@@ -1758,18 +1758,14 @@ insert into @table
 
 select top 5 D.Descripcion
 from
-(select Viaje,count(*) as Cantidad
-from MM.Butacas
-where Estado='vendida'
-group by Viaje)A,
 MM.Viajes B,
 MM.Rutas_Aereas C,
 MM.Ciudades D
-where A.Viaje= B.Id and B.Ruta=C.Id and C.Ciudad_Destino=D.Id 
+where B.Ruta=C.Id and C.Ciudad_Destino=D.Id 
 and b.Fecha_salida
 between @anio+@desde and @anio+@hasta
 group by D.Descripcion
-order by sum(A.Cantidad) desc
+order by sum(B.butacasDisponibles) desc
 return
 end
 
