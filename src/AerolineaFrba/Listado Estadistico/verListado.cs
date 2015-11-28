@@ -16,14 +16,14 @@ namespace AerolineaFrba.Listado_Estadistico
         {
             InitializeComponent();
             label1.Text = listadoElegido;
-            String queryListadoElegido="Select 'no implementado'";
+            String queryListadoElegido="";
             switch (listadoElegido)
             {
                 case "Destinos más comprados":
                     queryListadoElegido="select * from mm.DestinosMasVendidosPasajes("+semestre+","+anio+")";                    
                     break;
                 case "Destinos con aeronaves mas vacias" :
-                    
+                    queryListadoElegido ="select * from mm.DestinosAeronavesMenosButacasVendidos("+semestre+","+anio+")";
                     break;
                 case "Clientes con más millas acumuladas":
                     queryListadoElegido = "select * from mm.maximosMilleros(" + semestre + "," + anio + ")";

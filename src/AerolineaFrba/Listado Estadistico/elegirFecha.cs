@@ -21,6 +21,8 @@ namespace AerolineaFrba.Listado_Estadistico
 
         private void elegirFecha_Load(object sender, EventArgs e)
         {
+            numericUpDown1.Minimum = 2000;
+            numericUpDown1.Value = 2000;
             comboBox1.Items.Add("1");
             comboBox1.Items.Add("2");
         }
@@ -34,16 +36,15 @@ namespace AerolineaFrba.Listado_Estadistico
         private void button1_Click(object sender, EventArgs e) //Confirmar
         {
             
-            if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1, "Ingrese un año"))
-            {
+           
                 if (Validaciones.Validaciones.validarComboBox(comboBox1, "Elija un semestre"))
                 {
                     int semestre=Int32.Parse(comboBox1.Text);
-                    int anio=Int32.Parse(maskedTextBox1.Text);
+                    int anio=Int32.Parse(numericUpDown1.Text);
                     new verListado(listadoElegido,semestre,anio).Show();
                     this.Close();
                 }
-            }
+          
         }
     }
 }

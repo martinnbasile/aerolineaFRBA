@@ -26,7 +26,7 @@ namespace AerolineaFrba.Canje_Millas
             reader = ConexionALaBase.Conexion.consultarBase("select sum(millas) from MM.millas where cliente=" + numCliente);
             reader.Read();
             textBox2.Text = (reader.GetSqlInt32(0)).ToString();
-            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "Select Millas from MM.Millas where cliente=" + numCliente); 
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "Select Millas, fecha_movimiento, descripcion from MM.Millas where cliente=" + numCliente); 
 
         }
 
