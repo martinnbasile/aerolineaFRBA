@@ -86,6 +86,8 @@ drop procedure mm.ingresarCompraPasaje
 drop procedure mm.asentarCompra
 drop function mm.DestinosAeronavesMenosButacasVendidos
 drop procedure mm.ingresarTC
+
+
 drop schema MM
 
 go
@@ -1148,7 +1150,7 @@ create function mm.DestinosMasVendidosPasajes
 (@semestre int,
 @anio char(4))
 returns @table table
-(Description varchar(100))
+(Description varchar(100),cantidad int)
 as
 begin
 declare @desde char(4)
@@ -1186,12 +1188,12 @@ go
 create  function mm.AeronavesMasDiasFueraServicio
 (@semestre int, @anio char(4))
 
-returns @table table (Description varchar(50))
+returns @table table (Description varchar(50),dias int)
 as
 begin
 
 insert into @table
-select top 5 aeronave
+select top 5 aeronave,count(*)
 from  mm.logBajasAeronaves
 where (year(fechabaja)=@anio and mm.semestre(FechaBaja)=@semestre)
 group by aeronave
@@ -1259,7 +1261,7 @@ create index indiceMillero on mm.clientes (nombre,apellido)
 go
 
 create function mm.maximosMilleros(@semestre int,@anio int) returns
-@tablita table(nombre varchar(30), apellido varchar(30),cantMillas int)
+@tablita table(dni numeric(20), nombre varchar(30), apellido varchar(30),cantMillas int)
 as
 begin
 insert into @tablita 
@@ -1267,7 +1269,7 @@ select top 5 c.dni,c.nombre, c.apellido, sum(m.millas)
 
 from mm.millas m join mm.clientes c on (m.cliente=c.id)
 where m.millas>0 and year(m.Fecha_movimiento)=@anio and (1+(month(m.Fecha_movimiento)-1)/6)=@semestre
-group by c.nombre,c.apellido
+group by c.nombre,c.apellido,c.dni
 
 
 order by sum(m.millas) DESC
