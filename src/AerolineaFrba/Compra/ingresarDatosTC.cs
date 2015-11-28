@@ -75,9 +75,12 @@ namespace AerolineaFrba.Compra
             {
             ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingrestarTC "+ maskedTextBox1.Text+", " + maskedTextBox2.Text+", "+numericUpDown2.Value+", "+numericUpDown1.Value);
             ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarCompraPaquete " + unaCompra.idViaje + ", " + elPasajero.dni + ", " + unaCompra.cantidadKgs + " , " + unaCompra.codigoCompra);
+            //ASENTAR EN TABLA COMPRAS
             MessageBox.Show("Total: " + unaCompra.totalPasaje());
             MessageBox.Show("Operacion exitosa. Codigo de compra: " + unaCompra.codigoCompra);
             unaCompra.comandoT.Transaction.Commit();
+            new Funcionalidades.Funcionalidades().Show();
+            this.Close();
             }
 
         }
