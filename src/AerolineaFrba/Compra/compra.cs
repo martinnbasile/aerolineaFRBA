@@ -17,14 +17,16 @@ namespace AerolineaFrba.Compra
         
         public compra()
         {
-            InitializeComponent();
+           InitializeComponent();
            nuevaCompra.comandoT=comandoT;
-           comandoT.CommandText = "Begin transaction compra";
-           comandoT.ExecuteNonQuery();
+           comandoT.Transaction = comandoT.Connection.BeginTransaction(); //iolation level
+           
            //comandoT.CommandText="set transaction isolation level serializable";
            //comandoT.ExecuteNonQuery();
-            ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.nuevaCompra");
-            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("select mm.ultimacompra()");
+           comandoT.CommandText = "exec mm.nuevaCompra";
+           comandoT.ExecuteNonQuery();
+           comandoT.CommandText = "select mm.ultimacompra()";
+           System.Data.SqlClient.SqlDataReader reader = comandoT.ExecuteReader();
             if (reader.Read()){
                nuevaCompra.codigoCompra = reader.GetInt32(0);
            }

@@ -72,9 +72,8 @@ namespace AerolineaFrba.Compra
         {//CONFIRMAR
               
 
-            if (this.validarFecha()) && (this.validarTodo())
+            if ((this.validarFecha()) & (this.validarTodo()))
             {
-            //INGRESAR DATOS DE TC EN BASE
             ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.ingrestarTC "+ maskedTextBox1.Text+", " + maskedTextBox2.Text+", "+numericUpDown2.Value+", "+numericUpDown1.Value);
             ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.ingresarCompraPaquete " + unaCompra.idViaje + ", " + elPasajero.dni + ", " + unaCompra.cantidadKgs + " , " + unaCompra.codigoCompra);
             MessageBox.Show("Total: " + unaCompra.totalPasaje());

@@ -22,6 +22,15 @@ namespace AerolineaFrba.Registro_Llegada_Destino
 
             dateTimePicker1.Format = DateTimePickerFormat.Time;
             dateTimePicker1.ShowUpDown = true;
+            System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades where estado='Habilitado'");
+            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, reader);
+            reader.Dispose();
+            reader = ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.ciudades where estado='Habilitado'");
+            ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, reader);
+            reader.Dispose();
+            
+            
+
         }
 
         private void button1_Click(object sender, EventArgs e)
