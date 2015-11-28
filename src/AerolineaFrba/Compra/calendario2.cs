@@ -29,13 +29,14 @@ namespace AerolineaFrba.Compra
         {
 
         }
+        
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             DateTime fechaSeleccionada = monthCalendar1.SelectionRange.Start;
-            if (fechaSeleccionada < DateTime.Parse(Properties.Settings.Default.fechaDelSistema))
+            if (fechaSeleccionada > DateTime.Parse(Properties.Settings.Default.fechaDelSistema))
             {
-                MessageBox.Show("No puede elegir una fecha anterior a la actual");
+                MessageBox.Show("No puede elegir una fecha posterior a la actual");
                 new calendario2(abmQueLlamo).Show();
                 this.Close();
             }
