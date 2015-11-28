@@ -116,6 +116,9 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.Fabricantes"));
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.Tipos_Servicio"));
+            numericUpDown1.Minimum = 1;
+            numericUpDown2.Minimum = 1;
+            numericUpDown3.Minimum = 1;
         }
     }
 }
