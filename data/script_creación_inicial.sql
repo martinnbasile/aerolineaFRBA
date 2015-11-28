@@ -6,6 +6,7 @@ create schema MM
 go
 Create Procedure MM.limpiarBase as
 drop table pagos_TC
+drop procedure mm.eliminarruta
 drop procedure mm.cancelacionPaquete
 drop procedure mm.cancelacionPasaje
 drop procedure mm.nuevaCancelacion
@@ -63,7 +64,6 @@ Drop table MM.Viajes
 Drop table MM.Rutas_Aereas
 Drop table MM.Ciudades 
 Drop table MM.Clientes_Repetidos 
-Drop table MM.tarjetas_Credito
 Drop table MM.Clientes 
 Drop table MM.Usuarios 
 Drop table MM.Roles 
@@ -81,14 +81,11 @@ DROP FUNCTION MM.BUTACASDISPONIBLES
 DROP FUNCTION MM.VIAJESDISPONIBLES
 drop function MM.paquetesCancelables
 drop function MM.pasajesCancelables
-drop procedure MM.cancelacionPaquete
-drop procedure MM.cancelacionPasaje
 drop procedure mm.ingresarCompraPaquete
 drop procedure mm.ingresarCompraPasaje
-drop procedure MM.pasajesCliente
-drop procedure MM.paquetesCliente
-drop procedure MM.vista_paquetes_cancelables
-drop procedure MM.vista_pasajes_cancelables
+drop procedure mm.asentarCompra
+drop function mm.DestinosAeronavesMenosButacasVendidos
+drop procedure mm.ingresarTC
 drop schema MM
 
 go
@@ -476,8 +473,10 @@ alter table MM.Rutas_Aereas
 drop column Fecha_llegada
 go
 alter table MM.Rutas_Aereas
-add Estado int not null default 'Habilitado'
+add Estado int not null default 1
 go
+
+--alter table mm.rutas_aereras add default 1
 alter table MM.Viajes
 add Fecha_Salida date not null
 go
@@ -971,14 +970,14 @@ create procedure MM.CancelarAeronaveFueraDeServicio(@matricula varchar(10), @has
   COMMIT TRAN
   go
 
-create  procedure MM.BorrarCiudades(
+create   procedure MM.BorrarCiudades(
 @Descripcion varchar(100))
 as
 begin tran
 declare @id int
 select @id=(select Id from MM.Ciudades where Descripcion= @Descripcion)
 update MM.Ciudades set Estado='Deshabilitado' where Id= @id
-update MM.Rutas_Aereas set Estado=2 where Ciudad_Destino=10/*@id */or Ciudad_Origen=@id
+update MM.Rutas_Aereas set Estado=2 where Ciudad_Destino=@id or Ciudad_Origen=@id
 delete b  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id  join mm.butacas b on b.viaje=v.id
 where r.Estado=2
 
@@ -1165,9 +1164,9 @@ set @desde='0601'
 set @hasta='1231'
 end
 insert into @table  
-select top 5 d.Descripcion
+select top 5 d.Descripcion,count(*)
 from MM.Pasajes a,MM.Viajes b, mm.Rutas_Aereas c, MM.Ciudades d
-where a.Viaje=b.Id and b.Ruta=c.Ciudad_Destino and c.Ciudad_Destino=d.Id and b.Fecha_salida 
+where a.Viaje=b.Id and b.Ruta=c.Id and c.Ciudad_Destino=d.Id and b.Fecha_salida 
 between @anio+@desde and @anio+@hasta 
 group by d.Descripcion 
 order by count(*) desc
@@ -1264,7 +1263,7 @@ create function mm.maximosMilleros(@semestre int,@anio int) returns
 as
 begin
 insert into @tablita 
-select top 5 c.nombre, c.apellido, sum(m.millas)
+select top 5 c.dni,c.nombre, c.apellido, sum(m.millas)
 
 from mm.millas m join mm.clientes c on (m.cliente=c.id)
 where m.millas>0 and year(m.Fecha_movimiento)=@anio and (1+(month(m.Fecha_movimiento)-1)/6)=@semestre
@@ -1685,7 +1684,7 @@ begin
 	raiserror ('Un Pasajero no puede estar haciendo 2 viajes a la vez',16,150)
 	rollback
 end
-
+else
 commit
 
 go
@@ -1739,7 +1738,8 @@ group by a.Cli_Dni
 (@semestre int,
 @anio char(4))
 returns @table table
-(Description varchar(100))
+(Description varchar(100),
+vacias int)
 as
 begin
 declare @desde char(4)
@@ -1756,7 +1756,7 @@ set @hasta='1231'
 end
 insert into @table  
 
-select top 5 D.Descripcion
+select top 5 D.Descripcion,sum(b.butacasDisponibles) as vacias
 from
 MM.Viajes B,
 MM.Rutas_Aereas C,
@@ -1770,3 +1770,44 @@ return
 end
 
 GO
+
+create  trigger noPuedeHaber2ViajesAlMismoTiempo on mm.Viajes
+for insert
+as
+begin transaction
+if(exists(select v1.Id 
+ 
+from mm.Viajes v1 
+
+join mm.viajes as v2 on v2.Matricula=v1.Matricula
+and
+(v1.Fecha_salida between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v1.Fecha_Estimada_llegada between v2.Fecha_salida and v2.Fecha_Estimada_llegada)
+))
+begin 
+	raiserror ('Un avion no puede estar haciendo 2 viajes a la vez',16,150)
+	rollback
+end
+else
+commit
+
+go
+
+
+create procedure mm.eliminarRuta @ruta int
+as
+begin transaction
+update MM.Rutas_Aereas set Estado=2 where Id=@ruta
+delete b  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id  join mm.butacas b on b.viaje=v.id
+where r.Estado=2
+
+delete p  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id join mm.pasajes p on p.viaje=v.id 
+where r.Estado=2
+
+delete w  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id join  mm.paquetes w on w.viaje=v.id 
+where r.Estado=2
+
+delete v  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id 
+where r.Estado=2
+commit
+
+
