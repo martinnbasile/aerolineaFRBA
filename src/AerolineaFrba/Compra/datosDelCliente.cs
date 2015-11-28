@@ -122,10 +122,10 @@ namespace AerolineaFrba.Compra
                     {
                         
                         ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT,"exec mm.ingresarCompraPaquete "+ laCompra.idViaje+", "+ elPasajero.dni +", "+ laCompra.cantidadKgs +" , "+ laCompra.codigoCompra);
-                        MessageBox.Show("Total: " + laCompra.totalPasaje());
-                        MessageBox.Show("Operacion exitosa. Codigo de compra: " + laCompra.codigoCompra);
-                        //FALTA ASENTAR EN LA TABLA COMPRAS
+                        ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT, "exec mm.asentarCompra " + unaCompra.codigoCompra + ", " + elPasajero.dni + ", " + unaCompra.totalCompra() + ", 'Efectivo'");
                         laCompra.comandoT.Transaction.Commit();
+                        MessageBox.Show("Total: " + laCompra.totalCompra());
+                        MessageBox.Show("Operacion exitosa. Codigo de compra: " + laCompra.codigoCompra);
                         new Funcionalidades.Funcionalidades().Show();
                         this.Close();
                     }

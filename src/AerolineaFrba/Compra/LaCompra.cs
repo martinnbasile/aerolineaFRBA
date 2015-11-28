@@ -42,7 +42,7 @@ namespace AerolineaFrba.Compra
              precioTotal = precioBaseEncomienda * cantidadKgs + precioPasaje * cantidadPasajes;
          }
 
-         public float totalPasaje()
+         public float totalCompra()
          {
              return precioTotal;
          }
