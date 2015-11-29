@@ -1196,7 +1196,8 @@ create function mm.DestinosMasCancelados
 (@semestre int,
 @anio char(4))
 returns @table table
-(Description varchar(100))
+(Description varchar(100),
+cantidad int)
 as
 begin
 declare @desde char(4)
@@ -1213,12 +1214,12 @@ set @hasta='1231'
 end
 insert into @table  
 
-select top 5 e.Descripcion
-from MM.Pasajes b, MM.Viajes c, MM.Rutas_Aereas d, MM.Ciudades e
+select top 5 e.Descripcion,count(*)
+from MM.Pasajes b, MM.Viajes c, MM.Rutas_Aereas d right join MM.Ciudades e on d.Ciudad_Destino=e.Id
 where	
 		b.Viaje=c.Id and
-		c.Ruta=d.Id and
-		d.Ciudad_Destino=e.Id
+		c.Ruta=d.Id 
+		
 		and b.cod_cancelacion is not null 
 		and c.Fecha_salida 
 between @anio+@desde and @anio+@hasta 
