@@ -30,40 +30,31 @@ exec mm.nuevaCancelacion 'baja de viaje'
 declare @canc int
 set @canc=mm.ultimacancelacion()
 
-declare cursorPasajes cursor for
 select 
-p.Id from
+p.Id into #tempPas from
 pasajes p join viajes v on p.Viaje=v.Id and v.estado<>'habilitado'
-declare @i int
-open cursorPasajes
-fetch next from cursorPasajes into @i
-while @@FETCH_STATUS=0
-begin
-exec mm.cancelacionPasaje @i,@canc
-fetch next from cursorPasajes into @i
-end
-close cursorPasajes
-deallocate cursorPasajes
+
+update mm.Pasajes
+set cod_cancelacion=@canc
+where Id in (select * from #tempPas)
+drop table #tempPas
 
 
-declare cursorPaquetes cursor for
 select 
-p.Id from
+p.Id into #tempPaq from
 paquetes p join viajes v on p.Viaje=v.Id and v.estado<>'habilitado'
-open cursorPaquetes
-fetch next from cursorPaquetes into @i
-while @@FETCH_STATUS=0
-begin
-exec mm.cancelacionPaquete @i,@canc
-fetch next from cursorPaquetes into @i
-end
-close cursorPaquetes
-deallocate cursorPaquetes
+update mm.Paquetes
+set cod_cancelacion=@canc
+where Id in (select * from #tempPaq)
+
+drop table #tempPaq
+
 
 commit
 
 go
-/*create procedure mm.inhabilitarViajesConRutasInhabilitadas
+
+create procedure mm.inhabilitarViajesConRutasInhabilitadas
 as
 begin transaction
 
@@ -77,14 +68,12 @@ select v.id into #temporal from mm.viajes v join mm.rutas_aereas r on v.ruta=r.i
 
 update mm.Viajes
 set estado='inhabilitado'
-where Id=@i
-fetch next from uncursor into @i
-end
-close uncursor
-deallocate uncursor
+where Id in(select * from #temporal)
+drop table #temporal
 exec mm.cancelarPasajesYPaquetesConViajeInhabilitado
 commit
-go*/
+go
+
 Create Procedure MM.limpiarBase as
 drop table pagos_TC
 drop procedure mm.eliminarruta
@@ -1704,7 +1693,7 @@ update mm.Pasajes
 set cod_cancelacion=@codCancelacion,@viaje=viaje,@num=numero_butaca
 where Id=@codPasaje
 update mm.Viajes
-set butacasDisponibles=butacasDisponibles-1
+set butacasDisponibles=butacasDisponibles+1
 where Id=@viaje
 update mm.Butacas
 set Estado='Libre'
