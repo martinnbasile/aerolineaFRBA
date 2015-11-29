@@ -4,6 +4,87 @@ go
 --go
 create schema MM
 go
+
+create  procedure mm.nuevaCancelacion @motivo varchar(200)
+as
+insert into mm.Cancelaciones(Motivo,Fecha) values (@motivo,mm.fechaDeHoy())
+go
+
+
+create  function mm.ultimacancelacion() returns int
+as
+begin 
+declare @a int
+select @a=max(Cod_CAncelacion) from mm.Cancelaciones
+return @a
+end
+
+go
+create procedure mm.cancelarPasajesYPaquetesConViajeInhabilitado 
+as
+begin transaction
+set transaction isolation level serializable
+
+exec mm.nuevaCancelacion 'baja de viaje'
+
+declare @canc int
+set @canc=mm.ultimacancelacion()
+
+declare cursorPasajes cursor for
+select 
+p.Id from
+pasajes p join viajes v on p.Viaje=v.Id and v.estado<>'habilitado'
+declare @i int
+open cursorPasajes
+fetch next from cursorPasajes into @i
+while @@FETCH_STATUS=0
+begin
+exec mm.cancelacionPasaje @i,@canc
+fetch next from cursorPasajes into @i
+end
+close cursorPasajes
+deallocate cursorPasajes
+
+
+declare cursorPaquetes cursor for
+select 
+p.Id from
+paquetes p join viajes v on p.Viaje=v.Id and v.estado<>'habilitado'
+open cursorPaquetes
+fetch next from cursorPaquetes into @i
+while @@FETCH_STATUS=0
+begin
+exec mm.cancelacionPaquete @i,@canc
+fetch next from cursorPaquetes into @i
+end
+close cursorPaquetes
+deallocate cursorPaquetes
+
+commit
+
+go
+/*create procedure mm.inhabilitarViajesConRutasInhabilitadas
+as
+begin transaction
+
+delete b  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id  join mm.butacas b on b.viaje=v.id
+where r.Estado=2
+
+
+ 
+select v.id into #temporal from mm.viajes v join mm.rutas_aereas r on v.ruta=r.id and r.Estado=2
+
+
+update mm.Viajes
+set estado='inhabilitado'
+where Id=@i
+fetch next from uncursor into @i
+end
+close uncursor
+deallocate uncursor
+exec mm.cancelarPasajesYPaquetesConViajeInhabilitado
+commit
+go*/
 Create Procedure MM.limpiarBase as
 drop table pagos_TC
 drop procedure mm.eliminarruta
@@ -12,6 +93,8 @@ drop procedure mm.cancelacionPasaje
 drop procedure mm.nuevaCancelacion
 drop function mm.ultimacancelacion
 drop procedure mm.crearAeronave
+drop procedure mm.inhabilitarViajesConRutasInhabilitadas
+drop procedure mm.cancelarPasajesYPaquetesConViajeInhabilitado
 drop procedure mm.crearModeloAvion
 drop function mm.semestre
 drop function mm.maximosMilleros
@@ -206,7 +289,8 @@ go
 
 Create table MM.Viajes(
 Id int identity(1,1) primary key ,
-Matricula varchar(10) foreign key references MM.Aeronaves(Matricula),
+Matricula varchar(10) foreign key references MM.Aeronaves(Matricula), 
+estado varchar(15) default 'habilitado',
 Ruta int,
 constraint Ruta foreign key (Ruta) references MM.Rutas_Aereas(Id),
 kgDisponibles int,
@@ -324,8 +408,7 @@ create table MM.Cancelaciones(
 Cod_CAncelacion int identity(100000,1) primary key,
 
 Fecha smalldatetime not null,
-Motivo varchar(200),
-Cod_compra int foreign key references mm.compras
+Motivo varchar(200)
 )
 
 go
@@ -919,13 +1002,12 @@ create procedure MM.CancelarAeronaveVidaUtil (@matricula varchar(10))
   delete b from MM.Butacas b join mm.viajes as v on v.id=b.viaje 
 where v.Fecha_salida>=mm.fechaDeHoy() and v.Matricula=@matricula
 
-  delete b from MM.Pasajes b join mm.viajes as v on v.id=b.viaje 
-where v.Fecha_salida>=mm.fechaDeHoy() and v.Matricula=@matricula
+  update MM.Viajes 
+  set estado='inhabilitado'
+  where Matricula=@matricula and Fecha_salida>=mm.fechaDeHoy()
+  
+exec cancelarPasajesYPaquetesConViajeInhabilitado
 
-  delete b from MM.Paquetes b join mm.viajes as v on v.id=b.viaje 
-where v.Fecha_salida>=mm.fechaDeHoy() and v.Matricula=@matricula
-
-  delete from MM.Viajes where Matricula=@matricula and Fecha_salida>=mm.fechaDeHoy()
 
   UPDATE MM.Aeronaves set fecha_baja_definitiva=mm.fechaDeHoy() where matricula=@matricula 	  
   
@@ -948,15 +1030,11 @@ create procedure MM.CancelarAeronaveFueraDeServicio(@matricula varchar(10), @has
 
   delete from MM.Butacas where Viaje in (select Id from MM.Viajes
   where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
+update   MM.Viajes
+set estado='inhabilitado'
+ where Matricula=@matricula and Fecha_salida>=@dia and Fecha_salida<=@hasta
 
-  delete from MM.Pasajes where Viaje in (select Id from MM.Viajes
-  where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
-
-  delete from MM.Paquetes where Viaje in (select Id from MM.Viajes
-  where Fecha_salida>=@dia and Fecha_salida<=@hasta and Matricula=@matricula)
-
-  delete from MM.Viajes where Matricula=@matricula and Fecha_salida>=@dia and Fecha_salida<=@hasta
-
+exec cancelarPasajesYPaquetesConViajeInhabilitado
   UPDATE MM.Aeronaves set fecha_baja_fuera_servicio=@dia, Fecha_alta_fuera_servicio=@hasta
   where matricula=@matricula
   COMMIT TRAN
@@ -970,17 +1048,7 @@ declare @id int
 select @id=(select Id from MM.Ciudades where Descripcion= @Descripcion)
 update MM.Ciudades set Estado='Deshabilitado' where Id= @id
 update MM.Rutas_Aereas set Estado=2 where Ciudad_Destino=@id or Ciudad_Origen=@id
-delete b  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id  join mm.butacas b on b.viaje=v.id
-where r.Estado=2
-
-delete p  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id join mm.pasajes p on p.viaje=v.id 
-where r.Estado=2
-
-delete w  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id join  mm.paquetes w on w.viaje=v.id 
-where r.Estado=2
-
-delete v  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id 
-where r.Estado=2
+exec mm.inhabilitarViajesConRutasInhabilitadas
 commit tran
 go
 
@@ -1386,7 +1454,7 @@ set @llegada=convert(datetime,@fechaLlegada,20)
 set @salida=convert(datetime,@fechaSalida,20)
 
 insert into @tabla
-select a.matricula  from mm.aeronaves a left join mm.Viajes v on v.Matricula=a.matricula  and ((v.Fecha_Estimada_llegada between @salida and @llegada  ) or (@salida between v.Fecha_salida and v.Fecha_Estimada_llegada) or (v.Fecha_salida between @salida and @llegada  ) )left join mm.modeloAvion m on m.id=a.modelo left join mm.Tipos_Servicio t on t.Id=m.tipoServicio
+select a.matricula  from mm.aeronaves a left join mm.Viajes v on v.Matricula=a.matricula  and ((v.Fecha_Estimada_llegada between @salida and @llegada  ) or (@salida between v.Fecha_salida and v.Fecha_Estimada_llegada) or (v.Fecha_salida between @salida and @llegada  ) and v.estado='habilitado' )left join mm.modeloAvion m on m.id=a.modelo left join mm.Tipos_Servicio t on t.Id=m.tipoServicio
 where t.Descripcion=@TipoServicio  
 and (a.fecha_baja_definitiva >@llegada or a.fecha_baja_definitiva is null)
 group by a.Matricula,v.id
@@ -1469,7 +1537,7 @@ insert into @jaja
 
 select v.Id,butacasDisponibles,kgDisponibles,t.Descripcion,r.Precio_Base*t.Porcentaje,r.Precio_Kg from mm.viajes v join mm.Rutas_Aereas r on r.Id=v.Ruta join mm.Tipos_Servicio t on t.Id=r.Tipo_servicio join mm.Ciudades d on d.id=r.Ciudad_Destino join mm.Ciudades o on o.Id=r.Ciudad_Origen
 where datepart(dayofyear,v.fecha_salida) = datepart(dayofyear,@llegada) and year(v.Fecha_salida)=year(@llegada) and d.Descripcion=@destino and o.Descripcion=@origen
-and (kgDisponibles>0 or butacasDisponibles>0) 
+and (kgDisponibles>0 or butacasDisponibles>0) and v.estado='habilitado' 
  return 
  end
 
@@ -1584,22 +1652,6 @@ COMMIT TRANSACTION
 
 go
 */
-create  procedure mm.nuevaCancelacion @motivo varchar(200),@codCompra int
-as
-insert into mm.Cancelaciones(Motivo,Fecha,Cod_compra) values (@motivo,mm.fechaDeHoy(),@codCompra)
-go
-
-
-create  function mm.ultimacancelacion() returns int
-as
-begin 
-declare @a int
-select @a=max(Cod_CAncelacion) from mm.Cancelaciones
-return @a
-end
-
-go
-
 
 create function mm.paquetesCancelables (@codCompra int)
 returns @mitabla table(
@@ -1660,7 +1712,7 @@ where Viaje=@viaje and Nro=@num
 go
 
 
-create  trigger mm.noPuedeHaber2PasajesAlMismoTiempo on mm.Pasajes
+create trigger mm.noPuedeHaber2PasajesAlMismoTiempo on mm.Pasajes
 for insert
 as
 begin transaction
@@ -1668,7 +1720,7 @@ if(exists(select v1.Id
 from mm.Pasajes as p1 
  
 join mm.Viajes v1 on p1.viaje=v1.Id 
-join mm.Pasajes p2 on p2.cliente=p1.Cliente  
+join inserted p2 on p2.cliente=p1.Cliente  
 join mm.viajes as v2 on v2.Id=p2.viaje 
 and
 (v1.Fecha_salida between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v1.Fecha_Estimada_llegada between v2.Fecha_salida and v2.Fecha_Estimada_llegada or (v2.Fecha_salida between v1.Fecha_salida and v1.Fecha_Estimada_llegada))
@@ -1794,18 +1846,13 @@ create procedure mm.eliminarRuta @ruta int
 as
 begin transaction
 update MM.Rutas_Aereas set Estado=2 where Id=@ruta
-delete b  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id  join mm.butacas b on b.viaje=v.id
-where r.Estado=2
-
-delete p  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id join mm.pasajes p on p.viaje=v.id 
-where r.Estado=2
-
-delete w  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id join  mm.paquetes w on w.viaje=v.id 
-where r.Estado=2
-
-delete v  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id 
-where r.Estado=2
+exec mm.inhabilitarViajesConRutasInhabilitadas
 commit
+
+
+
+
+
 
 
 
