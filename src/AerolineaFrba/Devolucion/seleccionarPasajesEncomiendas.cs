@@ -32,13 +32,16 @@ namespace AerolineaFrba.Devolucion
             if (estadoValido())
             {
                 String motivo = textBox1.Text;
-                //ConexionALaBase.Conexion.ejecutarNonQuery("Begin transaction cancelacion");
-                //ConexionALaBase.Conexion.ejecutarNonQuery("set transaction isolation level serializable");
                 ConexionALaBase.Conexion.ejecutarNonQuery("mm.nuevaCancelacion @motivo='"+motivo+"',@codCompra="+codigoDeCompra+"");
                 SqlCommand comando = ConexionALaBase.Conexion.getComando();
                 comando.CommandText = "SELECT mm.ultimacancelacion()";
                 int codigoDeCancelacion = (Int32) comando.ExecuteScalar();
-                
+                float precioPasaje = float.Parse(dataGridView1.SelectedRows[0].Cells["precioPasaje"].Value.ToString());
+                float precioPaquete = float.Parse(dataGridView2.SelectedRows[0].Cells["precioPaquete"].Value.ToString());
+                int cantidadPasajes = (dataGridView1.SelectedRows.Count);
+                int cantidadPaquetes = (dataGridView1.SelectedRows.Count);
+                float importeDevolucion = cantidadPasajes * precioPasaje + cantidadPaquetes * precioPaquete;
+
                 foreach (DataGridViewRow row in dataGridView1.SelectedRows)
                 {
                     int codigoDePasaje = Convert.ToInt32(row.Cells["Cod_pasaje"].Value.ToString());
@@ -49,8 +52,7 @@ namespace AerolineaFrba.Devolucion
                     int codigoDePaquete = Convert.ToInt32(row.Cells["Cod_paquete"].Value.ToString());
                     ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.cancelacionPaquete @codPaquete="+codigoDePaquete+",@codCancelacion="+codigoDeCancelacion+"");
                 }
-               // ConexionALaBase.Conexion.ejecutarNonQuery("commit transaction cancelacion");
-                MessageBox.Show("Se han cancelado satisfactoriamente los pasajes y paquetes seleccionados");
+                MessageBox.Show("Se han cancelado satisfactoriamente los pasajes y paquetes seleccionados, importe: "+importeDevolucion);
                 new seleccionarPasajesEncomiendas(codigoDeCompra).Show();
                 this.Close();
            }          
