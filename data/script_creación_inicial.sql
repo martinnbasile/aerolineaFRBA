@@ -1702,7 +1702,7 @@ go
 
 
 create trigger mm.noPuedeHaber2PasajesAlMismoTiempo on mm.Pasajes
-for insert
+instead of insert
 as
 begin transaction
 if(exists(select v1.Id 
@@ -1719,8 +1719,12 @@ begin
 	rollback
 end
 else
-commit
 
+begin
+insert into mm.Pasajes(Cliente,cod_cancelacion,cod_compra,Fecha_Compra,Numero_Butaca,precioPasaje,Viaje)
+select Cliente,cod_cancelacion,cod_compra,Fecha_Compra,Numero_Butaca,precioPasaje,Viaje from inserted
+commit
+end
 go
 
 
