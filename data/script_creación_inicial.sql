@@ -1398,7 +1398,7 @@ end
 go
 
 
-create trigger decrementarButacas on mm.Pasajes
+create trigger mm.decrementarButacas on mm.Pasajes
 for insert
 as
 begin transaction
@@ -1425,7 +1425,7 @@ close micursor
 deallocate micursor
 commit
 go
-create trigger decrementarKg on mm.Paquetes
+create trigger mm.decrementarKg on mm.Paquetes
 for insert
 as
 begin transaction
@@ -1661,7 +1661,7 @@ where Viaje=@viaje and Nro=@num
 go
 
 
-create  trigger noPuedeHaber2PasajesAlMismoTiempo on mm.Pasajes
+create  trigger mm.noPuedeHaber2PasajesAlMismoTiempo on mm.Pasajes
 for insert
 as
 begin transaction
@@ -1769,6 +1769,7 @@ create  trigger mm.noPuedeHaber2ViajesAlMismoTiempo on mm.Viajes
 instead of insert
 as
 begin transaction
+set transaction isolation level serializable
 if(exists(select v1.Id 
  
 from mm.Viajes v1 
