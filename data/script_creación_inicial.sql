@@ -237,6 +237,7 @@ Viaje int,
 Kg int not null,
 Fecha_Compra smalldatetime,
 Cliente int,
+precio_paquete float,
 cod_compra int,
 cod_cancelacion int)
 go
@@ -255,6 +256,7 @@ Viaje int,
 Numero_Butaca int not null,
 Fecha_Compra smalldatetime,
 Cliente int,
+precioPasaje float,
 cod_compra int,
 cod_cancelacion int)
 go
@@ -347,16 +349,9 @@ go
 insert into MM.Fabricantes (Descripcion)
 select distinct Aeronave_Fabricante from gd_esquema.Maestra
 go
-insert into MM.Tipos_Servicio(Descripcion,Porcentaje) values ('Común',0)
+insert into MM.Tipos_Servicio(Descripcion,Porcentaje) select distinct Tipo_Servicio,round( Pasaje_Precio/Ruta_Precio_BasePasaje,2) from gd_esquema.Maestra where Pasaje_Precio<>0
 go
-insert into MM.Tipos_Servicio(Descripcion,Porcentaje) values ('Ejecutivo',5)
-go
-insert into MM.Tipos_Servicio(Descripcion,Porcentaje) values ('Cama',10)
-go
-insert into MM.Tipos_Servicio(Descripcion,Porcentaje) values ('Semi-Cama',15)
-go
-insert into MM.Tipos_Servicio(Descripcion,Porcentaje) values ('Premium',25)
-go
+
 insert into MM.Ciudades(Descripcion)
 select distinct Ruta_Ciudad_Destino from gd_esquema.Maestra union
 select distinct Ruta_Ciudad_Origen from gd_esquema.Maestra
@@ -1465,7 +1460,9 @@ returns @jaja table
 idViaje int,
 butacasLibres int,
 kgLibres int,
-tipoServicio varchar(15))
+tipoServicio varchar(15),
+precioPasaje float,
+precioPaquete float)
 as
 begin
 
@@ -1482,7 +1479,7 @@ and (kgDisponibles>0 or butacasDisponibles>0)
  go
 
 
-create procedure mm.ingresarCompraPasaje @viaje int,@dni int,@butaca int,@codigoCompra int --vamos a tener que agregar un codigo de compra
+create procedure mm.ingresarCompraPasaje @viaje int,@dni int,@butaca int,@codigoCompra int,@precio float --vamos a tener que agregar un codigo de compra
 as 
 begin
 declare @cliente int
@@ -1493,7 +1490,7 @@ insert into mm.pasajes(Viaje,Numero_Butaca,Fecha_Compra,Cliente,cod_compra) valu
 end
 go
 
-create procedure mm.ingresarCompraPaquete @viaje int,@dni int,@kg int,@compra int
+create procedure mm.ingresarCompraPaquete @viaje int,@dni int,@kg int,@compra int,@precio float
 as
 begin
 declare @cliente int
@@ -1707,7 +1704,7 @@ else insert into mm.TC values(@nro,@cod,@anio,@mes)
 end
 go
 
-create procedure mm.asentarCompra @codCompra int, @dni int, @total float, @medioPago varchar(10)
+create procedure mm.asentarCompra @codCompra int, @dni int, @total float, @medioPago varchar(10),@precio float
 as
 
 begin
@@ -1768,7 +1765,7 @@ end
 
 GO
 
-create  trigger noPuedeHaber2ViajesAlMismoTiempo on mm.Viajes
+create  trigger mm.noPuedeHaber2ViajesAlMismoTiempo on mm.Viajes
 instead of insert
 as
 begin transaction
@@ -1776,7 +1773,7 @@ if(exists(select v1.Id
  
 from mm.Viajes v1 
 
-join mm.inserted as v2 on v2.Matricula=v1.Matricula
+join inserted as v2 on v2.Matricula=v1.Matricula
 and
 (v1.Fecha_salida between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v1.Fecha_Estimada_llegada between v2.Fecha_salida and v2.Fecha_Estimada_llegada)
 ))
