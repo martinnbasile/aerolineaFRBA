@@ -56,15 +56,18 @@ namespace AerolineaFrba.Compra
         }
 
         private bool validarTodo()
-        {
-            if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1, "Ingrese numero de tarjeta"))
+        {   
+            String numT = maskedTextBox1.Text;
+            String codSeg = maskedTextBox2.Text;
+            if (numT.Length == 16)
             {
-                if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox2, "Ingrese codigo de seguridad"))
+                if (codSeg.Length == 3)
                 {
                     return true;
                 }
-            
+                else MessageBox.Show("El codigo de seguridad son 3 numeros");
             }
+            else MessageBox.Show("El numero de tarjeta debe tener 16 numeros");
             return false;
         }
 
@@ -75,7 +78,7 @@ namespace AerolineaFrba.Compra
             if ((this.validarFecha()) & (this.validarTodo()))
             {
             ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarTC "+ maskedTextBox1.Text+", " + maskedTextBox2.Text+", "+numericUpDown2.Value+", "+numericUpDown1.Value);
-            ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarCompraPaquete " + unaCompra.idViaje + ", " + elPasajero.dni + ", " + unaCompra.cantidadKgs + " , " + unaCompra.codigoCompra);
+            ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarCompraPaquete " + unaCompra.idViaje + ", " + elPasajero.dni + ", " + unaCompra.cantidadKgs + " , " + unaCompra.codigoCompra+","+unaCompra.precioPaquete);
             ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT, "exec mm.asentarCompra " + unaCompra.codigoCompra + ", " + elPasajero.dni + ", " + unaCompra.totalCompra() + ", 'Tarjeta'");
             MessageBox.Show("Total: " + unaCompra.totalCompra());
             MessageBox.Show("Operacion exitosa. Codigo de compra: " + unaCompra.codigoCompra);
