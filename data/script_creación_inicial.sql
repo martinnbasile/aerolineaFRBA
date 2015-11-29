@@ -1606,11 +1606,12 @@ create function mm.paquetesCancelables (@codCompra int)
 returns @mitabla table(
 cod_paquete int,
 viaje int,
-kg int)
+kg int,
+precioPaquete float)
 as 
 begin
 insert into @mitabla
-select Id,viaje,kg from mm.paquetes
+select Id,viaje,kg,precio_paquete from mm.paquetes
 where cod_compra=@codCompra and cod_cancelacion is null
 return 
 end
@@ -1620,11 +1621,12 @@ create function mm.pasajesCancelables (@codCompra int)
 returns @mitabla table(
 cod_pasaje int,
 viaje int,
-butaca_nro int)
+butaca_nro int,
+precioPasaje float)
 as 
 begin
 insert into @mitabla
-select Id,viaje,Numero_Butaca from mm.pasajes
+select Id,viaje,Numero_Butaca,precioPasaje from mm.pasajes
 where cod_compra=@codCompra and cod_cancelacion is null
 return 
 end
