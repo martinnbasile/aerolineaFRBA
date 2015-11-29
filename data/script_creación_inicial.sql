@@ -309,7 +309,7 @@ mes_venc int
 
 )
 go
-create  table mm.compras(
+create table mm.compras(
 cod_compra int identity(1000000,1) primary key,
 cliente int foreign key references mm.clientes,
 fecha datetime,
@@ -618,25 +618,25 @@ BEGIN
 END
 GO
 
-insert into MM.Pasajes(Viaje,Numero_Butaca,Fecha_Compra,Cliente)
-select distinct b.Id,a.Butaca_Nro,Pasaje_FechaCompra,d.Id  from gd_esquema.Maestra as a join MM.Viajes as b on 
+insert into MM.Pasajes(Viaje,Numero_Butaca,Fecha_Compra,Cliente,PrecioPasaje)
+select distinct b.Id,a.Butaca_Nro,Pasaje_FechaCompra,d.Id,Pasaje_Precio  from gd_esquema.Maestra as a join MM.Viajes as b on 
 b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and 
 b.Matricula=a.Aeronave_Matricula join MM.Rutas_Aereas as c on b.Ruta=c.Id and c.Precio_Base=a.Ruta_Precio_BasePasaje 
 /*and c.Precio_Kg=a.Ruta_Precio_BaseKG */join MM.Tipos_Servicio as g on  c.Tipo_Servicio=g.Id and g.Descripcion =a.Tipo_Servicio 
 join MM.Clientes as d on d.DNI=a.Cli_Dni join MM.Ciudades as e on c.Ciudad_Destino=e.Id and e.Descripcion=a.Ruta_Ciudad_Destino 
 join MM.Ciudades as f on c.Ciudad_Origen=f.Id and f.Descripcion=a.Ruta_Ciudad_Origen
 where Pasaje_codigo <>0
-group by b.Id,Butaca_Nro,Pasaje_fechaCompra,d.Id
+group by b.Id,Butaca_Nro,Pasaje_fechaCompra,d.Id,Pasaje_Precio
 
-insert into MM.Paquetes(Viaje,Kg,Fecha_Compra,Cliente)
-select distinct b.Id,a.Paquete_KG,Paquete_FechaCompra,d.Id  from gd_esquema.Maestra as a join MM.Viajes as b on b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada 
+insert into MM.Paquetes(Viaje,Kg,Fecha_Compra,Cliente,precio_Paquete)
+select distinct b.Id,a.Paquete_KG,Paquete_FechaCompra,d.Id,Paquete_Precio  from gd_esquema.Maestra as a join MM.Viajes as b on b.Fecha_Estimada_llegada=a.Fecha_LLegada_Estimada 
 and b.Fecha_llegada=a.FechaLLegada and b.Fecha_salida=a.FechaSalida and b.Matricula=a.Aeronave_Matricula join MM.Rutas_Aereas 
 as c on b.Ruta=c.Id /*and c.Precio_Base=a.Ruta_Precio_BasePasaje*/ and c.Precio_Kg=a.Ruta_Precio_BaseKG join MM.Tipos_Servicio as 
 g on  c.Tipo_Servicio=g.Id and g.Descripcion =a.Tipo_Servicio join MM.Clientes as d on d.DNI=a.Cli_Dni join MM.Ciudades as e 
 on c.Ciudad_Destino=e.Id and e.Descripcion=a.Ruta_Ciudad_Destino join MM.Ciudades as f on c.Ciudad_Origen=f.Id and 
 f.Descripcion=a.Ruta_Ciudad_Origen
 where Paquete_KG != 0
-group by b.Id,a.Paquete_KG,Paquete_fechaCompra,d.Id
+group by b.Id,a.Paquete_KG,Paquete_fechaCompra,d.Id,Paquete_Precio
 
 go
 /*
@@ -830,11 +830,11 @@ where
 	not exists (
 		select * from MM.Viajes v
 		where (v.Fecha_salida between @fechaBaja and @fechaAlta
-		or  v.Fecha_Estimada_llegada between @fechaBaja and @fechaAlta) 
+		or  v.Fecha_Estimada_llegada between @fechaBaja and @fechaAlta or @fechaAlta between v.Fecha_llegada and v.Fecha_Estimada_llegada) 
 		and a.matricula=v.Matricula
 	)
 	and a.fecha_baja_definitiva is null
-	and (((a.fecha_baja_fuera_servicio not between @fechaBaja and @fechaAlta) and (a.fecha_alta_fuera_servicio not between @fechaBaja and @fechaAlta)) or ((a.fecha_baja_fuera_servicio is null) and (a.fecha_alta_fuera_servicio is null)))
+	and (((a.fecha_baja_fuera_servicio not between @fechaBaja and @fechaAlta) and (a.fecha_alta_fuera_servicio not between @fechaBaja and @fechaAlta) and @fechaBaja not between a.fecha_baja_fuera_servicio and a.fecha_alta_fuera_servicio) or ((a.fecha_baja_fuera_servicio is null) and (a.fecha_alta_fuera_servicio is null)) )
 	and a.Modelo=@Modelo
 	and a.matricula!=@matricula			 
 	 group by Modelo_descripcion,f.Descripcion,ts.Descripcion,mo.Kg,
@@ -1391,7 +1391,7 @@ set @salida=convert(datetime,@fechaSalida,20)
 
 insert into @tabla
 select a.matricula  from mm.aeronaves a left join mm.Viajes v on v.Matricula=a.matricula join mm.modeloAvion m on m.id=a.modelo join mm.Tipos_Servicio t on t.Id=m.tipoServicio
-where t.Descripcion=@TipoServicio and (not((v.Fecha_Estimada_llegada between @salida and @llegada  ) or (v.Fecha_salida between @salida and @llegada  ) ) or v.Id is null)
+where t.Descripcion=@TipoServicio and (not((v.Fecha_Estimada_llegada between @salida and @llegada  ) or (@salida between v.Fecha_salida and v.Fecha_Estimada_llegada) or (v.Fecha_salida between @salida and @llegada  ) ) or v.Id is null)
 and (a.fecha_baja_definitiva >@llegada or a.fecha_baja_definitiva is null)
 group by a.Matricula
 
@@ -1470,7 +1470,7 @@ declare @llegada datetime
 set @llegada=convert(date,@fecha,20)
 insert into @jaja
 
-select v.Id,butacasDisponibles,kgDisponibles,t.Descripcion from mm.viajes v join mm.Rutas_Aereas r on r.Id=v.Ruta join mm.Tipos_Servicio t on t.Id=r.Tipo_servicio join mm.Ciudades d on d.id=r.Ciudad_Destino join mm.Ciudades o on o.Id=r.Ciudad_Origen
+select v.Id,butacasDisponibles,kgDisponibles,t.Descripcion,r.Precio_Base*t.Porcentaje,r.Precio_Kg from mm.viajes v join mm.Rutas_Aereas r on r.Id=v.Ruta join mm.Tipos_Servicio t on t.Id=r.Tipo_servicio join mm.Ciudades d on d.id=r.Ciudad_Destino join mm.Ciudades o on o.Id=r.Ciudad_Origen
 where datepart(dayofyear,v.fecha_salida) = datepart(dayofyear,@llegada) and year(v.Fecha_salida)=year(@llegada) and d.Descripcion=@destino and o.Descripcion=@origen
 and (kgDisponibles>0 or butacasDisponibles>0) 
  return 
@@ -1485,7 +1485,7 @@ begin
 declare @cliente int
 set @cliente=(select max(Id) from mm.clientes where DNI=@dni)
 
-insert into mm.pasajes(Viaje,Numero_Butaca,Fecha_Compra,Cliente,cod_compra) values (@viaje,@butaca,mm.fechaDeHoy(),@cliente,@codigoCompra)
+insert into mm.pasajes(Viaje,Numero_Butaca,Fecha_Compra,Cliente,cod_compra,precioPasaje) values (@viaje,@butaca,mm.fechaDeHoy(),@cliente,@codigoCompra,@precio)
 
 end
 go
@@ -1496,7 +1496,7 @@ begin
 declare @cliente int
 set @cliente=(select max(Id) from mm.clientes where DNI=@dni)
 
-insert into mm.paquetes(viaje,kg,Fecha_Compra,Cliente,cod_compra) values(@viaje,@kg,mm.fechaDeHoy(),@cliente,@compra)
+insert into mm.paquetes(viaje,kg,Fecha_Compra,Cliente,cod_compra,Precio_paquete) values(@viaje,@kg,mm.fechaDeHoy(),@cliente,@compra,@precio)
 end
 go
 
@@ -1672,7 +1672,7 @@ join mm.Viajes v1 on p1.viaje=v1.Id
 join mm.Pasajes p2 on p2.cliente=p1.Cliente  
 join mm.viajes as v2 on v2.Id=p2.viaje 
 and
-(v1.Fecha_salida between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v1.Fecha_Estimada_llegada between v2.Fecha_salida and v2.Fecha_Estimada_llegada)
+(v1.Fecha_salida between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v1.Fecha_Estimada_llegada between v2.Fecha_salida and v2.Fecha_Estimada_llegada or (v2.Fecha_salida between v1.Fecha_salida and v1.Fecha_Estimada_llegada))
 ))
 begin 
 	raiserror ('Un Pasajero no puede estar haciendo 2 viajes a la vez',16,150)
@@ -1704,7 +1704,7 @@ else insert into mm.TC values(@nro,@cod,@anio,@mes)
 end
 go
 
-create procedure mm.asentarCompra @codCompra int, @dni int, @total float, @medioPago varchar(10),@precio float
+create procedure mm.asentarCompra @codCompra int, @dni int, @total float, @medioPago varchar(10)
 as
 
 begin
@@ -1775,7 +1775,7 @@ from mm.Viajes v1
 
 join inserted as v2 on v2.Matricula=v1.Matricula
 and
-(v1.Fecha_salida between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v1.Fecha_Estimada_llegada between v2.Fecha_salida and v2.Fecha_Estimada_llegada)
+(v1.Fecha_salida between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v1.Fecha_Estimada_llegada between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v2.Fecha_salida between v1.Fecha_salida and v1.Fecha_Estimada_llegada)
 ))
 begin 
 	raiserror ('Un avion no puede estar haciendo 2 viajes a la vez',16,150)
@@ -1805,5 +1805,9 @@ where r.Estado=2
 delete v  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id 
 where r.Estado=2
 commit
+
+
+
+
 
 
