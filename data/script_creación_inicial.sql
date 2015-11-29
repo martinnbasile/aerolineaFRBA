@@ -1021,7 +1021,7 @@ set @horas=datepart(hour,@llegada)
 set @minutos=datepart(minute,@llegada)
 set @hora=cast(MM.fechaDeHoy() as datetime)
 set @hora=dateadd(hour,@horas,@hora)
-(select v.Id from MM.viajes v join MM.Rutas_Aereas r on v.Ruta=r.Id and r.Ciudad_Destino=@destino and r.Ciudad_Origen=@origen 
+(select @viaje=v.Id from MM.viajes v join MM.Rutas_Aereas r on v.Ruta=r.Id and r.Ciudad_Destino=@destino and r.Ciudad_Origen=@origen 
 where 
 Matricula=@avion and Fecha_Estimada_llegada between dateadd(hour,-1,@hora) and dateadd(hour,1,@hora))
 if(@viaje is null)
@@ -1154,12 +1154,12 @@ set @desde='0601'
 set @hasta='1231'
 end
 insert into @table  
-select top 5 d.Descripcion,count(*)
-from MM.Pasajes a,MM.Viajes b, mm.Rutas_Aereas c, MM.Ciudades d
-where a.Viaje=b.Id and b.Ruta=c.Id and c.Ciudad_Destino=d.Id and b.Fecha_salida 
-between @anio+@desde and @anio+@hasta 
+select top 5 d.Descripcion,count(a.Id)
+from MM.Pasajes a right join MM.Viajes b on a.Viaje=b.Id right join  mm.Rutas_Aereas c on b.Ruta=c.Id  and b.Fecha_salida 
+between @anio+@desde and @anio+@hasta  right join MM.Ciudades d on c.Ciudad_Destino=d.Id
+ 
 group by d.Descripcion 
-order by count(*) desc
+order by count(a.Id) desc
 return
 end
 GO
