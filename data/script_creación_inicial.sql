@@ -1173,7 +1173,7 @@ set @puto=1+(month(@fecha)-1)/6
 return @puto
 end
 go
-create  function mm.AeronavesMasDiasFueraServicio
+create function mm.AeronavesMasDiasFueraServicio
 (@semestre int, @anio char(4))
 
 returns @table table (Description varchar(50),dias int)
@@ -1181,10 +1181,10 @@ as
 begin
 
 insert into @table
-select top 5 aeronave,count(*)
-from  mm.aeronaves a left join mm.logBajasAeronaves b on a.Matricula=b.matricula
-where (year(fechabaja)=@anio and mm.semestre(FechaBaja)=@semestre)
-group by aeronave
+select top 5 a.matricula,count(b.aeronave)
+from  mm.aeronaves a left join mm.logBajasAeronaves b on a.Matricula=b.aeronave
+where ((year(fechabaja)=@anio and mm.semestre(FechaBaja)=@semestre) or b.aeronave is null)
+group by a.MAtricula
 order by count(*) desc
 
 return
@@ -1214,15 +1214,12 @@ set @hasta='1231'
 end
 insert into @table  
 
-select top 5 e.Descripcion,count(*)
-from MM.Pasajes b, MM.Viajes c, MM.Rutas_Aereas d right join MM.Ciudades e on d.Ciudad_Destino=e.Id
-where	
-		b.Viaje=c.Id and
-		c.Ruta=d.Id 
+select top 5 e.Descripcion,count(b.cod_cancelacion)
+from MM.Pasajes b right join MM.Viajes c  on b.Viaje=c.Id  and  b.cod_cancelacion is not null   right join MM.Rutas_Aereas d on c.Ruta=d.Id and 
+		  c.Fecha_salida 
+between @anio+@desde and @anio+@hasta  right join MM.Ciudades e on d.Ciudad_Destino=e.Id
+	
 		
-		and b.cod_cancelacion is not null 
-		and c.Fecha_salida 
-between @anio+@desde and @anio+@hasta 
 group by e.Descripcion 
 order by count(*) desc
 return
@@ -1389,10 +1386,11 @@ set @llegada=convert(datetime,@fechaLlegada,20)
 set @salida=convert(datetime,@fechaSalida,20)
 
 insert into @tabla
-select a.matricula  from mm.aeronaves a left join mm.Viajes v on v.Matricula=a.matricula join mm.modeloAvion m on m.id=a.modelo join mm.Tipos_Servicio t on t.Id=m.tipoServicio
-where t.Descripcion=@TipoServicio and (not((v.Fecha_Estimada_llegada between @salida and @llegada  ) or (@salida between v.Fecha_salida and v.Fecha_Estimada_llegada) or (v.Fecha_salida between @salida and @llegada  ) ) or v.Id is null)
+select a.matricula  from mm.aeronaves a left join mm.Viajes v on v.Matricula=a.matricula  and ((v.Fecha_Estimada_llegada between @salida and @llegada  ) or (@salida between v.Fecha_salida and v.Fecha_Estimada_llegada) or (v.Fecha_salida between @salida and @llegada  ) )left join mm.modeloAvion m on m.id=a.modelo left join mm.Tipos_Servicio t on t.Id=m.tipoServicio
+where t.Descripcion=@TipoServicio  
 and (a.fecha_baja_definitiva >@llegada or a.fecha_baja_definitiva is null)
-group by a.Matricula
+group by a.Matricula,v.id
+having v.id is  null
 
 return 
 end
