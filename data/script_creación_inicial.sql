@@ -993,11 +993,9 @@ create procedure MM.asentarMillas @viaje int
 as
 begin transaction
 insert into MM.Millas(Cliente,Millas,Fecha_movimiento,Descripcion)
-select Cliente,r.Precio_Base/10,MM.fechaDeHoy(),'COMPRA PASAJE' from MM.Pasajes pas join MM.Viajes v on v.Id=pas.Viaje and v.Id=@viaje join MM.Rutas_Aereas r 
-on r.Id=v.Ruta left join mm.Cancelaciones j on pas.cod_cancelacion=j.Cod_CAncelacion where j.Cod_CAncelacion is null-- where pas.Id not in (select Codigo_Pasaje from MM.Cancelaciones)
+select Cliente,pas.precioPasaje/10,MM.fechaDeHoy(),'COMPRA PASAJE' from MM.Pasajes pas join MM.Viajes v on v.Id=pas.Viaje and v.Id=@viaje left join mm.Cancelaciones j on pas.cod_cancelacion=j.Cod_CAncelacion where j.Cod_CAncelacion is null-- where pas.Id not in (select Codigo_Pasaje from MM.Cancelaciones)
 union
-select paq.Cliente,(paq.Kg*r.Precio_Kg)/10,MM.fechaDeHoy(),'COMPRA PAQUETE' from MM.Paquetes paq join MM.Viajes v on v.Id=paq.Viaje and v.Id=@viaje join MM.Rutas_Aereas 
-r on r.Id=v.Ruta left join mm.Cancelaciones j on paq.cod_cancelacion=j.Cod_CAncelacion where j.Cod_CAncelacion is null --where paq.Id not in (select Codigo_Encomienda from MM.Cancelaciones) 
+select paq.Cliente,(paq.precio_paquete)/10,MM.fechaDeHoy(),'COMPRA PAQUETE' from MM.Paquetes paq join MM.Viajes v on v.Id=paq.Viaje and v.Id=@viaje  left join mm.Cancelaciones j on paq.cod_cancelacion=j.Cod_CAncelacion where j.Cod_CAncelacion is null --where paq.Id not in (select Codigo_Encomienda from MM.Cancelaciones) 
 
 
 commit
