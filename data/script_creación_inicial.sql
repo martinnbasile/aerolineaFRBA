@@ -546,8 +546,8 @@ GO
 insert into MM.Rutas_Aereas(Ruta_Codigo,Ciudad_Destino,Ciudad_Origen,Precio_Base,Precio_Kg,Estado,Tipo_Servicio)
 select e.Ruta_Codigo,d.Id,o.Id,max(e.Ruta_Precio_BasePasaje),max(e.Ruta_Precio_BaseKG),1,t.Id from gd_esquema.Maestra as e join mm.ciudades as d on e.Ruta_Ciudad_Destino=d.Descripcion join  mm.Ciudades as o on e.Ruta_Ciudad_Origen=o.Descripcion join mm.Tipos_Servicio t on t.Descripcion=e.Tipo_Servicio
 group by d.Id,o.Id,e.Ruta_Codigo,t.Id
-
 go
+
 create FUNCTION MM.devuelveRutaaa
 (
 	@ciudad_origen int,
