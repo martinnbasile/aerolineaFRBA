@@ -67,7 +67,8 @@ namespace AerolineaFrba.Compra
                     MessageBox.Show("Ingrese los datos de los pasajeros:");
                     unaCompra.instanciaDeCompra = "Pasajeros";
                 }
-
+                unaCompra.precioPasaje = float.Parse(viajeSeleccionado.Cells["precioPasaje"].Value.ToString());
+                unaCompra.precioPaquete = float.Parse(viajeSeleccionado.Cells["precioPaquete"].Value.ToString());
                 unaCompra.iniciarProcesamiento();
                 this.Close();
             }

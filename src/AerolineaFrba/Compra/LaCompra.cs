@@ -21,6 +21,8 @@ namespace AerolineaFrba.Compra
         public int dniCliente;
         private int pasajesProcesados = 0;
         private float precioTotal;
+        public float precioPasaje;
+        public float precioPaquete;
 
          public LaCompra()
          {
@@ -30,16 +32,7 @@ namespace AerolineaFrba.Compra
          public void viajeElegido(int viajeElegido)
          {
              idViaje = viajeElegido;
-             System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase(
-                "select precio_kg from mm.viajes v JOIN mm.rutas_aereas r on v.ruta=r.id where v.id=" + idViaje);
-             reader.Read();
-             float precioBaseEncomienda = float.Parse(reader.GetSqlValue(0).ToString());
-             reader.Dispose();
-             reader = ConexionALaBase.Conexion.consultarBase(
-                 "select precio_base from mm.viajes v JOIN mm.rutas_aereas r on v.ruta=r.id where v.id=" + idViaje);
-             reader.Read();
-             float precioPasaje = float.Parse(reader.GetSqlValue(0).ToString());
-             precioTotal = precioBaseEncomienda * cantidadKgs + precioPasaje * cantidadPasajes;
+             precioTotal = precioPaquete * cantidadKgs + precioPasaje * cantidadPasajes;
          }
 
          public float totalCompra()

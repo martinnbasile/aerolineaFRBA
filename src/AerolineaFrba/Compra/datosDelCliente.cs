@@ -121,7 +121,7 @@ namespace AerolineaFrba.Compra
                     else
                     {
                         
-                        ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT,"exec mm.ingresarCompraPaquete "+ laCompra.idViaje+", "+ elPasajero.dni +", "+ laCompra.cantidadKgs +" , "+ laCompra.codigoCompra);
+                        ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT,"exec mm.ingresarCompraPaquete "+ laCompra.idViaje+", "+ elPasajero.dni +", "+ laCompra.cantidadKgs +" , "+ laCompra.codigoCompra+","+laCompra.precioPaquete);
                         ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT, "exec mm.asentarCompra " + laCompra.codigoCompra + ", " + elPasajero.dni + ", " + laCompra.totalCompra() + ", 'Efectivo'");
                         laCompra.comandoT.Transaction.Commit();
                         MessageBox.Show("Total: " + laCompra.totalCompra());
