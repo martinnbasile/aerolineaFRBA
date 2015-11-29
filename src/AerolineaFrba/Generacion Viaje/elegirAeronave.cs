@@ -32,10 +32,18 @@ namespace AerolineaFrba.Generacion_Viaje
             {
                 DataGridViewRow aeronaveElegida = this.dataGridView1.SelectedRows[0];
                 String matriculaElegida = aeronaveElegida.Cells["Matricula"].Value.ToString();
-                ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.generarViaje '" + matriculaElegida + "', " + elViajeElegido.ruta + ",'" + elViajeElegido.fechaSalida + "','" + elViajeElegido.fechaLlegada + "'");
-                MessageBox.Show("El viaje se genero exitosamente");
-                new Funcionalidades.Funcionalidades().Show();
-                this.Close();
+                try
+                {
+                    ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.generarViaje '" + matriculaElegida + "', " + elViajeElegido.ruta + ",'" + elViajeElegido.fechaSalida + "','" + elViajeElegido.fechaLlegada + "'");
+                    MessageBox.Show("El viaje se genero exitosamente");
+                    new Funcionalidades.Funcionalidades().Show();
+                    this.Close();
+                }
+                catch (System.Data.SqlClient.SqlException exe)
+                {
+                    MessageBox.Show(exe.Message);
+                }
+
             }    
         }
     }

@@ -23,8 +23,8 @@ namespace AerolineaFrba.Devolucion
 
         private void seleccionarPasajesEncomiendas_Load(object sender, EventArgs e)
         {
-            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "exec MM.vista_pasajes_cancelables @idCompra="+codigoDeCompra+"");
-            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView2, "exec MM.vista_paquetes_cancelables @idCompra="+codigoDeCompra+"");
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "Select * from  mm.pasajesCancelables (" + codigoDeCompra + ")");
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView2, "Select * from mm.paquetesCancelables (" + codigoDeCompra + ")");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -41,12 +41,12 @@ namespace AerolineaFrba.Devolucion
                 
                 foreach (DataGridViewRow row in dataGridView1.SelectedRows)
                 {
-                    int codigoDePasaje = Convert.ToInt32(row.Cells["Codigo de pasaje"].Value.ToString());
+                    int codigoDePasaje = Convert.ToInt32(row.Cells["Cod_pasaje"].Value.ToString());
                     ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.cancelacionPasaje @codPasaje="+codigoDePasaje+",@codCancelacion="+codigoDeCancelacion+"");              
                 }
                 foreach (DataGridViewRow row in dataGridView2.SelectedRows)
                 {
-                    int codigoDePaquete = Convert.ToInt32(row.Cells["Codigo de paquete"].Value.ToString());
+                    int codigoDePaquete = Convert.ToInt32(row.Cells["Cod_paquete"].Value.ToString());
                     ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.cancelacionPaquete @codPaquete="+codigoDePaquete+",@codCancelacion="+codigoDeCancelacion+"");
                 }
                // ConexionALaBase.Conexion.ejecutarNonQuery("commit transaction cancelacion");
