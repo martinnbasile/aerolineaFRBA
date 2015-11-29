@@ -48,10 +48,20 @@ namespace AerolineaFrba.Compra
         {//CONFIRMA
             if (this.validarSeleccionDeButaca())
             {
-                int butacaElegida = int.Parse(dataGridView1.SelectedRows[0].Cells["nroButaca"].Value.ToString());
-                ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarCompraPasaje "+ unaCompra.idViaje +", "+unPasajero.dni+", "+ butacaElegida+", "+ unaCompra.codigoCompra+","+unaCompra.precioPasaje);
-                unaCompra.seProcesoUnPasaje();
-                this.Close(); 
+                try
+                {
+                    int butacaElegida = int.Parse(dataGridView1.SelectedRows[0].Cells["nroButaca"].Value.ToString());
+                    ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT, "exec mm.ingresarCompraPasaje " + unaCompra.idViaje + ", " + unPasajero.dni + ", " + butacaElegida + ", " + unaCompra.codigoCompra + "," + unaCompra.precioPasaje);
+                    unaCompra.seProcesoUnPasaje();
+                    this.Close();
+                }
+                catch (System.Data.SqlClient.SqlException exec)
+                {
+                    MessageBox.Show(exec.Message);
+                    MessageBox.Show("La compra fue cancelada"); 
+                    new compra().Show();
+                    this.Close();
+                }
             }
         }
     }
