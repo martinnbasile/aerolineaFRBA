@@ -211,6 +211,10 @@ Ruta int,
 constraint Ruta foreign key (Ruta) references MM.Rutas_Aereas(Id),
 kgDisponibles int,
 butacasDisponibles int,
+Fecha_Salida date not null,
+Fecha_Estimada_llegada date,
+Fecha_llegada date,
+
 check(kgdisponibles>=0),
 check(butacasdisponibles>=0)
 )
@@ -479,15 +483,6 @@ add Estado int not null default 1
 go
 
 --alter table mm.rutas_aereras add default 1
-alter table MM.Viajes
-add Fecha_Salida date not null
-go
-alter table MM.Viajes
-add Fecha_Estimada_llegada date
-alter table MM.Viajes
-add Fecha_llegada date
-
-go
 Create table MM.Intentos_login(
 	Id_login int identity(1,1) primary key,
 	Codigo_usuario int not null,
@@ -1194,7 +1189,7 @@ begin
 
 insert into @table
 select top 5 aeronave,count(*)
-from  mm.logBajasAeronaves
+from  mm.aeronaves a left join mm.logBajasAeronaves b on a.Matricula=b.matricula
 where (year(fechabaja)=@anio and mm.semestre(FechaBaja)=@semestre)
 group by aeronave
 order by count(*) desc
@@ -1774,14 +1769,14 @@ end
 GO
 
 create  trigger noPuedeHaber2ViajesAlMismoTiempo on mm.Viajes
-for insert
+instead of insert
 as
 begin transaction
 if(exists(select v1.Id 
  
 from mm.Viajes v1 
 
-join mm.viajes as v2 on v2.Matricula=v1.Matricula
+join mm.inserted as v2 on v2.Matricula=v1.Matricula
 and
 (v1.Fecha_salida between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v1.Fecha_Estimada_llegada between v2.Fecha_salida and v2.Fecha_Estimada_llegada)
 ))
@@ -1790,8 +1785,10 @@ begin
 	rollback
 end
 else
+begin
+insert into mm.viajes(mATRICULA,ruta,kgDisponibles,butacasDisponibles,Fecha_salida,fecha_llegada,fecha_estimada_llegada) select mATRICULA,ruta,kgDisponibles,butacasDisponibles,Fecha_salida,fecha_llegada,fecha_estimada_llegada from inserted
 commit
-
+end
 go
 
 
