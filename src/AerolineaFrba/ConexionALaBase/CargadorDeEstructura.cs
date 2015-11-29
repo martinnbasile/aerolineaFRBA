@@ -25,6 +25,7 @@ namespace AerolineaFrba.ConexionALaBase
         public static void cargarDataGrid(SqlCommand command, DataGridView unDataGrid, String unaQuery)
         {
             DataTable dataTable = new DataTable();
+            command.CommandText = unaQuery;
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             adapter.Fill(dataTable);
             unDataGrid.DataSource = dataTable;

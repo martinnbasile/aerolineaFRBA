@@ -32,7 +32,7 @@ namespace AerolineaFrba.Devolucion
             if (estadoValido())
             {
                 String motivo = textBox1.Text;
-                ConexionALaBase.Conexion.ejecutarNonQuery("mm.nuevaCancelacion @motivo='"+motivo+"',@codCompra="+codigoDeCompra+"");
+                ConexionALaBase.Conexion.ejecutarNonQuery("mm.nuevaCancelacion @motivo='"+motivo+"'");
                 SqlCommand comando = ConexionALaBase.Conexion.getComando();
                 comando.CommandText = "SELECT mm.ultimacancelacion()";
                 int codigoDeCancelacion = (Int32) comando.ExecuteScalar();

@@ -96,7 +96,7 @@ namespace AerolineaFrba.Compra
             else
             {
                 ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT,"Insert into mm.clientes (DNI,Nombre,Apellido,Direccion,Telefono,Mail,Fecha_nacimiento) values (" + elPasajero.dni + ",'" + textBox2.Text + "','" + textBox3.Text + "','" + textBox4.Text + "'," + maskedTextBox1.Text + ",'" + textBox6.Text + "','" + textBox7.Text + "')");
-
+               
             }
 
         }
