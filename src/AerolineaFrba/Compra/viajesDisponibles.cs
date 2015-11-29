@@ -60,6 +60,9 @@ namespace AerolineaFrba.Compra
                 unaCompra.cantidadPasajes = int.Parse(numericUpDown1.Value.ToString());
                 unaCompra.cantidadKgs = int.Parse(numericUpDown2.Value.ToString());
                 DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
+                unaCompra.precioPasaje = float.Parse(viajeSeleccionado.Cells["precioPasaje"].Value.ToString());
+                unaCompra.precioPaquete = float.Parse(viajeSeleccionado.Cells["precioPaquete"].Value.ToString());
+                
                 unaCompra.viajeElegido(int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString()));
                 
                 if (unaCompra.cantidadPasajes > 0)
@@ -67,8 +70,6 @@ namespace AerolineaFrba.Compra
                     MessageBox.Show("Ingrese los datos de los pasajeros:");
                     unaCompra.instanciaDeCompra = "Pasajeros";
                 }
-                unaCompra.precioPasaje = float.Parse(viajeSeleccionado.Cells["precioPasaje"].Value.ToString());
-                unaCompra.precioPaquete = float.Parse(viajeSeleccionado.Cells["precioPaquete"].Value.ToString());
                 unaCompra.iniciarProcesamiento();
                 this.Close();
             }

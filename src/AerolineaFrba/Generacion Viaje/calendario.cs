@@ -21,11 +21,12 @@ namespace AerolineaFrba.Generacion_Viaje
             abmQueLlamo = elAbmQueLlamo;
             InitializeComponent();
             textBoxLlamo = textBox;
+            monthCalendar1.TodayDate = Convert.ToDateTime(Properties.Settings.Default.fechaDelSistema);
+            monthCalendar1.MaxSelectionCount = 1;
         }
 
         private void calendario_Load(object sender, EventArgs e)
         {
-            monthCalendar1.MaxSelectionCount = 1;
         }
 
         

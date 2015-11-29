@@ -36,10 +36,18 @@ namespace AerolineaFrba.Devolucion
                 SqlCommand comando = ConexionALaBase.Conexion.getComando();
                 comando.CommandText = "SELECT mm.ultimacancelacion()";
                 int codigoDeCancelacion = (Int32) comando.ExecuteScalar();
-                float precioPasaje = float.Parse(dataGridView1.SelectedRows[0].Cells["precioPasaje"].Value.ToString());
-                float precioPaquete = float.Parse(dataGridView2.SelectedRows[0].Cells["precioPaquete"].Value.ToString());
+                float precioPasaje = 0;
+                float precioPaquete = 0;
                 int cantidadPasajes = (dataGridView1.SelectedRows.Count);
-                int cantidadPaquetes = (dataGridView1.SelectedRows.Count);
+                int cantidadPaquetes = (dataGridView2.SelectedRows.Count);
+                if (cantidadPasajes>0)
+                {
+                     precioPasaje = float.Parse(dataGridView1.SelectedRows[0].Cells["precioPasaje"].Value.ToString());
+                }
+                if (cantidadPaquetes > 0)
+                {
+                    precioPaquete = float.Parse(dataGridView2.SelectedRows[0].Cells["precioPaquete"].Value.ToString());
+                }
                 float importeDevolucion = cantidadPasajes * precioPasaje + cantidadPaquetes * precioPaquete;
 
                 foreach (DataGridViewRow row in dataGridView1.SelectedRows)
