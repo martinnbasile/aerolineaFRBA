@@ -35,7 +35,7 @@ namespace AerolineaFrba.Login
             String nuevaPassword = "";
             if (Validaciones.Validaciones.validarTextBox(textBox1, "Ingrese nueva contraseña"))
             {
-                if (Validaciones.Validaciones.validarTextBox(textBox2, "Repita la contraseña"))
+                if (Validaciones.Validaciones.validarTextBox(textBox2, "Repita la nueva contraseña"))
                 {
                     if (textBox1.Text == textBox2.Text)
                     {
@@ -55,6 +55,12 @@ namespace AerolineaFrba.Login
                     }
                 }
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new Login().Show();
+            this.Close();
         }
     }
 
