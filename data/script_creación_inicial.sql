@@ -1251,14 +1251,14 @@ create function mm.maximosMilleros(@semestre int,@anio int) returns
 as
 begin
 insert into @tablita 
-select top 5 c.dni,c.nombre, c.apellido, sum(m.millas)
+select top 5 c.dni,c.nombre, c.apellido, sum(isnull(m.millas,0))
 
-from mm.millas m join mm.clientes c on (m.cliente=c.id)
-where m.millas>0 and year(m.Fecha_movimiento)=@anio and (1+(month(m.Fecha_movimiento)-1)/6)=@semestre
+from mm.millas m right join mm.clientes c on (m.cliente=c.id) and m.millas>0 and year(m.Fecha_movimiento)=@anio and (1+(month(m.Fecha_movimiento)-1)/6)=@semestre
+ 
 group by c.nombre,c.apellido,c.dni
 
 
-order by sum(m.millas) DESC
+order by sum(isnull(m.millas,0)) DESC
 return
 end
 go
@@ -1727,7 +1727,7 @@ group by a.Cli_Dni
  order by 2 desc
  */
 
- create   function [MM].[DestinosAeronavesMenosButacasVendidos]
+ create function [MM].[DestinosAeronavesMenosButacasVendidos]
 (@semestre int,
 @anio char(4))
 returns @table table
@@ -1749,16 +1749,17 @@ set @hasta='1231'
 end
 insert into @table  
 
-select top 5 D.Descripcion,sum(b.butacasDisponibles) as vacias
+select top 5 D.Descripcion,sum(isnull(b.butacasDisponibles,0)) 
+as vacias
 from
-MM.Viajes B,
-MM.Rutas_Aereas C,
-MM.Ciudades D
-where B.Ruta=C.Id and C.Ciudad_Destino=D.Id 
+MM.Viajes B right join
+MM.Rutas_Aereas C on B.Ruta=C.Id  right join
+MM.Ciudades D on C.Ciudad_Destino=D.Id 
 and b.Fecha_salida
 between @anio+@desde and @anio+@hasta
+
 group by D.Descripcion
-order by sum(B.butacasDisponibles) desc
+order by sum(isnull(B.butacasDisponibles,0)) desc
 return
 end
 
