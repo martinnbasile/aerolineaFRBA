@@ -48,8 +48,8 @@ namespace AerolineaFrba.Compra
         {//CONFIRMA
             if (this.validarSeleccionDeButaca())
             {
-                int butacaElegida = int.Parse(dataGridView1.SelectedRows[0].Cells["nroButaca"].ToString());
-                ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarCompraPasaje"+ unaCompra.idViaje +", "+unPasajero.dni+", "+ butacaElegida+", "+ unaCompra.codigoCompra+","+unaCompra.precioPasaje);
+                int butacaElegida = int.Parse(dataGridView1.SelectedRows[0].Cells["nroButaca"].Value.ToString());
+                ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarCompraPasaje "+ unaCompra.idViaje +", "+unPasajero.dni+", "+ butacaElegida+", "+ unaCompra.codigoCompra+","+unaCompra.precioPasaje);
                 unaCompra.seProcesoUnPasaje();
                 this.Close(); 
             }
