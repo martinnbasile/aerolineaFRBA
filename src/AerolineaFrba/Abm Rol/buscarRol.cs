@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace AerolineaFrba.Abm_Rol
 {
@@ -41,19 +42,26 @@ namespace AerolineaFrba.Abm_Rol
             if (Validaciones.Validaciones.validarListBox(listBox1, "Seleccione un rol"))
             {
                 rol = listBox1.SelectedItem.ToString();
-                String noQuery = "exec MM.darDeBajaRol @rol='" + rol + "'";
-                ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
-                MessageBox.Show("Se ha deshabilitado el rol " + rol + "");
-                if (Program.rol.Equals(rol))
-                {
-                    MessageBox.Show("El rol desactivado es el que estaba utilizandose, seleccione un nuevo Rol");
-                    new elegirRol().Show();
-                    this.Close();
-                }
-                else
-                {
-                    new buscarRol().Show();
-                    this.Close();
+                SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("Select Estado from MM.Roles where Descripcion='"+rol+"'");
+                consulta.Read();           
+                String Estado = consulta.GetString(consulta.GetOrdinal("Estado")); 
+                if(Estado.Equals("Deshabilitado")){
+                    MessageBox.Show("El rol seleccionado ya se encuentra deshabilitado");
+                }else{
+                    String noQuery = "exec MM.darDeBajaRol @rol='" + rol + "'";
+                    ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
+                    MessageBox.Show("Se ha deshabilitado el rol " + rol + "");
+                    if (Program.rol.Equals(rol))
+                    {
+                        MessageBox.Show("El rol desactivado es el que estaba utilizandose, seleccione un nuevo Rol");
+                        new elegirRol().Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        new buscarRol().Show();
+                        this.Close();
+                    }
                 }
             }
         }
