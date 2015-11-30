@@ -12,7 +12,7 @@ namespace AerolineaFrba.Validaciones
     {
         public static bool validarMatricula(MaskedTextBox unMaskedTextBox, String unMensajeDeAlerta)
         {
-            if (!unMaskedTextBox.MaskCompleted) //Text.Length == 0)
+            if (unMaskedTextBox.Text.Length <7)
             {
                 MessageBox.Show(unMensajeDeAlerta);
                 return false;
@@ -32,7 +32,7 @@ namespace AerolineaFrba.Validaciones
 
         public static bool validarMaskedTextBox(MaskedTextBox unMaskedTextBox, String unMensajeDeAlerta)
         {
-            if (unMaskedTextBox.Text.Length <= 1)
+            if (unMaskedTextBox.Text.Length < 1)
             {
                 MessageBox.Show(unMensajeDeAlerta);
                 return false;

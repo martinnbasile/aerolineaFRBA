@@ -61,7 +61,7 @@ namespace AerolineaFrba.Compra
                 unaCompra.cantidadKgs = int.Parse(numericUpDown2.Value.ToString());
                 DataGridViewRow viajeSeleccionado = this.dataGridView1.SelectedRows[0];
                 unaCompra.precioPasaje = float.Parse(viajeSeleccionado.Cells["precioPasaje"].Value.ToString());
-                unaCompra.precioPaquete = float.Parse(viajeSeleccionado.Cells["precioPaquete"].Value.ToString());
+                unaCompra.precioPaquete = float.Parse(viajeSeleccionado.Cells["precioPaquete"].Value.ToString())*unaCompra.cantidadKgs;
                 
                 unaCompra.viajeElegido(int.Parse(viajeSeleccionado.Cells["idViaje"].Value.ToString()));
                 

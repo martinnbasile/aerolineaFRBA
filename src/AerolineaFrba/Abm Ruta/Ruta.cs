@@ -15,15 +15,15 @@ namespace AerolineaFrba.Abm_Ruta
         String origen;
         String destino;
         String servicio;
-        String precioBase;
-        String precioBaseEncomienda;
+        int precioBase;
+        int precioBaseEncomienda;
         public void cargate(DataGridViewRow unaFila){
             id=int.Parse(unaFila.Cells["Codigo"].Value.ToString());
             origen = unaFila.Cells["Ciudad origen"].Value.ToString();
             destino = unaFila.Cells["Ciudad destino"].Value.ToString();
             servicio = unaFila.Cells["Servicio"].Value.ToString();
-            precioBase = unaFila.Cells["Precio base"].Value.ToString();
-            precioBaseEncomienda = unaFila.Cells["Precio base encomienda"].Value.ToString();            
+            precioBase = (int)float.Parse(unaFila.Cells["Precio base"].Value.ToString());
+            precioBaseEncomienda =(int)float.Parse(unaFila.Cells["Precio base encomienda"].Value.ToString());            
         }
 
         public string getOrigen()
@@ -41,11 +41,11 @@ namespace AerolineaFrba.Abm_Ruta
             return servicio;
         }
 
-        public string getPrecioBase()
+        public int getPrecioBase()
         {
             return precioBase;
         }
-        public string getPrecioEncomienda()
+        public int getPrecioEncomienda()
         {
             return precioBaseEncomienda;
         }

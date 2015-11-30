@@ -1050,9 +1050,9 @@ create procedure MM.asentarMillas @viaje int
 as
 begin transaction
 insert into MM.Millas(Cliente,Millas,Fecha_movimiento,Descripcion)
-select Cliente,pas.precioPasaje/10,MM.fechaDeHoy(),'COMPRA PASAJE' from MM.Pasajes pas join MM.Viajes v on v.Id=pas.Viaje and v.Id=@viaje left join mm.Cancelaciones j on pas.cod_cancelacion=j.Cod_CAncelacion where j.Cod_CAncelacion is null-- where pas.Id not in (select Codigo_Pasaje from MM.Cancelaciones)
+select Cliente,cast(pas.precioPasaje as int)/10,MM.fechaDeHoy(),'COMPRA PASAJE' from MM.Pasajes pas join MM.Viajes v on v.Id=pas.Viaje and v.Id=@viaje left join mm.Cancelaciones j on pas.cod_cancelacion=j.Cod_CAncelacion where j.Cod_CAncelacion is null-- where pas.Id not in (select Codigo_Pasaje from MM.Cancelaciones)
 union
-select paq.Cliente,(paq.precio_paquete)/10,MM.fechaDeHoy(),'COMPRA PAQUETE' from MM.Paquetes paq join MM.Viajes v on v.Id=paq.Viaje and v.Id=@viaje  left join mm.Cancelaciones j on paq.cod_cancelacion=j.Cod_CAncelacion where j.Cod_CAncelacion is null --where paq.Id not in (select Codigo_Encomienda from MM.Cancelaciones) 
+select paq.Cliente,cast(paq.precio_paquete as int)/10,MM.fechaDeHoy(),'COMPRA PAQUETE' from MM.Paquetes paq join MM.Viajes v on v.Id=paq.Viaje and v.Id=@viaje  left join mm.Cancelaciones j on paq.cod_cancelacion=j.Cod_CAncelacion where j.Cod_CAncelacion is null --where paq.Id not in (select Codigo_Encomienda from MM.Cancelaciones) 
 
 
 commit
@@ -1080,7 +1080,7 @@ set @hora=cast(MM.fechaDeHoy() as datetime)
 set @hora=dateadd(hour,@horas,@hora)
 (select @viaje=v.Id from MM.viajes v join MM.Rutas_Aereas r on v.Ruta=r.Id and r.Ciudad_Destino=@destino and r.Ciudad_Origen=@origen 
 where 
-Matricula=@avion and Fecha_Estimada_llegada between dateadd(hour,-1,@hora) and dateadd(hour,1,@hora))
+Matricula=@avion and Fecha_Estimada_llegada between dateadd(hour,-1,@hora) and dateadd(hour,1,@hora) and v.estado='habilitado') 
 if(@viaje is null)
 begin	
 raiserror ('No deberia estar llegando alli este avion',16,150)
@@ -1713,7 +1713,7 @@ join inserted p2 on p2.cliente=p1.Cliente
 join mm.viajes as v2 on v2.Id=p2.viaje 
 and
 (v1.Fecha_salida between v2.Fecha_salida and v2.Fecha_Estimada_llegada or v1.Fecha_Estimada_llegada between v2.Fecha_salida and v2.Fecha_Estimada_llegada or (v2.Fecha_salida between v1.Fecha_salida and v1.Fecha_Estimada_llegada))
-))
+and p1.cod_cancelacion is null)) 
 begin 
 	raiserror ('Un Pasajero no puede estar haciendo 2 viajes a la vez',16,150)
 	rollback
@@ -1722,7 +1722,7 @@ else
 
 begin
 insert into mm.Pasajes(Cliente,cod_cancelacion,cod_compra,Fecha_Compra,Numero_Butaca,precioPasaje,Viaje)
-select Cliente,cod_cancelacion,cod_compra,Fecha_Compra,Numero_Butaca,precioPasaje,Viaje from inserted
+select Cliente,cod_cancelacion,cod_compra,Fecha_Compra,Numero_Butaca,precioPasaje,viaje from inserted
 commit
 end
 go
@@ -1841,7 +1841,6 @@ begin transaction
 update MM.Rutas_Aereas set Estado=2 where Id=@ruta
 exec mm.inhabilitarViajesConRutasInhabilitadas
 commit
-
 
 
 

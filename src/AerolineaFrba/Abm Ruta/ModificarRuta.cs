@@ -30,8 +30,8 @@ namespace AerolineaFrba.Abm_Ruta
             comboBox1.Text = unaRuta.getOrigen();
             comboBox2.Text = unaRuta.getDestino();
             comboBox3.Text = unaRuta.getServicio();
-            maskedTextBox1.Text = unaRuta.getPrecioBase();
-            maskedTextBox2.Text = unaRuta.getPrecioEncomienda();
+            maskedTextBox1.Text = unaRuta.getPrecioBase().ToString();
+            maskedTextBox2.Text = unaRuta.getPrecioEncomienda().ToString();
 
         }
 

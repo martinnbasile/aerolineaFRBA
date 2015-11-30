@@ -48,14 +48,15 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             if(Validaciones.Validaciones.validarTextBox(textBox1,"Seleccione una fecha"))
             {
-                String fechaActual = DateTime.Now.ToString("yyyy-MM-dd");
+                String fechaActual = ((DateTime.Parse(Properties.Settings.Default.fechaDelSistema).ToString("yyyy-MM-dd")));
                 String queryConsulta = "SELECT * FROM MM.Viajes WHERE Fecha_salida BETWEEN '" + fechaActual + "'  AND '" + fechaReinicioDeServicio + "' AND Matricula='" + aeronaveAfectada.getMatricula() + "' ";
                 SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase(queryConsulta);
+                aeronaveAfectada.setFechaAltaFueraServicio(fechaReinicioDeServicio);
+                aeronaveAfectada.setFechaBajaFueraServicio(fechaActual);
+
                 if (consulta.HasRows)
                 {
                     
-                    aeronaveAfectada.setFechaBajaFueraServicio(fechaActual);
-                    aeronaveAfectada.setFechaAltaFueraServicio(fechaReinicioDeServicio);
                     new cancelarOReemplazarFueraDeServicio(aeronaveAfectada).Show();
                     this.Close();
                 }

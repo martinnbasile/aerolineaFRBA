@@ -31,11 +31,12 @@ namespace AerolineaFrba.Compra
         {
             textBox1.Text = elPasajero.dni.ToString();
             estabaEnBaseElCliente = true;
-            String consulta = "Select * from mm.clientes where DNI=" + elPasajero.dni;
-            SqlCommand comando = new SqlCommand(consulta, ConexionALaBase.Conexion.conexxxxx);
-            SqlDataAdapter adapter = new SqlDataAdapter(comando);
+            laCompra.comandoT.CommandText = "Select * from mm.clientes where DNI=" + elPasajero.dni;
+            SqlDataAdapter adapter = new SqlDataAdapter(laCompra.comandoT);
             adapter.Fill(dt);
-                      
+            
+            adapter.Dispose();
+          
             try
             {
                 filaCliente = dt.Rows[0];
@@ -120,8 +121,10 @@ namespace AerolineaFrba.Compra
                     }
                     else
                     {
-                        
-                        ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT,"exec mm.ingresarCompraPaquete "+ laCompra.idViaje+", "+ elPasajero.dni +", "+ laCompra.cantidadKgs +" , "+ laCompra.codigoCompra+","+laCompra.precioPaquete);
+                        if (laCompra.cantidadKgs > 0)
+                        {
+                            ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT, "exec mm.ingresarCompraPaquete " + laCompra.idViaje + ", " + elPasajero.dni + ", " + laCompra.cantidadKgs + " , " + laCompra.codigoCompra + "," + laCompra.precioPaquete);
+                        }
                         ConexionALaBase.Conexion.ejecutarNonQuery(laCompra.comandoT, "exec mm.asentarCompra " + laCompra.codigoCompra + ", " + elPasajero.dni + ", " + laCompra.totalCompra() + ", 'Efectivo'");
                         laCompra.comandoT.Transaction.Commit();
                         MessageBox.Show("Total: " + laCompra.totalCompra());
