@@ -75,7 +75,7 @@ commit
 go
 
 Create Procedure MM.limpiarBase as
-drop table pagos_TC
+
 drop procedure mm.eliminarruta
 drop procedure mm.cancelacionPaquete
 drop procedure mm.cancelacionPasaje
@@ -1728,13 +1728,7 @@ end
 go
 
 
-create table pagos_TC(
-cod_compra int,
-cod_TC int
 
-)
-
-go
 
 
 create procedure mm.ingresarTC @nro numeric(18),@cod int,@anio int,@mes int
