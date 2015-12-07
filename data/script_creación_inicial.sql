@@ -925,16 +925,23 @@ begin
 return ( convert(Date,@fecha,103))
 end
 go
-create   procedure MM.actualizarFecha @fecha varchar(10) 
+
+
+create procedure MM.actualizarFecha @fecha varchar(10) 
 as
 begin
-insert into MM.Fecha(fecha) values(MM.convertirFecha(@fecha))
+if exists(select fecha from mm.fecha)
+begin
+update MM.Fecha set fecha=(MM.convertirFecha(@fecha))
+end
+else
+begin 
+insert into mm.fecha (fecha) values(MM.convertirFecha(@fecha))
+end
 
 insert into mm.Millas(Cliente,Millas,Fecha_movimiento,Descripcion) 
-
 select c.Id,-sum(m.Millas),MM.convertirFecha(@fecha),'VENCIMIENTO' from mm.Clientes c join mm.Millas m on m.Cliente=c.Id
 where c.Fecha_prox_vencimiento<MM.convertirFecha(@fecha) 
-
 group by c.Id
 
 end 
