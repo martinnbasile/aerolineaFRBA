@@ -1855,6 +1855,10 @@ declare @cantidadMinimaPasillo  int
 set @cantidadMinimaPasillo = (select count(ba.butacaTipo) from mm.Aeronaves a INNER JOIN mm.modeloAvion ma on a.modelo=ma.id INNER JOIN mm.Butacas_Avion ba on ba.modeloAvion=ma.id where a.matricula=@matricula and ba.butacaTipo='Pasillo')
 declare @cantidadMinimaVentanilla int
 set @cantidadMinimaVentanilla= (select count(ba.butacaTipo) from mm.Aeronaves a INNER JOIN mm.modeloAvion ma on a.modelo=ma.id INNER JOIN mm.Butacas_Avion ba on ba.modeloAvion=ma.id where a.matricula=@matricula and ba.butacaTipo='Ventanilla')
+declare @tipoDeServicio int
+set @tipoDeServicio= (select ma.tipoServicio from mm.Aeronaves a INNER JOIN mm.modeloAvion ma on a.modelo=ma.id where a.matricula=@matricula)
+
+
 
 declare @tablaPasillo table (modelo int,cantidadPasillo int)
 insert into @tablaPasillo
@@ -1881,6 +1885,7 @@ MM.modeloAvion on tp.modelo=modeloAvion.id
 where tp.cantidadPasillo>=@cantidadMinimaPasillo 
 and tv.cantidadVentanilla>=@cantidadMinimaVentanilla 
 and modeloAvion.Kg>=@cantidadMinimaKg
+and modeloAvion.tipoServicio=@tipoDeServicio
 and modeloAvion.id!=@modeloAeronave
 return 
 end
