@@ -34,18 +34,18 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textModelo = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textTS = new System.Windows.Forms.TextBox();
-            this.textFabricante = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.textPisos = new System.Windows.Forms.TextBox();
             this.textButacas = new System.Windows.Forms.TextBox();
             this.textKg = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textFabricante = new System.Windows.Forms.TextBox();
+            this.textTS = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textModelo = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -75,9 +75,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(13, 126);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(220, 13);
+            this.label4.Size = new System.Drawing.Size(191, 13);
             this.label4.TabIndex = 49;
-            this.label4.Text = "Seleccione un modelo para sustituir al actual:";
+            this.label4.Text = "Modelos que pueden sustituir al actual:";
             // 
             // button2
             // 
@@ -120,59 +120,32 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Características actuales";
             // 
-            // label1
+            // textPisos
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 84);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 13);
-            this.label1.TabIndex = 58;
-            this.label1.Text = "Tipo de servicio:";
+            this.textPisos.Location = new System.Drawing.Point(495, 52);
+            this.textPisos.Name = "textPisos";
+            this.textPisos.ReadOnly = true;
+            this.textPisos.Size = new System.Drawing.Size(140, 20);
+            this.textPisos.TabIndex = 66;
+            this.textPisos.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
             // 
-            // label5
+            // textButacas
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 51);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(60, 13);
-            this.label5.TabIndex = 56;
-            this.label5.Text = "Fabricante:";
+            this.textButacas.Location = new System.Drawing.Point(495, 85);
+            this.textButacas.Name = "textButacas";
+            this.textButacas.ReadOnly = true;
+            this.textButacas.Size = new System.Drawing.Size(140, 20);
+            this.textButacas.TabIndex = 65;
+            this.textButacas.TextChanged += new System.EventHandler(this.textBox5_TextChanged);
             // 
-            // textModelo
+            // textKg
             // 
-            this.textModelo.Location = new System.Drawing.Point(94, 20);
-            this.textModelo.Name = "textModelo";
-            this.textModelo.ReadOnly = true;
-            this.textModelo.Size = new System.Drawing.Size(205, 20);
-            this.textModelo.TabIndex = 54;
-            this.textModelo.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 23);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(45, 13);
-            this.label2.TabIndex = 53;
-            this.label2.Text = "Modelo:";
-            // 
-            // textTS
-            // 
-            this.textTS.Location = new System.Drawing.Point(94, 84);
-            this.textTS.Name = "textTS";
-            this.textTS.ReadOnly = true;
-            this.textTS.Size = new System.Drawing.Size(205, 20);
-            this.textTS.TabIndex = 59;
-            this.textTS.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // textFabricante
-            // 
-            this.textFabricante.Location = new System.Drawing.Point(94, 51);
-            this.textFabricante.Name = "textFabricante";
-            this.textFabricante.ReadOnly = true;
-            this.textFabricante.Size = new System.Drawing.Size(205, 20);
-            this.textFabricante.TabIndex = 60;
-            this.textFabricante.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
+            this.textKg.Location = new System.Drawing.Point(495, 20);
+            this.textKg.Name = "textKg";
+            this.textKg.ReadOnly = true;
+            this.textKg.Size = new System.Drawing.Size(140, 20);
+            this.textKg.TabIndex = 64;
+            this.textKg.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
             // 
             // label7
             // 
@@ -201,32 +174,59 @@
             this.label6.TabIndex = 61;
             this.label6.Text = "Cantidad de Kgs para encomiendas:";
             // 
-            // textPisos
+            // textFabricante
             // 
-            this.textPisos.Location = new System.Drawing.Point(495, 52);
-            this.textPisos.Name = "textPisos";
-            this.textPisos.ReadOnly = true;
-            this.textPisos.Size = new System.Drawing.Size(140, 20);
-            this.textPisos.TabIndex = 66;
-            this.textPisos.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
+            this.textFabricante.Location = new System.Drawing.Point(94, 51);
+            this.textFabricante.Name = "textFabricante";
+            this.textFabricante.ReadOnly = true;
+            this.textFabricante.Size = new System.Drawing.Size(205, 20);
+            this.textFabricante.TabIndex = 60;
+            this.textFabricante.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
-            // textButacas
+            // textTS
             // 
-            this.textButacas.Location = new System.Drawing.Point(495, 85);
-            this.textButacas.Name = "textButacas";
-            this.textButacas.ReadOnly = true;
-            this.textButacas.Size = new System.Drawing.Size(140, 20);
-            this.textButacas.TabIndex = 65;
-            this.textButacas.TextChanged += new System.EventHandler(this.textBox5_TextChanged);
+            this.textTS.Location = new System.Drawing.Point(94, 84);
+            this.textTS.Name = "textTS";
+            this.textTS.ReadOnly = true;
+            this.textTS.Size = new System.Drawing.Size(205, 20);
+            this.textTS.TabIndex = 59;
+            this.textTS.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
-            // textKg
+            // label2
             // 
-            this.textKg.Location = new System.Drawing.Point(495, 20);
-            this.textKg.Name = "textKg";
-            this.textKg.ReadOnly = true;
-            this.textKg.Size = new System.Drawing.Size(140, 20);
-            this.textKg.TabIndex = 64;
-            this.textKg.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 23);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(45, 13);
+            this.label2.TabIndex = 53;
+            this.label2.Text = "Modelo:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 84);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(85, 13);
+            this.label1.TabIndex = 58;
+            this.label1.Text = "Tipo de servicio:";
+            // 
+            // textModelo
+            // 
+            this.textModelo.Location = new System.Drawing.Point(94, 20);
+            this.textModelo.Name = "textModelo";
+            this.textModelo.ReadOnly = true;
+            this.textModelo.Size = new System.Drawing.Size(205, 20);
+            this.textModelo.TabIndex = 54;
+            this.textModelo.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 51);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(60, 13);
+            this.label5.TabIndex = 56;
+            this.label5.Text = "Fabricante:";
             // 
             // modificarAeronave
             // 

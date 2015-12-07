@@ -82,6 +82,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button3_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Recuerde que para que un modelo pueda sustituir al de la aeronave seleccionada debe tener su mismo tipo de servicio, una cantidad mayor o igual de Kgs para encomiendas, y una cantidad de asientos mayor o igual");
             new crearModelo("modificarAeronave",aeronaveAModificar).Show();
             this.Close();
         }
