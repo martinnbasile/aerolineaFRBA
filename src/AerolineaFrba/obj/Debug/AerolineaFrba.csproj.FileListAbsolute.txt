@@ -54,3 +54,4 @@ C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Compr
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Compra.seleccionarMedioPago.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Devolucion.seleccionarPasajesEncomiendas.resources
 C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Devolucion.ingresarCodigoDeCompra.resources
+C:\Users\f\Desktop\aerolineaFRBA\src\AerolineaFrba\obj\Debug\AerolineaFrba.Abm_Aeronave.modificarAeronave.resources

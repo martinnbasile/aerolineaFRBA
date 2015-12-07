@@ -85,6 +85,7 @@
             this.label4.Size = new System.Drawing.Size(45, 13);
             this.label4.TabIndex = 44;
             this.label4.Text = "Modelo:";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // dataGridView1
             // 
@@ -95,6 +96,7 @@
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(645, 292);
             this.dataGridView1.TabIndex = 45;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // button3
             // 

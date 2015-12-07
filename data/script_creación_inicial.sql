@@ -158,7 +158,7 @@ drop procedure mm.ingresarCompraPasaje
 drop procedure mm.asentarCompra
 drop function mm.DestinosAeronavesMenosButacasVendidos
 drop procedure mm.ingresarTC
-
+drop function mm.modelosValidos
 
 drop schema MM
 
@@ -734,19 +734,21 @@ from MM.Rutas_Aereas r join MM.Ciudades c1 on (r.Ciudad_Origen=c1.Id)
 go
 
 create view MM.vista_aeronaves as
-select a.Fecha_alta as 'Fecha de alta',  mo.Modelo_descripcion as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.fecha_baja_fuera_servicio as 'Fecha de fuera de servicio',a.fecha_alta_fuera_servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas'
+select a.Fecha_alta as 'Fecha de alta',  mo.Modelo_descripcion as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.fecha_baja_fuera_servicio as 'Fecha de fuera de servicio',a.fecha_alta_fuera_servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas', Count(DISTINCT ba.butacaPiso) as 'Cantidad de pisos',COUNT(ba.id) as 'Cantidad de asientos'
 from MM.Aeronaves a join mm.modeloAvion mo on mo.id=a.modelo join MM.Fabricantes f on (mo.Fabricante=f.Id)
-					join MM.Tipos_Servicio ts on (mo.tipoServicio=ts.Id)				
+					join MM.Tipos_Servicio ts on (mo.tipoServicio=ts.Id)
+					join MM.Butacas_Avion ba on (mo.id=ba.modeloAvion)				
 where a.Fecha_Baja_Definitiva is null
+					 group by Modelo_descripcion,f.Descripcion,ts.Descripcion,mo.Kg,a.fecha_alta,a.matricula,a.fecha_baja_fuera_servicio,a.fecha_alta_fuera_servicio,a.fecha_baja_definitiva
 go
 
 
 create view MM.vista_modelos as
-select mo.Modelo_descripcion as 'Modelo',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas', Count(DISTINCT ba.butacaPiso) as 'Cantidad de pisos',COUNT(ba.id) as 'Cantidad de asientos'
+select mo.id, mo.Modelo_descripcion as 'Modelo',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas', Count(DISTINCT ba.butacaPiso) as 'Cantidad de pisos',COUNT(ba.id) as 'Cantidad de asientos'
 from mm.modeloAvion mo join MM.Fabricantes f on (mo.Fabricante=f.Id)
 					   join MM.Tipos_Servicio ts on (mo.tipoServicio=ts.Id)	
 					   join MM.Butacas_Avion ba on (mo.id=ba.modeloAvion)	
-					   group by Modelo_descripcion,f.Descripcion,ts.Descripcion,mo.Kg		
+					   group by mo.id,mo.Modelo_descripcion,f.Descripcion,ts.Descripcion,mo.Kg		
 go
 
 
@@ -1842,8 +1844,53 @@ update MM.Rutas_Aereas set Estado=2 where Id=@ruta
 exec mm.inhabilitarViajesConRutasInhabilitadas
 commit
 
+go
 
+create function [MM].[modelosValidos](@matricula varchar(10))
+returns @tabla table
+(modelo int)
+as
+begin
 
+declare @modeloAeronave int
+set @modeloAeronave= (select a.modelo from mm.aeronaves a where a.matricula=@matricula)
+declare @cantidadMinimaKg int
+set @cantidadMinimaKg = (select ma.Kg from mm.Aeronaves a INNER JOIN mm.modeloAvion ma on a.modelo=ma.id where a.matricula=@matricula)
+declare @cantidadMinimaPasillo  int
+set @cantidadMinimaPasillo = (select count(ba.butacaTipo) from mm.Aeronaves a INNER JOIN mm.modeloAvion ma on a.modelo=ma.id INNER JOIN mm.Butacas_Avion ba on ba.modeloAvion=ma.id where a.matricula=@matricula and ba.butacaTipo='Pasillo')
+declare @cantidadMinimaVentanilla int
+set @cantidadMinimaVentanilla= (select count(ba.butacaTipo) from mm.Aeronaves a INNER JOIN mm.modeloAvion ma on a.modelo=ma.id INNER JOIN mm.Butacas_Avion ba on ba.modeloAvion=ma.id where a.matricula=@matricula and ba.butacaTipo='Ventanilla')
+
+declare @tablaPasillo table (modelo int,cantidadPasillo int)
+insert into @tablaPasillo
+select mo.id,count(mo.id) from mm.modeloAvion mo
+INNER JOIN
+MM.Butacas_Avion ba on (mo.id=ba.modeloAvion)
+where ba.butacaTipo='Pasillo'
+group by mo.id
+
+declare @tablaVentanilla table (modelo int,cantidadVentanilla int)
+insert into @tablaVentanilla
+select mo.id,count(mo.id) from mm.modeloAvion mo
+INNER JOIN
+MM.Butacas_Avion ba on (mo.id=ba.modeloAvion)
+where ba.butacaTipo='Ventanilla'
+group by mo.id
+
+insert into @tabla
+select tp.modelo from @tablaPasillo tp
+INNER JOIN
+@tablaVentanilla tv on tp.modelo=tv.modelo
+INNER JOIN 
+MM.modeloAvion on tp.modelo=modeloAvion.id
+where tp.cantidadPasillo>=@cantidadMinimaPasillo 
+and tv.cantidadVentanilla>=@cantidadMinimaVentanilla 
+and modeloAvion.Kg>=@cantidadMinimaKg
+and modeloAvion.id!=@modeloAeronave
+return 
+end
+
+go
 
 
 

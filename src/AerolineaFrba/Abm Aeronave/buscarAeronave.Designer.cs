@@ -34,6 +34,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,7 +59,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(686, 109);
+            this.button3.Location = new System.Drawing.Point(686, 154);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(108, 44);
             this.button3.TabIndex = 23;
@@ -68,7 +69,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(686, 67);
+            this.button2.Location = new System.Drawing.Point(686, 112);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(108, 36);
             this.button2.TabIndex = 22;
@@ -97,11 +98,22 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(686, 67);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(108, 36);
+            this.button5.TabIndex = 28;
+            this.button5.Text = "Modificar Aeronave";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // buscarAeronave
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(806, 464);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button4);
@@ -125,6 +137,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button5;
 
     }
 }
