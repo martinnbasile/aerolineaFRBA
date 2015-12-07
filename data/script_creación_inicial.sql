@@ -75,7 +75,7 @@ commit
 go
 
 Create Procedure MM.limpiarBase as
-drop table pagos_TC
+
 drop procedure mm.eliminarruta
 drop procedure mm.cancelacionPaquete
 drop procedure mm.cancelacionPasaje
@@ -872,11 +872,12 @@ orden int identity(1,1) primary key,
 fecha date
 )
 go
-create  function MM.fechaDeHoy()
+
+create function MM.fechaDeHoy()
 returns date
 as begin
 
-return (select top 1 fecha from MM.Fecha order by orden)
+return (select top 1 fecha from MM.Fecha order by orden desc)
 end
 go
 
@@ -1730,13 +1731,7 @@ end
 go
 
 
-create table pagos_TC(
-cod_compra int,
-cod_TC int
 
-)
-
-go
 
 
 create procedure mm.ingresarTC @nro numeric(18),@cod int,@anio int,@mes int
