@@ -32,7 +32,7 @@ namespace AerolineaFrba.Compra
          public void viajeElegido(int viajeElegido)
          {
              idViaje = viajeElegido;
-             precioTotal = precioPaquete * cantidadKgs + precioPasaje * cantidadPasajes;
+             precioTotal = precioPaquete + precioPasaje * cantidadPasajes;
          }
 
          public float totalCompra()
