@@ -77,7 +77,7 @@ namespace AerolineaFrba.Compra
 
             if ((this.validarFecha()) & (this.validarTodo()))
             {
-            ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarTC "+ maskedTextBox1.Text+", " + maskedTextBox2.Text+", "+numericUpDown2.Value+", "+numericUpDown1.Value);
+            ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT,"exec mm.ingresarTC "+ maskedTextBox1.Text+", " + maskedTextBox2.Text+", "+numericUpDown2.Value+", "+numericUpDown1.Value+","+unaCompra.codigoCompra);
             if (unaCompra.cantidadKgs > 0)
             {
                 ConexionALaBase.Conexion.ejecutarNonQuery(unaCompra.comandoT, "exec mm.ingresarCompraPaquete " + unaCompra.idViaje + ", " + elPasajero.dni + ", " + unaCompra.cantidadKgs + " , " + unaCompra.codigoCompra + "," + unaCompra.precioPaquete);

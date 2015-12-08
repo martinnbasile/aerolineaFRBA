@@ -38,8 +38,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
-            this.maskedTextBox2 = new System.Windows.Forms.MaskedTextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // comboBox1
@@ -134,29 +134,27 @@
             this.label5.TabIndex = 11;
             this.label5.Text = "Precio base encomienda (Kg)";
             // 
-            // maskedTextBox1
+            // textBox1
             // 
-            this.maskedTextBox1.Location = new System.Drawing.Point(162, 95);
-            this.maskedTextBox1.Mask = "09999999999999999999999999999999999999999999999999999999999999999999";
-            this.maskedTextBox1.Name = "maskedTextBox1";
-            this.maskedTextBox1.Size = new System.Drawing.Size(255, 20);
-            this.maskedTextBox1.TabIndex = 12;
+            this.textBox1.Location = new System.Drawing.Point(162, 95);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(255, 20);
+            this.textBox1.TabIndex = 13;
             // 
-            // maskedTextBox2
+            // textBox2
             // 
-            this.maskedTextBox2.Location = new System.Drawing.Point(162, 121);
-            this.maskedTextBox2.Mask = "099999999999999999999999999999999999999999999999999999999999999";
-            this.maskedTextBox2.Name = "maskedTextBox2";
-            this.maskedTextBox2.Size = new System.Drawing.Size(255, 20);
-            this.maskedTextBox2.TabIndex = 13;
+            this.textBox2.Location = new System.Drawing.Point(162, 121);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(255, 20);
+            this.textBox2.TabIndex = 14;
             // 
             // NuevaRuta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(429, 193);
-            this.Controls.Add(this.maskedTextBox2);
-            this.Controls.Add(this.maskedTextBox1);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -187,7 +185,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
-        private System.Windows.Forms.MaskedTextBox maskedTextBox2;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
     }
 }

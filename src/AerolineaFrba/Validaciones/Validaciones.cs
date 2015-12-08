@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,6 +19,21 @@ namespace AerolineaFrba.Validaciones
                 return false;
             }
             return true;
+        }
+
+       
+        public static bool validarFloatTextBox(TextBox unTextBox, String unMesajeDeAlerta)
+        {
+            if (Regex.Match(unTextBox.Text, "^[0-9]*[.][0-9]*$").Success)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show(unMesajeDeAlerta);
+                return false;
+            }
+
         }
 
         public static bool validarTextBox(TextBox unTextBox, String unMensajeDeAlerta)

@@ -30,8 +30,8 @@ namespace AerolineaFrba.Abm_Ruta
             comboBox1.Text = unaRuta.getOrigen();
             comboBox2.Text = unaRuta.getDestino();
             comboBox3.Text = unaRuta.getServicio();
-            maskedTextBox1.Text = unaRuta.getPrecioBase().ToString();
-            maskedTextBox2.Text = unaRuta.getPrecioEncomienda().ToString();
+            textBox1.Text = unaRuta.getPrecioBase().ToString();
+            textBox2.Text = unaRuta.getPrecioEncomienda().ToString();
 
         }
 
@@ -54,15 +54,23 @@ namespace AerolineaFrba.Abm_Ruta
                 {
                     if (Validaciones.Validaciones.validarComboBox(comboBox3, "Completar el tipo de servicio"))
                     {
-                        if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1, "Completar precio base"))
+                        if (Validaciones.Validaciones.validarTextBox(textBox1, "Completar precio base"))
                         {
-                            if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox2, "Completar precio base de encomienda"))
+                            if (Validaciones.Validaciones.validarTextBox(textBox2, "Completar precio base de encomienda"))
                             {
-                                if (comboBox1.Text != comboBox2.Text)
+                                if (Validaciones.Validaciones.validarFloatTextBox(textBox2,"El valor debe precio base encomienda debe ser un float separado por punto"))
                                 {
-                                    return true;
+                                    if (Validaciones.Validaciones.validarFloatTextBox(textBox1, "El valor debe precio base pasaje debe ser un float separado por punto"))
+                                    {
+
+
+                                        if (comboBox1.Text != comboBox2.Text)
+                                        {
+                                            return true;
+                                        }
+                                        else MessageBox.Show("No puede ser la misma la ciudad origen y destino");
+                                    }
                                 }
-                                else MessageBox.Show("No puede ser la misma la ciudad origen y destino");
                             }
                         }
                     }
@@ -78,8 +86,8 @@ namespace AerolineaFrba.Abm_Ruta
                 String nuevoOrigen = comboBox1.SelectedItem.ToString();
                 String nuevoDestino = comboBox2.SelectedItem.ToString();
                 String nuevoServicio = comboBox3.SelectedItem.ToString();
-                int nuevoPrecioBase = int.Parse(maskedTextBox1.Text);
-                int nuevoPrecioEncomienda = int.Parse(maskedTextBox2.Text);
+                String nuevoPrecioBase = textBox1.Text;
+                String nuevoPrecioEncomienda = textBox2.Text;
                 ConexionALaBase.Conexion.ejecutarNonQuery("execute mm.actualizarRuta " + idRutaE + ", '" + nuevoDestino + "', '" + nuevoOrigen + "', '" + nuevoServicio + "', " + nuevoPrecioBase + ", " + nuevoPrecioEncomienda);
                 MessageBox.Show("Se actualizo la ruta correctamente");
                 new ABM_RUTA().Show();
