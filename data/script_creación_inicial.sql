@@ -1401,7 +1401,7 @@ insert into mm.aeronaves(matricula,modelo,fecha_alta) values(@matricula,@id_Mode
 go
 
 
-create procedure mm.crearRuta @destino varchar(30),@origen varchar(30),@servicio varchar(10),@basePasaje int,@baseKg int
+create procedure mm.crearRuta @destino varchar(30),@origen varchar(30),@servicio varchar(20),@basePasaje int,@baseKg int
 as insert into mm.Rutas_Aereas(Ciudad_Destino,Ciudad_Origen,Tipo_Servicio,Precio_Base,Precio_Kg)
 select d.Id,o.Id,t.Id,@basePasaje,@baseKg from mm.Tipos_Servicio as t,MM.Ciudades as o,mm.Ciudades as d
 where t.Descripcion=@servicio and o.Descripcion=@origen and d.Descripcion=@destino
@@ -1409,7 +1409,7 @@ where t.Descripcion=@servicio and o.Descripcion=@origen and d.Descripcion=@desti
 go
 
 
-create procedure mm.actualizarRuta @id int,@destino varchar(30),@origen varchar(30),@servicio varchar(10),@basePasaje int,@baseKg int
+create procedure mm.actualizarRuta @id int,@destino varchar(30),@origen varchar(30),@servicio varchar(20),@basePasaje int,@baseKg int
 as
 begin
 declare @dest int
