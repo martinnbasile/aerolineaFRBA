@@ -1016,14 +1016,14 @@ create procedure MM.CancelarAeronaveVidaUtil (@matricula varchar(10))
 
   
   
-  delete b from MM.Butacas b join mm.viajes as v on v.id=b.viaje 
+delete b from MM.Butacas b join mm.viajes as v on v.id=b.viaje 
 where v.Fecha_salida>=mm.fechaDeHoy() and v.Matricula=@matricula
 
   update MM.Viajes 
   set estado='inhabilitado'
   where Matricula=@matricula and Fecha_salida>=mm.fechaDeHoy()
   
-exec cancelarPasajesYPaquetesConViajeInhabilitado
+exec MM.cancelarPasajesYPaquetesConViajeInhabilitado
 
 
   UPDATE MM.Aeronaves set fecha_baja_definitiva=mm.fechaDeHoy() where matricula=@matricula 	  
@@ -1051,7 +1051,7 @@ update   MM.Viajes
 set estado='inhabilitado'
  where Matricula=@matricula and Fecha_salida>=@dia and Fecha_salida<=@hasta
 
-exec cancelarPasajesYPaquetesConViajeInhabilitado
+exec mm.cancelarPasajesYPaquetesConViajeInhabilitado
   UPDATE MM.Aeronaves set fecha_baja_fuera_servicio=@dia, Fecha_alta_fuera_servicio=@hasta
   where matricula=@matricula
   COMMIT TRAN

@@ -49,7 +49,7 @@ namespace AerolineaFrba.Abm_Aeronave
                     unaAeronave.setTipoDeServicio(tipoDeServicioAeronaveSeleccionada);
                     unaAeronave.setCantidadKgs(cantidadDeKgs);
 
-                    if (!ConexionALaBase.Conexion.consultarBase("select * from MM.Viajes where Matricula ='" + unaAeronave.getMatricula() + "'").HasRows)
+                    if (!ConexionALaBase.Conexion.consultarBase("select * from MM.Viajes where estado='habilitado' and fecha_salida > mm.fechaDeHoy() and Matricula ='" + unaAeronave.getMatricula() + "'").HasRows)
                     {
                         String noQuery = "exec MM.CancelarAeronaveVidaUtil '" + unaAeronave.getMatricula() + "'";
                         ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
