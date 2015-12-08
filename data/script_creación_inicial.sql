@@ -158,12 +158,13 @@ drop procedure mm.ingresarCompraPaquete
 drop procedure mm.ingresarCompraPasaje
 drop procedure mm.asentarCompra
 drop function mm.DestinosAeronavesMenosButacasVendidos
+drop table mm.canjeDeMillas
 drop procedure mm.ingresarTC
 drop function mm.modelosValidos
 
 drop schema MM
-
 go
+
 create Table MM.Ciudades(
 Id int identity(1,1) primary key,
 Descripcion varchar(70) not null unique)
@@ -1166,6 +1167,16 @@ go
 insert into MM.usuario_rol values (5,1)
 go
 
+create table mm.canjeDeMillas
+(id int identity(1,1) primary key,
+cod_cliente int foreign key references mm.clientes(id),
+cod_producto int foreign key references mm.productos_milla(id),
+cantidadMillas int,
+cantidadProducto int,
+fecha Date default mm.fechaDeHoy()
+)
+go
+
 CREATE PROCEDURE [MM].[registrarCanje] @numCli int,@cantidad int,@descripcion varchar (30)
 AS
 
@@ -1182,7 +1193,9 @@ BEGIN TRANSACTION
 	
 	Insert into mm.millas(cliente,Millas,Fecha_movimiento,Descripcion)
 	values (@numCli,-(@cantidad*@millasCosto),getdate(),'Canje de millas')
-		
+	Insert into mm.canjeDeMillas(cod_cliente,cod_producto,cantidadMillas,cantidadProducto)
+	values (@numCli,@idProducto,@millasCosto*@cantidad,@cantidad)
+
 	Begin try
 	UPDATE MM.Productos_Milla
 	SET Cantidad=@cantidadActual-@cantidad
