@@ -82,7 +82,7 @@ namespace AerolineaFrba.Abm_Aeronave
                 if (ingresoUnaMatricula)
                 {
                     String nuevaMatricula = maskedTextBox2.Text;
-                    ConexionALaBase.Conexion.ejecutarNonQuery("update mm.aeronaves set matricula=" + nuevaMatricula + " where matricula='" + aeronaveAModificar.getMatricula() + "'");
+                    ConexionALaBase.Conexion.ejecutarNonQuery("update mm.aeronaves set matricula='" + nuevaMatricula + "' where matricula='" + aeronaveAModificar.getMatricula() + "'");
                 }
                 MessageBox.Show("Se ha modificado el modelo exitosamente");
                 new buscarAeronave().Show();
