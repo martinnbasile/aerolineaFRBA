@@ -88,7 +88,15 @@ namespace AerolineaFrba.Abm_Ruta
                 String nuevoServicio = comboBox3.SelectedItem.ToString();
                 String nuevoPrecioBase = textBox1.Text;
                 String nuevoPrecioEncomienda = textBox2.Text;
-                ConexionALaBase.Conexion.ejecutarNonQuery("execute mm.actualizarRuta " + idRutaE + ", '" + nuevoDestino + "', '" + nuevoOrigen + "', '" + nuevoServicio + "', " + nuevoPrecioBase + ", " + nuevoPrecioEncomienda);
+                try
+                {
+                    ConexionALaBase.Conexion.ejecutarNonQuery("execute mm.actualizarRuta " + idRutaE + ", '" + nuevoDestino + "', '" + nuevoOrigen + "', '" + nuevoServicio + "', " + nuevoPrecioBase + ", " + nuevoPrecioEncomienda);
+                }
+                catch (System.Data.SqlClient.SqlException exc)
+                {
+                    MessageBox.Show("Ya existe una ruta igual a la que esta intentanto de ingresar");
+                }
+
                 MessageBox.Show("Se actualizo la ruta correctamente");
                 new ABM_RUTA().Show();
                 this.Close();

@@ -145,6 +145,7 @@ drop table MM.Tipos_Servicio
 drop table MM.logBajasAeronaves
 drop table MM.Butacas_Avion
 drop table MM.Aeronaves
+drop table mm.comprasConTarjeta
 drop table MM.modeloAvion
 drop procedure mm.generarViaje
 drop function mm.aeronavesDisponibles
@@ -382,15 +383,7 @@ unique (NRO_TC,cod_seg,anio_venc,mes_venc)
 
 )
 go
-create table mm.comprasConTarjeta
-(cod_compra int foreign key references mm.compras,
-id_tc int foreign key references mm.TC,
-PRIMARY KEY(COD_COMPRA,id_tc)
 
-
-)
-
-go
 
 
 
@@ -405,6 +398,17 @@ medioPago varchar(10)
 
 )
 go
+
+create table mm.comprasConTarjeta
+(cod_compra int foreign key references mm.compras,
+id_tc int foreign key references mm.TC,
+PRIMARY KEY(COD_COMPRA,id_tc)
+
+
+)
+
+go
+
 create table MM.Cancelaciones(
 Cod_CAncelacion int identity(100000,1) primary key,
 

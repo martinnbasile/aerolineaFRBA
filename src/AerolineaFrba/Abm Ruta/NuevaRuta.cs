@@ -75,8 +75,14 @@ namespace AerolineaFrba.Abm_Ruta
                 String precioBase = textBox1.Text;
                 String precioBaseEncomienda = textBox2.Text;
 
-
-                ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.crearRuta '"+ ciudadDestino +"', '"+ ciudadOrigen+"', '"+ servicio+"', "+ precioBase +", "+precioBaseEncomienda);
+                try
+                {
+                    ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.crearRuta '" + ciudadDestino + "', '" + ciudadOrigen + "', '" + servicio + "', " + precioBase + ", " + precioBaseEncomienda);
+                }
+                catch (System.Data.SqlClient.SqlException exc)
+                {
+                    MessageBox.Show("Ya existe una ruta igual a la que esta intentanto de ingresar");
+                }
                 MessageBox.Show("Operacion exitosa");
                 new ABM_RUTA().Show();
                 this.Close();
