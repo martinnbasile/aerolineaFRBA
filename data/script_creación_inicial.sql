@@ -372,15 +372,28 @@ alter table MM.Cambios_Millas
 add constraint Producto foreign key (Producto) references MM.Productos_Milla(Id)
 go
 
-create  table mm.TC(
-NRO_TC numeric(18) primary key,
+create table mm.TC(
+id_TC int primary key,
+NRO_TC numeric(18) ,
 cod_seg int,
 anio_venc int,
 mes_venc int 
-
+unique (NRO_TC,cod_seg,anio_venc,mes_venc)
 
 )
 go
+create table mm.comprasConTarjeta
+(cod_compra int foreign key references mm.compras,
+id_tc int foreign key references mm.TC,
+PRIMARY KEY(COD_COMPRA,id_tc)
+
+
+)
+
+go
+
+
+
 create table mm.compras(
 cod_compra int identity(1000000,1) primary key,
 cliente int foreign key references mm.clientes,
@@ -1404,7 +1417,7 @@ insert into mm.aeronaves(matricula,modelo,fecha_alta) values(@matricula,@id_Mode
 go
 
 
-create procedure mm.crearRuta @destino varchar(30),@origen varchar(30),@servicio varchar(20),@basePasaje int,@baseKg int
+create procedure mm.crearRuta @destino varchar(30),@origen varchar(30),@servicio varchar(20),@basePasaje float,@baseKg float
 as insert into mm.Rutas_Aereas(Ciudad_Destino,Ciudad_Origen,Tipo_Servicio,Precio_Base,Precio_Kg)
 select d.Id,o.Id,t.Id,@basePasaje,@baseKg from mm.Tipos_Servicio as t,MM.Ciudades as o,mm.Ciudades as d
 where t.Descripcion=@servicio and o.Descripcion=@origen and d.Descripcion=@destino
@@ -1412,7 +1425,7 @@ where t.Descripcion=@servicio and o.Descripcion=@origen and d.Descripcion=@desti
 go
 
 
-create procedure mm.actualizarRuta @id int,@destino varchar(30),@origen varchar(30),@servicio varchar(20),@basePasaje int,@baseKg int
+create  procedure mm.actualizarRuta @id int,@destino varchar(30),@origen varchar(30),@servicio varchar(20),@basePasaje float,@baseKg float
 as
 begin
 declare @dest int
@@ -1744,14 +1757,16 @@ go
 
 
 
-create procedure mm.ingresarTC @nro numeric(18),@cod int,@anio int,@mes int
+create procedure mm.ingresarTC @nro numeric(18),@cod int,@anio int,@mes int,@compra int
 as
 begin
+declare @numero int
+if(not exists(select NRO_TC from mm.TC where NRO_TC=@nro and cod_seg=@cod and anio_venc=@anio and mes_venc=@mes))
+ insert into mm.TC(NRO_TC,cod_seg,anio_venc,mes_venc) values(@nro,@cod,@anio,@mes)
 
-if(exists(select NRO_TC from mm.TC where NRO_TC=@nro))
-return
-else insert into mm.TC values(@nro,@cod,@anio,@mes)
+select @numero=id_TC from mm.TC where NRO_TC=@nro and cod_seg=@cod and anio_venc=@anio and mes_venc=@mes
 
+insert into mm.comprasConTarjeta(cod_compra,id_tc) values(@compra,@numero)
 end
 go
 
@@ -1901,16 +1916,5 @@ return
 end
 
 go
-
-create table mm.comprasConTarjeta
-(cod_compra int foreign key references mm.compras,
-nro_TC numeric(18) foreign key references mm.TC,
-PRIMARY KEY(COD_COMPRA,NRO_TC)
-
-
-)
-
-go
-
 
 
