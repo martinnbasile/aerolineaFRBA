@@ -13,12 +13,17 @@ namespace AerolineaFrba.Validaciones
     {
         public static bool validarMatricula(MaskedTextBox unMaskedTextBox, String unMensajeDeAlerta)
         {
-            if (unMaskedTextBox.Text.Length <7)
+            if (Regex.Match(unMaskedTextBox.Text, "[A-Z][A-Z][A-Z][-][0-9][0-9][0-9]").Success)
+            {
+                return true;
+            }
+            else
             {
                 MessageBox.Show(unMensajeDeAlerta);
                 return false;
             }
-            return true;
+
+            
         }
 
        

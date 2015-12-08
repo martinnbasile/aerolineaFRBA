@@ -34,6 +34,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.maskedTextBox2 = new System.Windows.Forms.MaskedTextBox();
             this.textPisos = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.textButacas = new System.Windows.Forms.TextBox();
@@ -47,7 +48,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textModelo = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.maskedTextBox2 = new System.Windows.Forms.MaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -124,6 +124,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Características actuales";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // maskedTextBox2
+            // 
+            this.maskedTextBox2.Location = new System.Drawing.Point(94, 21);
+            this.maskedTextBox2.Mask = ">LLL-000";
+            this.maskedTextBox2.Name = "maskedTextBox2";
+            this.maskedTextBox2.Size = new System.Drawing.Size(205, 20);
+            this.maskedTextBox2.TabIndex = 54;
+            this.maskedTextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textPisos
             // 
@@ -241,15 +250,6 @@
             this.label5.Size = new System.Drawing.Size(60, 13);
             this.label5.TabIndex = 56;
             this.label5.Text = "Fabricante:";
-            // 
-            // maskedTextBox2
-            // 
-            this.maskedTextBox2.Location = new System.Drawing.Point(94, 21);
-            this.maskedTextBox2.Mask = "AAA-000";
-            this.maskedTextBox2.Name = "maskedTextBox2";
-            this.maskedTextBox2.Size = new System.Drawing.Size(205, 20);
-            this.maskedTextBox2.TabIndex = 54;
-            this.maskedTextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // modificarAeronave
             // 

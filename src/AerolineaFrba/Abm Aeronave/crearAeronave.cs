@@ -22,8 +22,7 @@ namespace AerolineaFrba.Abm_Aeronave
         {
 
             ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "select * from MM.vista_modelos");
-            //ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, ConexionALaBase.Conexion.consultarBase("Select descripcion from MM.Fabricantes"));
-            //ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.Tipos_Servicio"));
+           
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)

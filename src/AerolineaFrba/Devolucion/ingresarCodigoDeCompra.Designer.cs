@@ -57,7 +57,7 @@
             // maskedTextBox1
             // 
             this.maskedTextBox1.Location = new System.Drawing.Point(120, 26);
-            this.maskedTextBox1.Mask = "99999999";
+            this.maskedTextBox1.Mask = "09999999";
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(75, 20);
             this.maskedTextBox1.TabIndex = 5;
@@ -70,7 +70,7 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "label1";
             // 
-            // elegirCliente
+            // ingresarCodigoDeCompra
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -79,7 +79,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.maskedTextBox1);
             this.Controls.Add(this.label1);
-            this.Name = "elegirCliente";
+            this.Name = "ingresarCodigoDeCompra";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.elegirCliente_Load);
             this.ResumeLayout(false);

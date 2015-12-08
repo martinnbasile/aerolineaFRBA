@@ -72,7 +72,7 @@ namespace AerolineaFrba.Abm_Aeronave
             if(estaCompleto())
             {
                 bool seleccionoUnModelo = dataGridView1.SelectedRows.Count == 1;
-                bool ingresoUnaMatricula = maskedTextBox2.Text.Length >= 7;
+                bool ingresoUnaMatricula = Validaciones.Validaciones.validarMatricula(maskedTextBox2, "Ingrese la matricula con el formato correcto");
                 if (seleccionoUnModelo)
                 {
                     DataGridViewRow modeloSeleccionado = this.dataGridView1.SelectedRows[0];
