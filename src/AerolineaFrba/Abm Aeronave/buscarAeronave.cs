@@ -144,8 +144,21 @@ namespace AerolineaFrba.Abm_Aeronave
                 unaAeronave.setCantidadKgs(cantidadDeKgs);
                 unaAeronave.setCantidadDePisos(cantidadDePisos);
                 unaAeronave.setCantidadButacas(cantidadDeAsientos);
-                new modificarAeronave(unaAeronave).Show();
-                this.Close();
+                /*Consultar cantidad de viajes asociados a la aeronave
+                 * si tiene uno o mas => MessageBox error, no puede modificar si tiene viajes asociados
+                 * else new modificar(unaAeronave).s... */
+                System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select count(*) from mm.viajes where estado='habilitado' and Matricula='" + matriculaAeronaveSeleccionada + "'");
+                int cantidadViajes = 0;
+                if (reader.Read())
+                {
+                     cantidadViajes = reader.GetInt32(0);
+                }
+                if (cantidadViajes == 0)
+                {
+                    new modificarAeronave(unaAeronave).Show();
+                    this.Close();
+                }
+                else MessageBox.Show("No puede modificar una aeronave que tenga viajes asociados"); 
                 
             }
         }

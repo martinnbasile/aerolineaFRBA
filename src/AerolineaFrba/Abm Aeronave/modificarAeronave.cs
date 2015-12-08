@@ -27,7 +27,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void modificarAeronave_Load(object sender, EventArgs e)
         {
-            textMatricula.Text = aeronaveAModificar.getMatricula();
+            maskedTextBox2.Text = aeronaveAModificar.getMatricula();
             textModelo.Text = aeronaveAModificar.getModelo();
             textFabricante.Text = aeronaveAModificar.getFabricante();
             textTS.Text = aeronaveAModificar.getTipoDeServicio();
