@@ -13,15 +13,29 @@ namespace AerolineaFrba.Abm_Aeronave
 {
     public partial class crearModelo : Form
     {
-        public crearModelo()
+        String pantallaPrevia;
+        Aeronave aeronaveModificandose;
+        public crearModelo(String unaPantalla)
         {
+            pantallaPrevia = unaPantalla;
+            InitializeComponent();
+        }
+        public crearModelo(String unaPantalla,Aeronave unaAeronave)
+        {
+            pantallaPrevia = unaPantalla;
+            aeronaveModificandose = unaAeronave;
             InitializeComponent();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            new crearAeronave().Show();
-            this.Close();
+            if(pantallaPrevia.Equals("crearAeronave")){
+                new crearAeronave().Show();
+                this.Close();
+            }else if (pantallaPrevia.Equals("modificarAeronave")){
+                new modificarAeronave(aeronaveModificandose).Show();
+                this.Close();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -36,9 +50,9 @@ namespace AerolineaFrba.Abm_Aeronave
                 {   String nuevoModeloDescripcion = textBox2.Text;
                     String nuevoModeloFabricante = comboBox2.SelectedItem.ToString();
                     String nuevoModeloTipoDeServicio = comboBox1.SelectedItem.ToString();
-                    int cantidadDeKilogramosParaEncomiendas = Convert.ToInt32(numericUpDown2.Value);
-                    int cantidadDePisos = Convert.ToInt32 (numericUpDown1.Value);
-                    int cantidadDeButacasPorPiso = Convert.ToInt32(numericUpDown3.Value);
+                    int cantidadDeKilogramosParaEncomiendas = Convert.ToInt32(maskedTextBox1.Text);
+                    int cantidadDePisos = Convert.ToInt32(maskedTextBox2.Text);
+                    int cantidadDeButacasPorPiso = Convert.ToInt32(maskedTextBox3.Text);
                     
   
 
@@ -52,8 +66,16 @@ namespace AerolineaFrba.Abm_Aeronave
                      String noQueryCrearModelo = "exec MM.crearModeloAvion @modeloDescripcion='" + nuevoModeloDescripcion + "',@Kg =" + cantidadDeKilogramosParaEncomiendas + ",@fabricante=" + idFabricante + ",@tipoServicio=" + idTipoServicio + ",@cantPisos=" + cantidadDePisos + ", @cantButacasPiso=" + cantidadDeButacasPorPiso + "";
                      ConexionALaBase.Conexion.ejecutarNonQuery(noQueryCrearModelo);
                      MessageBox.Show("Se ha creado el modelo satisfactoriamente");
-                     new crearAeronave().Show();
-                     this.Close();
+                     if (pantallaPrevia.Equals("crearAeronave"))
+                     {
+                         new crearAeronave().Show();
+                         this.Close();
+                     }
+                     else if (pantallaPrevia.Equals("modificarAeronave"))
+                     {
+                         new modificarAeronave(aeronaveModificandose).Show();
+                         this.Close();
+                     }
                 }
             }
         }
@@ -66,11 +88,11 @@ namespace AerolineaFrba.Abm_Aeronave
                 {
                     if (Validaciones.Validaciones.validarComboBox(comboBox1, "Seleccione un tipo de servicio"))
                     {
-                        if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown2, "Ingrese la cantidad de Kgs para encomiendas"))
+                        if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox1, "Ingrese la cantidad de Kgs para encomiendas"))
                         {
-                            if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown1, "Ingrese la cantidad de pisos"))
+                            if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox2, "Ingrese la cantidad de pisos"))
                             {
-                                if (Validaciones.Validaciones.validarNumericUpDown(numericUpDown3, "Ingrese la cantidad de butacas por piso"))
+                                if (Validaciones.Validaciones.validarMaskedTextBox(maskedTextBox3, "Ingrese la cantidad de butacas por piso"))
                                 {
                                     return true;
                                 }
@@ -116,9 +138,11 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox2, ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.Fabricantes"));
             ConexionALaBase.CargadorDeEstructuras.cargarComboBox(comboBox1, ConexionALaBase.Conexion.consultarBase("select Descripcion from MM.Tipos_Servicio"));
-            numericUpDown1.Minimum = 1;
-            numericUpDown2.Minimum = 1;
-            numericUpDown3.Minimum = 1;
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

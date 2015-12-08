@@ -16,13 +16,16 @@ namespace AerolineaFrba
         public static String rol;
         public static String username;
         public static String password;
+        public static String fechaSistema;
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ConexionALaBase.Conexion.verificarConexion();
-            ConexionALaBase.Conexion.ejecutarNonQuery("exec MM.actualizarFecha '" + AerolineaFrba.Properties.Settings.Default.fechaDelSistema + "'");
+            DateTime fecha = Convert.ToDateTime(AerolineaFrba.Properties.Settings.Default.fechaDelSistema);
+            fechaSistema = fecha.ToString("dd/MM/yyyy");
+            ConexionALaBase.Conexion.ejecutarNonQuery("exec MM.actualizarFecha '" + fechaSistema + "'");
             if (MessageBox.Show("¿ES UN TERMINAL KIOSCO?", "INICIO", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 rol = "Cliente";

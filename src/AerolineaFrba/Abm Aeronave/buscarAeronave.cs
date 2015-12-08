@@ -123,5 +123,31 @@ namespace AerolineaFrba.Abm_Aeronave
             this.Close();
 
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (Validaciones.Validaciones.validarDataGridView(dataGridView1, "Selecciona una Aeronave para ser modificada"))
+            {
+                DataGridViewRow aeronaveSeleccionada = this.dataGridView1.SelectedRows[0];
+                String matriculaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Matrícula"].Value.ToString();
+                String modeloAeronaveSeleccionada = aeronaveSeleccionada.Cells["Modelo"].Value.ToString();
+                String fabricanteAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fabricante"].Value.ToString();
+                String tipoDeServicioAeronaveSeleccionada = aeronaveSeleccionada.Cells["Tipo de Servicio"].Value.ToString();
+                int cantidadDeKgs = Convert.ToInt32(aeronaveSeleccionada.Cells["Cantidad de Kgs disponibles para realizar encomiendas"].Value.ToString());
+                int cantidadDePisos = Convert.ToInt32(aeronaveSeleccionada.Cells["Cantidad de pisos"].Value.ToString());
+                int cantidadDeAsientos = Convert.ToInt32(aeronaveSeleccionada.Cells["Cantidad de asientos"].Value.ToString());
+                Aeronave unaAeronave = new Aeronave();
+                unaAeronave.setMatricula(matriculaAeronaveSeleccionada);
+                unaAeronave.setModelo(modeloAeronaveSeleccionada);
+                unaAeronave.setFabricante(fabricanteAeronaveSeleccionada);
+                unaAeronave.setTipoDeServicio(tipoDeServicioAeronaveSeleccionada);
+                unaAeronave.setCantidadKgs(cantidadDeKgs);
+                unaAeronave.setCantidadDePisos(cantidadDePisos);
+                unaAeronave.setCantidadButacas(cantidadDeAsientos);
+                new modificarAeronave(unaAeronave).Show();
+                this.Close();
+                
+            }
+        }
     }
 }

@@ -111,8 +111,18 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            new crearModelo().Show();
+            new crearModelo("crearAeronave").Show();
             this.Close();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

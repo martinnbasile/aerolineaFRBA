@@ -30,7 +30,7 @@ namespace AerolineaFrba.Canje_Millas
             System.Data.SqlClient.SqlDataReader reader = ConexionALaBase.Conexion.consultarBase("Select id from MM.clientes where DNI=" + dni);
             reader.Read();
             numCliente = (int)reader.GetSqlInt32(0);
-            reader = ConexionALaBase.Conexion.consultarBase("select sum(millas) from MM.millas where cliente=" + numCliente);
+            reader = ConexionALaBase.Conexion.consultarBase("select coalesce(sum(millas),0) from MM.millas where cliente=" + numCliente);
             reader.Read();
             millasDisponibles = (int)reader.GetSqlInt32(0);
             textBox2.Text = millasDisponibles.ToString();

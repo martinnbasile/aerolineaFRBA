@@ -22,6 +22,8 @@ namespace AerolineaFrba.Generacion_Viaje
             InitializeComponent();
             textBoxLlamo = textBox;
             monthCalendar1.TodayDate = Convert.ToDateTime(Properties.Settings.Default.fechaDelSistema);
+            monthCalendar1.SelectionStart = Convert.ToDateTime(Properties.Settings.Default.fechaDelSistema);
+            monthCalendar1.SelectionEnd = Convert.ToDateTime(Properties.Settings.Default.fechaDelSistema);
             monthCalendar1.MaxSelectionCount = 1;
         }
 

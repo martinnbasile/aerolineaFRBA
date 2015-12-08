@@ -19,7 +19,9 @@ namespace AerolineaFrba.Abm_Aeronave
             abmQueLlamo = elAbmQueLlamo;
             InitializeComponent();
             monthCalendar1.TodayDate = Convert.ToDateTime(Properties.Settings.Default.fechaDelSistema);
-            
+            monthCalendar1.SelectionStart = Convert.ToDateTime(Properties.Settings.Default.fechaDelSistema);
+            monthCalendar1.SelectionEnd = Convert.ToDateTime(Properties.Settings.Default.fechaDelSistema);
+            monthCalendar1.MaxSelectionCount = 1;
         }
 
         private void calendario_Load(object sender, EventArgs e)

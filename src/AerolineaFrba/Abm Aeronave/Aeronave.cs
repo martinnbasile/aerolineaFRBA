@@ -17,6 +17,7 @@ namespace AerolineaFrba.Abm_Aeronave
         String fechaAltaFueraServicio;
         int cantidadButacas;
         int cantidadKgs;
+        int cantidadDePisos;
 
         public string getMatricula()
         {
@@ -50,6 +51,10 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             return cantidadKgs;
         }
+        public int getCantidadDePisos()
+        {
+            return cantidadDePisos;
+        }
         public void setMatricula(String unaMatricula)
         {
              matricula=unaMatricula;
@@ -82,7 +87,9 @@ namespace AerolineaFrba.Abm_Aeronave
         {
             cantidadKgs = unaCantidad;
         }
-
+        public void setCantidadDePisos(int unaCantidad){
+            cantidadDePisos = unaCantidad;
+        }
 
     }
 }
