@@ -124,6 +124,7 @@ Drop table MM.Inhabilitados
 Drop table MM.Millas
 Drop table MM.Paquetes
 Drop table MM.Pasajes
+drop table mm.comprasConTarjeta
 drop table mm.compras
 drop table mm.TC
 drop function mm.ultimacompra
@@ -145,7 +146,6 @@ drop table MM.Tipos_Servicio
 drop table MM.logBajasAeronaves
 drop table MM.Butacas_Avion
 drop table MM.Aeronaves
-drop table mm.comprasConTarjeta
 drop table MM.modeloAvion
 drop procedure mm.generarViaje
 drop function mm.aeronavesDisponibles
@@ -376,7 +376,7 @@ add constraint Producto foreign key (Producto) references MM.Productos_Milla(Id)
 go
 
 create table mm.TC(
-id_TC int primary key,
+id_TC int identity(1,1) primary key,
 NRO_TC numeric(18) ,
 cod_seg int,
 anio_venc int,
@@ -388,13 +388,12 @@ go
 
 
 
-
 create table mm.compras(
 cod_compra int identity(1000000,1) primary key,
 cliente int foreign key references mm.clientes,
 fecha datetime,
 total float,
-medioPago varchar(10)
+medioPago varchar(30)
  
 
 
@@ -1679,12 +1678,14 @@ returns @mitabla table(
 cod_paquete int,
 viaje int,
 kg int,
-precioPaquete float)
+precioPaquete float,
+medioPago varchar(30)
+)
 as 
 begin
 insert into @mitabla
-select Id,viaje,kg,precio_paquete from mm.paquetes
-where cod_compra=@codCompra and cod_cancelacion is null
+select Id,viaje,kg,precio_paquete,medioPago from mm.paquetes p join mm.compras c on (c.cod_compra =p.cod_compra)
+where c.cod_compra=@codCompra and cod_cancelacion is null
 return 
 end
 
@@ -1694,12 +1695,14 @@ returns @mitabla table(
 cod_pasaje int,
 viaje int,
 butaca_nro int,
-precioPasaje float)
+precioPasaje float,
+medioPago varchar(30)
+)
 as 
 begin
 insert into @mitabla
-select Id,viaje,Numero_Butaca,precioPasaje from mm.pasajes
-where cod_compra=@codCompra and cod_cancelacion is null
+select Id,viaje,Numero_Butaca,precioPasaje,medioPago from mm.pasajes p join mm.compras c on (c.cod_compra =p.cod_compra)
+where c.cod_compra=@codCompra and cod_cancelacion is null
 return 
 end
 
@@ -1768,7 +1771,7 @@ as
 begin
 declare @numero int
 if(not exists(select NRO_TC from mm.TC where NRO_TC=@nro and cod_seg=@cod and anio_venc=@anio and mes_venc=@mes))
- insert into mm.TC(NRO_TC,cod_seg,anio_venc,mes_venc) values(@nro,@cod,@anio,@mes)
+insert into mm.TC(NRO_TC,cod_seg,anio_venc,mes_venc) values(@nro,@cod,@anio,@mes)
 
 select @numero=id_TC from mm.TC where NRO_TC=@nro and cod_seg=@cod and anio_venc=@anio and mes_venc=@mes
 
@@ -1776,7 +1779,7 @@ insert into mm.comprasConTarjeta(cod_compra,id_tc) values(@compra,@numero)
 end
 go
 
-create procedure mm.asentarCompra @codCompra int, @dni int, @total float, @medioPago varchar(10)
+create procedure mm.asentarCompra @codCompra int, @dni int, @total float, @medioPago varchar(30)
 as
 
 begin
@@ -1791,14 +1794,6 @@ end
 go
 
 
---alter table gd_esquema.Maestra add id int identity(1,1) primary key
-
-/*
-select a.Cli_Dni,count(distinct b.cli_apellido) from gd_esquema.maestra as a  join gd_esquema.maestra as b on a.cli_dni=b.cli_dni and b.id<=a.id
-
-group by a.Cli_Dni
- order by 2 desc
- */
 
  create function [MM].[DestinosAeronavesMenosButacasVendidos]
 (@semestre int,

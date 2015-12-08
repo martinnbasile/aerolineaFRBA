@@ -14,6 +14,7 @@ namespace AerolineaFrba.Devolucion
 {
     public partial class seleccionarPasajesEncomiendas : Form
     {
+        String medioPago;
         int codigoDeCompra;
         public seleccionarPasajesEncomiendas(int unCodigoDeCompra)
         {
@@ -42,14 +43,16 @@ namespace AerolineaFrba.Devolucion
                 int cantidadPaquetes = (dataGridView2.SelectedRows.Count);
                 if (cantidadPasajes>0)
                 {
+                     medioPago = dataGridView1.SelectedRows[0].Cells["medioPago"].Value.ToString();
                      precioPasaje = float.Parse(dataGridView1.SelectedRows[0].Cells["precioPasaje"].Value.ToString());
                 }
                 if (cantidadPaquetes > 0)
                 {
+                    medioPago = dataGridView2.SelectedRows[0].Cells["medioPago"].Value.ToString();
                     precioPaquete = float.Parse(dataGridView2.SelectedRows[0].Cells["precioPaquete"].Value.ToString());
                 }
                 float importeDevolucion = cantidadPasajes * precioPasaje + cantidadPaquetes * precioPaquete;
-
+                
                 foreach (DataGridViewRow row in dataGridView1.SelectedRows)
                 {
                     int codigoDePasaje = Convert.ToInt32(row.Cells["Cod_pasaje"].Value.ToString());
@@ -60,7 +63,7 @@ namespace AerolineaFrba.Devolucion
                     int codigoDePaquete = Convert.ToInt32(row.Cells["Cod_paquete"].Value.ToString());
                     ConexionALaBase.Conexion.ejecutarNonQuery("exec mm.cancelacionPaquete @codPaquete="+codigoDePaquete+",@codCancelacion="+codigoDeCancelacion+"");
                 }
-                MessageBox.Show("Se han cancelado satisfactoriamente los pasajes y paquetes seleccionados, importe: "+importeDevolucion);
+                MessageBox.Show("Se han cancelado satisfactoriamente los pasajes y paquetes seleccionados, importe: " + importeDevolucion + " medio de pago " + medioPago);
                 new seleccionarPasajesEncomiendas(codigoDeCompra).Show();
                 this.Close();
            }          

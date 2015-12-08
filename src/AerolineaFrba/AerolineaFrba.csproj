@@ -254,7 +254,6 @@
     </Compile>
     <Compile Include="ConexionALaBase\CargadorDeEstructura.cs" />
     <Compile Include="ConexionALaBase\Conexion.cs" />
-    <Compile Include="Convertir\conversiones.cs" />
     <Compile Include="Devolucion\ingresarCodigoDeCompra.cs">
       <SubType>Form</SubType>
     </Compile>
