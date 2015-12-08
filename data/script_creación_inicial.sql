@@ -231,8 +231,10 @@ Ciudad_Destino int,
 Ciudad_Origen int,
 Tipo_Servicio int,
 Precio_Base float not null,
-Precio_Kg float not null)
+Precio_Kg float not null,
+unique(Ciudad_Destino,Ciudad_Origen,Tipo_Servicio,Precio_base,Precio_kg))
 go
+
 Alter Table MM.Rutas_Aereas
 add constraint FK_Ciudad_Origen FOREIGN KEY (Ciudad_Origen) references MM.Ciudades(Id)
 go
