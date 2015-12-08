@@ -275,10 +275,9 @@ fecha_alta_fuera_servicio datetime,
 )
 go
 
-
-Create table MM.Viajes(
+Create  table MM.Viajes(
 Id int identity(1,1) primary key ,
-Matricula varchar(10) foreign key references MM.Aeronaves(Matricula), 
+Matricula varchar(10) foreign key references MM.Aeronaves(Matricula) on update cascade, 
 estado varchar(15) default 'habilitado',
 Ruta int,
 constraint Ruta foreign key (Ruta) references MM.Rutas_Aereas(Id),
@@ -1330,7 +1329,7 @@ fechaAlta DateTime
 create index aeronavesBajas on mm.logBajasAeronaves (aeronave)
 go
 
-create trigger mm.actualizarTablaLog on MM.Aeronaves
+create   trigger mm.actualizarTablaLog on MM.Aeronaves
 after update
 as
 begin
@@ -1339,7 +1338,7 @@ begin
 	Select i.matricula, i.fecha_baja_fuera_servicio, i.fecha_alta_fuera_servicio
 	from inserted i join deleted d on (i.matricula=d.matricula and i.fecha_alta_fuera_servicio>=mm.fechaDeHoy() and d.fecha_alta_fuera_servicio<mm.fechaDeHoy())
 	
-	declare miCursor cursor for
+	declare unCursor cursor for
 	select id, fecha_alta_fuera_servicio 
 	from mm.logBajasAeronaves l join inserted i on 
 	(l.aeronave=i.matricula and l.fechaBaja=i.fecha_baja_fuera_servicio
@@ -1347,15 +1346,19 @@ begin
 	declare @id int
 	declare @fechaR DateTime
 
-	open miCursor
+	open unCursor
 
-	fetch next from miCursor into @id,@fechaR
+	fetch next from unCursor into @id,@fechaR
 	while (@@fetch_status=0)
 	begin
 		update mm.logBajasAeronaves
 		set fechaAlta = @fechaR
 		where id = @id
+	fetch next from unCursor into @id,@fechaR
+	
 	end
+	close unCursor
+	deallocate unCursor
 end
 go
 
