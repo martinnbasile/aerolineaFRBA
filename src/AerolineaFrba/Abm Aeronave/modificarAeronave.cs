@@ -27,6 +27,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void modificarAeronave_Load(object sender, EventArgs e)
         {
+            textMatricula.Text = aeronaveAModificar.getMatricula();
             textModelo.Text = aeronaveAModificar.getModelo();
             textFabricante.Text = aeronaveAModificar.getFabricante();
             textTS.Text = aeronaveAModificar.getTipoDeServicio();
@@ -68,11 +69,21 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(Validaciones.Validaciones.validarDataGridView(dataGridView1,"Seleccione un modelo para reemplazar al actual"))
+            if(estaCompleto())
             {
-                DataGridViewRow modeloSeleccionado = this.dataGridView1.SelectedRows[0];
-                int idModeloSeleccionado = Convert.ToInt32(modeloSeleccionado.Cells["id"].Value.ToString());
-                ConexionALaBase.Conexion.ejecutarNonQuery("update mm.aeronaves set modelo=" + idModeloSeleccionado + " where matricula='" + aeronaveAModificar.getMatricula() + "'");
+                bool seleccionoUnModelo = dataGridView1.SelectedRows.Count == 1;
+                bool ingresoUnaMatricula = maskedTextBox2.Text.Length >= 7;
+                if (seleccionoUnModelo)
+                {
+                    DataGridViewRow modeloSeleccionado = this.dataGridView1.SelectedRows[0];
+                    int idModeloSeleccionado = Convert.ToInt32(modeloSeleccionado.Cells["id"].Value.ToString());
+                    ConexionALaBase.Conexion.ejecutarNonQuery("update mm.aeronaves set modelo=" + idModeloSeleccionado + " where matricula='" + aeronaveAModificar.getMatricula() + "'");
+                }
+                if (ingresoUnaMatricula)
+                {
+                    String nuevaMatricula = maskedTextBox2.Text;
+                  //  ConexionALaBase.Conexion.ejecutarNonQuery("update mm.aeronaves set matricula=" + nuevaMatricula + " where matricula='" + aeronaveAModificar.getMatricula() + "'");
+                }
                 MessageBox.Show("Se ha modificado el modelo exitosamente");
                 new buscarAeronave().Show();
                 this.Close();
@@ -85,6 +96,23 @@ namespace AerolineaFrba.Abm_Aeronave
             MessageBox.Show("Recuerde que para que un modelo pueda sustituir al de la aeronave seleccionada debe tener su mismo tipo de servicio, una cantidad mayor o igual de Kgs para encomiendas, y una cantidad de asientos mayor o igual");
             new crearModelo("modificarAeronave",aeronaveAModificar).Show();
             this.Close();
+        }
+
+        public bool estaCompleto()
+        {
+            bool noSeleccionoUnModelo = dataGridView1.SelectedRows.Count != 1;
+            bool noIngresoUnaMatricula = maskedTextBox2.Text.Length < 7;
+            if(noSeleccionoUnModelo && noIngresoUnaMatricula)
+            {
+                MessageBox.Show("Seleccione un modelo o ingrese una matrícula para guardar los cambios");
+                return false;
+            }
+            return true;
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }
