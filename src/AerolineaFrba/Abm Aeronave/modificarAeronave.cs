@@ -34,7 +34,7 @@ namespace AerolineaFrba.Abm_Aeronave
             textKg.Text = aeronaveAModificar.getCantidadKgs().ToString();
             textPisos.Text = aeronaveAModificar.getCantidadDePisos().ToString();
             textButacas.Text = aeronaveAModificar.getCantidadButacas().ToString();
-            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "select * from mm.vista_modelos vm where vm.id in (select * from mm.modelosValidos('" + aeronaveAModificar.getMatricula() + "'))");
+            ConexionALaBase.CargadorDeEstructuras.cargarDataGrid(dataGridView1, "select * from MM.vista_modelos");
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -84,7 +84,7 @@ namespace AerolineaFrba.Abm_Aeronave
                     String nuevaMatricula = maskedTextBox2.Text;
                     ConexionALaBase.Conexion.ejecutarNonQuery("update mm.aeronaves set matricula='" + nuevaMatricula + "' where matricula='" + aeronaveAModificar.getMatricula() + "'");
                 }
-                MessageBox.Show("Se ha modificado el modelo exitosamente");
+                MessageBox.Show("Se ha modificado la aeronave exitosamente");
                 new buscarAeronave().Show();
                 this.Close();
             }
@@ -93,7 +93,6 @@ namespace AerolineaFrba.Abm_Aeronave
 
         private void button3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Recuerde que para que un modelo pueda sustituir al de la aeronave seleccionada debe tener su mismo tipo de servicio, una cantidad mayor o igual de Kgs para encomiendas, y una cantidad de asientos mayor o igual");
             new crearModelo("modificarAeronave",aeronaveAModificar).Show();
             this.Close();
         }
