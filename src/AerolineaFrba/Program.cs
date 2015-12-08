@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,6 +23,7 @@ namespace AerolineaFrba
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Application.CurrentCulture = new CultureInfo("en-US");
             ConexionALaBase.Conexion.verificarConexion();
             DateTime fecha = Convert.ToDateTime(AerolineaFrba.Properties.Settings.Default.fechaDelSistema);
             fechaSistema = fecha.ToString("dd/MM/yyyy");

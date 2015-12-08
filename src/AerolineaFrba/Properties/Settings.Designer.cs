@@ -36,10 +36,11 @@ namespace AerolineaFrba.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("11/11/2015")]
+       // [global::System.Configuration.DefaultSettingValueAttribute("25/12/2015")]
         public string fechaDelSistema {
             get {
-                return ((string)(this["fechaDelSistema"]));
+
+                return System.DateTime.Parse((string)(this["fechaDelSistema"]), new System.Globalization.CultureInfo("es-AR")).ToString(new System.Globalization.CultureInfo("en-US"));
             }
             set {
                 this["fechaDelSistema"] = value;
