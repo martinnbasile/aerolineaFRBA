@@ -1331,7 +1331,7 @@ go
 
 create table mm.logBajasAeronaves(
 id int identity(1,1),
-aeronave varchar(10) foreign key references mm.aeronaves(matricula),
+aeronave varchar(10) foreign key references mm.aeronaves(matricula) on update cascade,
 fechaBaja DateTime,
 fechaAlta DateTime
 )
@@ -1902,9 +1902,15 @@ end
 
 go
 
+create table mm.comprasConTarjeta
+(cod_compra int foreign key references mm.compras,
+nro_TC numeric(18) foreign key references mm.TC,
+PRIMARY KEY(COD_COMPRA,NRO_TC)
 
 
+)
 
+go
 
 
 
