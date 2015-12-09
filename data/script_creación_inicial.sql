@@ -1202,7 +1202,7 @@ AS
 BEGIN TRANSACTION
 	
 	Insert into mm.millas(cliente,Millas,Fecha_movimiento,Descripcion)
-	values (@numCli,-(@cantidad*@millasCosto),getdate(),'Canje de millas')
+	values (@numCli,-(@cantidad*@millasCosto),mm.fechaDeHoy(),'Canje de millas')
 	Insert into mm.canjeDeMillas(cod_cliente,cod_producto,cantidadMillas,cantidadProducto)
 	values (@numCli,@idProducto,@millasCosto*@cantidad,@cantidad)
 
