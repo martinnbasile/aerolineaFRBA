@@ -458,8 +458,17 @@ from gd_esquema.Maestra ma join mm.modeloAvion mo on (ma.Aeronave_KG_Disponibles
 
 go
 
+create function MM.convertirFecha (@fecha varchar(30))
+returns Date
+as
+begin
+return ( convert(Date,@fecha,103))
+end
+go
+
+
 insert into MM.Aeronaves (matricula,fecha_alta,modelo)
-select distinct Aeronave_Matricula,'1999-01-01', mo.id 
+select distinct Aeronave_Matricula,convert(datetime,'1999/01/01 00:00:00',103), mo.id 
 from gd_esquema.Maestra ma join mm.modeloAvion mo on (ma.Aeronave_KG_Disponibles=mo.Kg and ma.Aeronave_Modelo=mo.Modelo_descripcion ) join mm.Fabricantes f on f.Id=mo.fabricante and f.Descripcion=ma.Aeronave_Fabricante join mm.Tipos_Servicio t on t.Id=mo.tipoServicio and t.Descripcion=ma.Tipo_Servicio
 go
 
@@ -936,13 +945,6 @@ where
 
 go
 
-create function MM.convertirFecha (@fecha varchar(10))
-returns Date
-as
-begin
-return ( convert(Date,@fecha,103))
-end
-go
 
 
 create procedure MM.actualizarFecha @fecha varchar(10) 
