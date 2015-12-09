@@ -75,7 +75,7 @@ commit
 go
 
 Create Procedure MM.limpiarBase as
-
+drop table mm.canjeDeMillas
 drop procedure mm.eliminarruta
 drop procedure mm.cancelacionPaquete
 drop procedure mm.cancelacionPasaje
@@ -158,7 +158,7 @@ drop procedure mm.ingresarCompraPaquete
 drop procedure mm.ingresarCompraPasaje
 drop procedure mm.asentarCompra
 drop function mm.DestinosAeronavesMenosButacasVendidos
-drop table mm.canjeDeMillas
+
 drop procedure mm.ingresarTC
 drop function mm.modelosValidos
 
@@ -1154,6 +1154,16 @@ close cursorMillas
 deallocate cursorMillas
 commit 
 go
+create function mm.semestre(@fecha date)
+returns int
+as 
+begin
+declare @puto int
+set @puto=1+(month(@fecha)-1)/6
+
+return @puto
+end
+go
 
 
 insert into MM.Usuario_rol values(1,1);
@@ -1231,45 +1241,22 @@ delete from MM.Usuario_rol where cod_rol=@idRol
 COMMIT
 
 GO
-create function mm.DestinosMasVendidosPasajes
+create  function mm.DestinosMasVendidosPasajes
 (@semestre int,
 @anio char(4))
 returns @table table
 (Description varchar(100),cantidad int)
 as
 begin
-declare @desde char(4)
-declare @hasta char(4)
-if @semestre=1
-begin
-set @desde='0101'
-set @hasta='0530'
-end
-if @semestre=2
-begin
-set @desde='0601'
-set @hasta='1231'
-end
 insert into @table  
 select top 5 d.Descripcion,count(a.Id)
-from MM.Pasajes a right join MM.Viajes b on a.Viaje=b.Id right join  mm.Rutas_Aereas c on b.Ruta=c.Id  and b.Fecha_salida 
-between @anio+@desde and @anio+@hasta  right join MM.Ciudades d on c.Ciudad_Destino=d.Id
- 
+from MM.Pasajes a right join MM.Viajes b on a.Viaje=b.Id right join  mm.Rutas_Aereas c on b.Ruta=c.Id  and year(b.fecha_salida)=@anio and (1+(month(b.fecha_salida)-1)/6)=@semestre 
+ right join MM.Ciudades d on c.Ciudad_Destino=d.Id
 group by d.Descripcion 
 order by count(a.Id) desc
 return
 end
 GO
-create function mm.semestre(@fecha date)
-returns int
-as 
-begin
-declare @puto int
-set @puto=1+(month(@fecha)-1)/6
-
-return @puto
-end
-go
 create function mm.AeronavesMasDiasFueraServicio
 (@semestre int, @anio char(4))
 
@@ -1282,14 +1269,14 @@ select top 5 a.matricula,count(b.aeronave)
 from  mm.aeronaves a left join mm.logBajasAeronaves b on a.Matricula=b.aeronave
 where ((year(fechabaja)=@anio and mm.semestre(FechaBaja)=@semestre) or b.aeronave is null)
 group by a.MAtricula
-order by count(*) desc
+order by count(b.aeronave) desc
 
 return
 end
 
 go
 
-create function mm.DestinosMasCancelados
+create  function mm.DestinosMasCancelados
 (@semestre int,
 @anio char(4))
 returns @table table
@@ -1297,28 +1284,16 @@ returns @table table
 cantidad int)
 as
 begin
-declare @desde char(4)
-declare @hasta char(4)
-if @semestre=1
-begin
-set @desde='0101'
-set @hasta='0530'
-end
-if @semestre=2
-begin
-set @desde='0601'
-set @hasta='1231'
-end
+
 insert into @table  
 
 select top 5 e.Descripcion,count(b.cod_cancelacion)
-from MM.Pasajes b right join MM.Viajes c  on b.Viaje=c.Id  and  b.cod_cancelacion is not null   right join MM.Rutas_Aereas d on c.Ruta=d.Id and 
-		  c.Fecha_salida 
-between @anio+@desde and @anio+@hasta  right join MM.Ciudades e on d.Ciudad_Destino=e.Id
+from MM.Pasajes b right join MM.Viajes c  on b.Viaje=c.Id  and  b.cod_cancelacion is not null  and year(c.fecha_salida)=@anio and (1+(month(c.fecha_salida)-1)/6)=@semestre  right join MM.Rutas_Aereas d on c.Ruta=d.Id 
+  right join MM.Ciudades e on d.Ciudad_Destino=e.Id
 	
 		
 group by e.Descripcion 
-order by count(*) desc
+order by count(b.cod_cancelacion) desc
 return
 end
 GO
@@ -1816,18 +1791,7 @@ returns @table table
 vacias int)
 as
 begin
-declare @desde char(4)
-declare @hasta char(4)
-if @semestre=1
-begin
-set @desde='0101'
-set @hasta='0530'
-end
-if @semestre=2
-begin
-set @desde='0601'
-set @hasta='1231'
-end
+
 insert into @table  
 
 select top 5 D.Descripcion,sum(isnull(b.butacasDisponibles,0)) 
@@ -1836,8 +1800,7 @@ from
 MM.Viajes B right join
 MM.Rutas_Aereas C on B.Ruta=C.Id  right join
 MM.Ciudades D on C.Ciudad_Destino=D.Id 
-and b.Fecha_salida
-between @anio+@desde and @anio+@hasta
+ and year(b.fecha_salida)=@anio and (1+(month(b.fecha_salida)-1)/6)=@semestre  
 
 group by D.Descripcion
 order by sum(isnull(B.butacasDisponibles,0)) desc
