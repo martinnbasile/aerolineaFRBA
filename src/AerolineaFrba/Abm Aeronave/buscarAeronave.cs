@@ -124,7 +124,7 @@ namespace AerolineaFrba.Abm_Aeronave
 
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void button5_Click(object sender, EventArgs e) //MODIFICAR AERONAVE
         {
             if (Validaciones.Validaciones.validarDataGridView(dataGridView1, "Selecciona una Aeronave para ser modificada"))
             {
