@@ -54,16 +54,16 @@ commit
 
 go
 
-create procedure mm.inhabilitarViajesConRutasInhabilitadas
+create  procedure mm.inhabilitarViajesConRutasInhabilitadas
 as
 begin transaction
 
 delete b  from mm.Rutas_aereas r join mm.viajes v on v.ruta=r.id  join mm.butacas b on b.viaje=v.id
-where r.Estado=2
+where r.Estado=2 and v.fecha_salida>mm.fechaDeHoy()
 
 
  
-select v.id into #temporal from mm.viajes v join mm.rutas_aereas r on v.ruta=r.id and r.Estado=2
+select v.id into #temporal from mm.viajes v join mm.rutas_aereas r on v.ruta=r.id and r.Estado=2 and v.fecha_salida>mm.fechaDeHoy()
 
 
 update mm.Viajes
