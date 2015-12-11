@@ -1695,7 +1695,7 @@ return
 end
 
 go
-create  function mm.pasajesCancelables (@codCompra int)
+create function mm.pasajesCancelables (@codCompra int)
 returns @mitabla table(
 cod_pasaje int,
 viaje int,
@@ -1706,8 +1706,9 @@ medioPago varchar(30)
 as 
 begin
 insert into @mitabla
-select p.Id,viaje,Numero_Butaca,precioPasaje,medioPago from mm.pasajes p join mm.compras c on (c.cod_compra =p.cod_compra) join mm.Viajes as v on v.Id=p.Viaje
+select p.Id,viaje,Numero_Butaca,precioPasaje,medioPago from mm.pasajes p join mm.compras c on (c.cod_compra =p.cod_compra) join mm.Viajes as v on v.Id=p.viaje
 where c.cod_compra=@codCompra and cod_cancelacion is null and v.Fecha_llegada is null
+return 
 end
 
 go
