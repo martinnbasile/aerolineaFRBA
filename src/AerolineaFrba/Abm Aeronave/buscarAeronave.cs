@@ -77,12 +77,6 @@ namespace AerolineaFrba.Abm_Aeronave
                String fechaBajaTemporalAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fecha de fuera de servicio"].Value.ToString();
                String fechaAltaTemporalAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fecha de reinicio de servicio"].Value.ToString();
 
-               if (!fechaBajaDefinitivaAeronaveSeleccionada.Equals("")||(!fechaBajaTemporalAeronaveSeleccionada.Equals("") &&
-                   DateTime.Parse(Properties.Settings.Default.fechaDelSistema)>DateTime.Parse(fechaBajaTemporalAeronaveSeleccionada) && DateTime.Parse(fechaAltaTemporalAeronaveSeleccionada)<DateTime.Parse(Properties.Settings.Default.fechaDelSistema)))
-               {
-                    MessageBox.Show("Ya se encuentra fuera de servicio la aeronave seleccionada");
-               }
-               else{
                    String matriculaAeronaveSeleccionada = aeronaveSeleccionada.Cells["Matrícula"].Value.ToString();
                    String modeloAeronaveSeleccionada = aeronaveSeleccionada.Cells["Modelo"].Value.ToString();
                    String fabricanteAeronaveSeleccionada = aeronaveSeleccionada.Cells["Fabricante"].Value.ToString();
@@ -97,7 +91,7 @@ namespace AerolineaFrba.Abm_Aeronave
    
                    new bajaFueraDeServicio(unaAeronave).Show();
                    this.Close();
-               }    
+                   
             }
         }
 
