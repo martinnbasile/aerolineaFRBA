@@ -1561,7 +1561,7 @@ set @llegada=convert(date,@fecha,20)
 insert into @jaja
 
 select v.Id,butacasDisponibles,kgDisponibles,t.Descripcion,r.Precio_Base*t.Porcentaje,r.Precio_Kg from mm.viajes v join mm.Rutas_Aereas r on r.Id=v.Ruta join mm.Tipos_Servicio t on t.Id=r.Tipo_servicio join mm.Ciudades d on d.id=r.Ciudad_Destino join mm.Ciudades o on o.Id=r.Ciudad_Origen
-where datepart(dayofyear,v.fecha_salida) = datepart(dayofyear,@llegada) and year(v.Fecha_salida)=year(@llegada) and d.Descripcion=@destino and o.Descripcion=@origen
+where datepart(dayofyear,v.fecha_salida) = datepart(dayofyear,@llegada) and year(v.Fecha_salida)=year(@llegada) and d.Descripcion=@destino and o.Descripcion=@origen and Fecha_llegada is null
 and (kgDisponibles>0 or butacasDisponibles>0) and v.estado='habilitado' 
  return 
  end
