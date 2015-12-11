@@ -38,10 +38,11 @@ namespace AerolineaFrba.Abm_Aeronave
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)//CONFIRMAR
         {
             if (estaCompleto())
             {
+                
                 if (ConexionALaBase.Conexion.consultarBase("Select * from MM.vista_modelos where Modelo='" + textBox2.Text + "'").HasRows)
                 {
                     MessageBox.Show("Ya existe un modelo con el nombre ingresado, ingrese uno diferente");
@@ -53,29 +54,37 @@ namespace AerolineaFrba.Abm_Aeronave
                     int cantidadDeKilogramosParaEncomiendas = Convert.ToInt32(maskedTextBox1.Text);
                     int cantidadDePisos = Convert.ToInt32(maskedTextBox2.Text);
                     int cantidadDeButacasPorPiso = Convert.ToInt32(maskedTextBox3.Text);
-                    
-  
 
-                    SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Tipos_Servicio where Descripcion='" +nuevoModeloTipoDeServicio+ "'");
-                    int idTipoServicio = new int();
-                    if (consulta.Read()) { idTipoServicio = consulta.GetInt32(consulta.GetOrdinal("id")); }
-                    consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Fabricantes where Descripcion='" + nuevoModeloFabricante + "'");
-                    int idFabricante = new int();
-                    if (consulta.Read()) { idFabricante = consulta.GetInt32(consulta.GetOrdinal("id")); }
+                    if (cantidadDeButacasPorPiso * cantidadDePisos + cantidadDeKilogramosParaEncomiendas > 0)
+                    {
 
-                     String noQueryCrearModelo = "exec MM.crearModeloAvion @modeloDescripcion='" + nuevoModeloDescripcion + "',@Kg =" + cantidadDeKilogramosParaEncomiendas + ",@fabricante=" + idFabricante + ",@tipoServicio=" + idTipoServicio + ",@cantPisos=" + cantidadDePisos + ", @cantButacasPiso=" + cantidadDeButacasPorPiso + "";
-                     ConexionALaBase.Conexion.ejecutarNonQuery(noQueryCrearModelo);
-                     MessageBox.Show("Se ha creado el modelo satisfactoriamente");
-                     if (pantallaPrevia.Equals("crearAeronave"))
-                     {
-                         new crearAeronave().Show();
-                         this.Close();
-                     }
-                     else if (pantallaPrevia.Equals("modificarAeronave"))
-                     {
-                         new modificarAeronave(aeronaveModificandose).Show();
-                         this.Close();
-                     }
+
+                        SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Tipos_Servicio where Descripcion='" + nuevoModeloTipoDeServicio + "'");
+                        int idTipoServicio = new int();
+                        if (consulta.Read()) { idTipoServicio = consulta.GetInt32(consulta.GetOrdinal("id")); }
+                        consulta = ConexionALaBase.Conexion.consultarBase("select id from MM.Fabricantes where Descripcion='" + nuevoModeloFabricante + "'");
+                        int idFabricante = new int();
+                        if (consulta.Read()) { idFabricante = consulta.GetInt32(consulta.GetOrdinal("id")); }
+
+                        String noQueryCrearModelo = "exec MM.crearModeloAvion @modeloDescripcion='" + nuevoModeloDescripcion + "',@Kg =" + cantidadDeKilogramosParaEncomiendas + ",@fabricante=" + idFabricante + ",@tipoServicio=" + idTipoServicio + ",@cantPisos=" + cantidadDePisos + ", @cantButacasPiso=" + cantidadDeButacasPorPiso + "";
+                        ConexionALaBase.Conexion.ejecutarNonQuery(noQueryCrearModelo);
+                        MessageBox.Show("Se ha creado el modelo satisfactoriamente");
+                        if (pantallaPrevia.Equals("crearAeronave"))
+                        {
+                            new crearAeronave().Show();
+                            this.Close();
+                        }
+                        else if (pantallaPrevia.Equals("modificarAeronave"))
+                        {
+                            new modificarAeronave(aeronaveModificandose).Show();
+                            this.Close();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("La aeronave debe tener butacas o kgs para encomiendas");
+                        return;
+                    }
                 }
             }
         }
