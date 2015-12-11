@@ -1689,8 +1689,8 @@ medioPago varchar(30)
 as 
 begin
 insert into @mitabla
-select Id,viaje,kg,precio_paquete,medioPago from mm.paquetes p join mm.compras c on (c.cod_compra =p.cod_compra)
-where c.cod_compra=@codCompra and cod_cancelacion is null
+select p.Id,p.viaje,p.kg,p.precio_paquete,c.medioPago from mm.paquetes p join mm.compras c on (c.cod_compra =p.cod_compra) join mm.Viajes as v on v.Id=p.Viaje
+where c.cod_compra=@codCompra and cod_cancelacion is null and v.Fecha_llegada is null
 return 
 end
 
@@ -1706,9 +1706,8 @@ medioPago varchar(30)
 as 
 begin
 insert into @mitabla
-select Id,viaje,Numero_Butaca,precioPasaje,medioPago from mm.pasajes p join mm.compras c on (c.cod_compra =p.cod_compra)
-where c.cod_compra=@codCompra and cod_cancelacion is null
-return 
+select p.Id,viaje,Numero_Butaca,precioPasaje,medioPago from mm.pasajes p join mm.compras c on (c.cod_compra =p.cod_compra) join mm.Viajes as v on v.Id=p.Viaje
+where c.cod_compra=@codCompra and cod_cancelacion is null and v.Fecha_llegada is null
 end
 
 go
