@@ -1259,19 +1259,30 @@ order by count(a.Id) desc
 return
 end
 GO
-create function mm.AeronavesMasDiasFueraServicio
+create  function mm.AeronavesMasDiasFueraServicio
 (@semestre int, @anio char(4))
 
 returns @table table (Description varchar(50),dias int)
 as
 begin
-
+declare @max datetime
+declare @min datetime
+if(@semestre=1)
+begin
+set @max=@anio+'0630'
+set @min=@anio+'0101'
+end
+else 
+begin
+set @max=@anio+'1231'
+set @min=@anio+'0701'
+end
 insert into @table
-select top 5 a.matricula,count(b.aeronave)
-from  mm.aeronaves a left join mm.logBajasAeronaves b on a.Matricula=b.aeronave
-where ((year(fechabaja)=@anio and mm.semestre(FechaBaja)=@semestre) or b.aeronave is null)
+select top 5 a.matricula,sum(coalesce(datediff(day,case when (year(b.fechabaja)=@anio and mm.semestre(b.FechaBaja)=@semestre) or b.fechabaja is null then b.fechabaja else @min end,case when (((year(fechaalta)=@anio and mm.semestre(FechaAlta)=@semestre)) or FechaAlta is Null) then FechaAlta else @max end),0))
+from  mm.aeronaves a left join mm.logBajasAeronaves b on a.Matricula=b.aeronave and ((year(b.fechabaja)=@anio and mm.semestre(b.FechaBaja)=@semestre) or (year(b.fechaAlta)=@anio and mm.semestre(b.FechaAlta)=@semestre) or @max between fechaBaja and fechaalta)
 group by a.MAtricula
-order by count(b.aeronave) desc
+order by sum(coalesce(datediff(day,case when (year(b.fechabaja)=@anio and mm.semestre(b.FechaBaja)=@semestre) or b.fechabaja is null then b.fechabaja else @min end,case when (((year(fechaalta)=@anio and mm.semestre(FechaAlta)=@semestre)) or FechaAlta is Null) then FechaAlta else @max end),0))
+ desc
 
 return
 end
@@ -1347,36 +1358,40 @@ fechaAlta DateTime
 create index aeronavesBajas on mm.logBajasAeronaves (aeronave)
 go
 
-create   trigger mm.actualizarTablaLog on MM.Aeronaves
+create trigger mm.actualizarTablaLog on MM.Aeronaves
 after update
 as
 begin
 	
 	insert into mm.logBajasAeronaves (aeronave,fechaBaja,fechaAlta)
 	Select i.matricula, i.fecha_baja_fuera_servicio, i.fecha_alta_fuera_servicio
-	from inserted i join deleted d on (i.matricula=d.matricula and i.fecha_alta_fuera_servicio>=mm.fechaDeHoy() and d.fecha_alta_fuera_servicio<mm.fechaDeHoy())
+	from inserted i join deleted d on (i.matricula=d.matricula and i.fecha_alta_fuera_servicio>=mm.fechaDeHoy() and (d.fecha_alta_fuera_servicio<mm.fechaDeHoy() or d.fecha_alta_fuera_servicio is null))
 	
 	declare unCursor cursor for
-	select id, fecha_alta_fuera_servicio 
+	select id, fecha_alta_fuera_servicio,fechaBaja,i.matricula 
 	from mm.logBajasAeronaves l join inserted i on 
-	(l.aeronave=i.matricula and l.fechaBaja=i.fecha_baja_fuera_servicio
-	and l.fechaBaja<i.fecha_baja_fuera_servicio)
+	(l.aeronave=i.matricula and l.fechaAlta>mm.fechaDeHoy())
 	declare @id int
 	declare @fechaR DateTime
-
+	declare @fechaBaja DateTime
+	declare @matricula varchar(10)
 	open unCursor
 
-	fetch next from unCursor into @id,@fechaR
+	fetch next from unCursor into @id,@fechaR,@feCHABAJA,@matricula
 	while (@@fetch_status=0)
 	begin
 		update mm.logBajasAeronaves
 		set fechaAlta = @fechaR
-		where id = @id
-	fetch next from unCursor into @id,@fechaR
+		where id = @id 
+	
+	
+	fetch next from unCursor into @id,@fechaR,@FECHABAJA,@matricula
 	
 	end
 	close unCursor
 	deallocate unCursor
+
+	
 end
 go
 
@@ -1895,5 +1910,3 @@ return
 end
 
 go
-
-
