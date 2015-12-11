@@ -46,7 +46,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(120, 67);
+            this.button1.Location = new System.Drawing.Point(196, 67);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 6;
@@ -56,7 +56,7 @@
             // 
             // maskedTextBox1
             // 
-            this.maskedTextBox1.Location = new System.Drawing.Point(120, 26);
+            this.maskedTextBox1.Location = new System.Drawing.Point(196, 23);
             this.maskedTextBox1.Mask = "09999999";
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(75, 20);
@@ -66,7 +66,7 @@
             // 
             this.label1.Location = new System.Drawing.Point(12, 26);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 20);
+            this.label1.Size = new System.Drawing.Size(157, 20);
             this.label1.TabIndex = 4;
             this.label1.Text = "label1";
             // 
@@ -74,13 +74,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(207, 105);
+            this.ClientSize = new System.Drawing.Size(283, 105);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.maskedTextBox1);
             this.Controls.Add(this.label1);
             this.Name = "ingresarCodigoDeCompra";
-            this.Text = "Form1";
+            this.Text = "Ingresar Cod compra";
             this.Load += new System.EventHandler(this.elegirCliente_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
