@@ -763,7 +763,7 @@ create view MM.vista_aeronaves as
 select a.Fecha_alta as 'Fecha de alta',  mo.Modelo_descripcion as 'Modelo',a.matricula as 'Matrícula',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',a.fecha_baja_fuera_servicio as 'Fecha de fuera de servicio',a.fecha_alta_fuera_servicio as 'Fecha de reinicio de servicio',a.Fecha_Baja_Definitiva as 'Fecha de baja definitiva',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas', Count(DISTINCT ba.butacaPiso) as 'Cantidad de pisos',COUNT(ba.id) as 'Cantidad de asientos'
 from MM.Aeronaves a join mm.modeloAvion mo on mo.id=a.modelo join MM.Fabricantes f on (mo.Fabricante=f.Id)
 					join MM.Tipos_Servicio ts on (mo.tipoServicio=ts.Id)
-					join MM.Butacas_Avion ba on (mo.id=ba.modeloAvion)				
+					left join MM.Butacas_Avion ba on (mo.id=ba.modeloAvion)				
 where a.Fecha_Baja_Definitiva is null
 					 group by Modelo_descripcion,f.Descripcion,ts.Descripcion,mo.Kg,a.fecha_alta,a.matricula,a.fecha_baja_fuera_servicio,a.fecha_alta_fuera_servicio,a.fecha_baja_definitiva
 go
