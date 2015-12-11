@@ -57,7 +57,7 @@ namespace AerolineaFrba.Compra
                 }
                 catch (System.Data.SqlClient.SqlException exec)
                 {
-                    MessageBox.Show(exec.Message);
+                    MessageBox.Show("Un pasajero no puede estar haciendo dos viajes al mismo tiempo");
                     MessageBox.Show("La compra fue cancelada"); 
                     new compra().Show();
                     this.Close();

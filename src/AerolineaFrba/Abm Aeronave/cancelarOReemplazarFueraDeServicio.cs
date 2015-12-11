@@ -51,7 +51,7 @@ namespace AerolineaFrba.Abm_Aeronave
             SqlDataReader consulta = ConexionALaBase.Conexion.consultarBase(procedureParaBuscarReemplazos);
             if (consulta.HasRows)
             {
-                new seleccionarReemplazo(aeronaveAfectada).Show();
+                new seleccionarReemplazo(aeronaveAfectada,"Tempo").Show();
                 this.Close();
             }
             else

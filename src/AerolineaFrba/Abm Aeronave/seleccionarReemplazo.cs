@@ -13,11 +13,12 @@ namespace AerolineaFrba.Abm_Aeronave
     public partial class seleccionarReemplazo : Form
     {
         Aeronave aeronaveAfectada;
-       
-        public seleccionarReemplazo(Aeronave unaAeronave)
+        String intencion;
+        public seleccionarReemplazo(Aeronave unaAeronave,String aQueVino)
         {
             aeronaveAfectada = unaAeronave;
             InitializeComponent();
+            intencion = aQueVino;
         }
 
         private void seleccionarReemplazo_Load(object sender, EventArgs e)
@@ -40,8 +41,16 @@ namespace AerolineaFrba.Abm_Aeronave
                 String matriculaAeronaveReemplazante = aeronaveReemplazante.Cells["Matrícula"].Value.ToString();
                 String noQuery = "update MM.viajes set viajes.Matricula='"+matriculaAeronaveReemplazante+"' where viajes.Matricula='"+aeronaveAfectada.getMatricula()+"' and (viajes.Fecha_salida between '"+aeronaveAfectada.getFechaBajaFueraServicio()+"' and '"+aeronaveAfectada.getFechaAltaFueraServicio()+"' or  viajes.Fecha_Estimada_llegada between '"+aeronaveAfectada.getFechaBajaFueraServicio()+"' and '"+aeronaveAfectada.getFechaAltaFueraServicio()+"')";
                 ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
-                noQuery = "UPDATE MM.Aeronaves set fecha_baja_definitiva=mm.fechaDeHoy() where matricula='" + aeronaveAfectada.getMatricula() + "'";
-                ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
+                if (intencion == "Definitiva")
+                {
+                    noQuery = "UPDATE MM.Aeronaves set fecha_baja_definitiva=mm.fechaDeHoy() where matricula='" + aeronaveAfectada.getMatricula() + "'";
+                    ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
+                }
+                else
+                {
+                    noQuery = "UPDATE MM.Aeronaves set fecha_baja_fuera_servicio=mm.fechaDeHoy(),fecha_alta_fuera_servicio='" + aeronaveAfectada.getFechaAltaFueraServicio() + "' where matricula='" + aeronaveAfectada.getMatricula() + "'"; 
+                    ConexionALaBase.Conexion.ejecutarNonQuery(noQuery);
+                }
                 MessageBox.Show("Se ha realizado el reemplazo correctamente");
                 new buscarAeronave().Show(); 
                 this.Close();
