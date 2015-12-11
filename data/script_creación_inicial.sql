@@ -774,7 +774,7 @@ create view MM.vista_modelos as
 select mo.id, mo.Modelo_descripcion as 'Modelo',f.Descripcion as 'Fabricante', ts.Descripcion as 'Tipo de servicio',mo.Kg as 'Cantidad de Kgs disponibles para realizar encomiendas', Count(DISTINCT ba.butacaPiso) as 'Cantidad de pisos',COUNT(ba.id) as 'Cantidad de asientos'
 from mm.modeloAvion mo join MM.Fabricantes f on (mo.Fabricante=f.Id)
 					   join MM.Tipos_Servicio ts on (mo.tipoServicio=ts.Id)	
-					   join MM.Butacas_Avion ba on (mo.id=ba.modeloAvion)	
+					   left join MM.Butacas_Avion ba on (mo.id=ba.modeloAvion)	
 					   group by mo.id,mo.Modelo_descripcion,f.Descripcion,ts.Descripcion,mo.Kg		
 go
 
