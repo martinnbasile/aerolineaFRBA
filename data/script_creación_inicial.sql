@@ -1695,7 +1695,7 @@ return
 end
 
 go
-create function mm.pasajesCancelables (@codCompra int)
+create  function mm.pasajesCancelables (@codCompra int)
 returns @mitabla table(
 cod_pasaje int,
 viaje int,
