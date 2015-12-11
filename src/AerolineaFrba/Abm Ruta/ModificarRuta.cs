@@ -81,6 +81,24 @@ namespace AerolineaFrba.Abm_Ruta
 
         private void button1_Click(object sender, EventArgs e)//COnfirmada la actualizacion
         {
+            int cantidadViajes = 0;
+            System.Data.SqlClient.SqlDataReader unReader = ConexionALaBase.Conexion.consultarBase("Select count(*) from mm.viajes where ruta=" + idRutaE);
+            if (unReader.Read())
+            {
+                cantidadViajes = unReader.GetInt32(0);
+            }
+            unReader.Dispose();
+            if (cantidadViajes > 0)
+            {
+                MessageBox.Show("No puede actualizar una ruta que ya tenga viajes asociados");
+                new ABM_RUTA().Show();
+                this.Close();
+                return;
+                
+            }
+
+
+
             if (this.validarTodo())
             {
                 String nuevoOrigen = comboBox1.SelectedItem.ToString();
@@ -94,7 +112,7 @@ namespace AerolineaFrba.Abm_Ruta
                 }
                 catch (System.Data.SqlClient.SqlException exc)
                 {
-                    MessageBox.Show("Ya existe una ruta igual a la que esta intentanto de ingresar");
+                    MessageBox.Show(exc.Message);
                     new ABM_RUTA().Show();
                     this.Close();
                     return;
