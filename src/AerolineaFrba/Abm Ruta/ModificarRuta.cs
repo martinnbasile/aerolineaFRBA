@@ -112,7 +112,7 @@ namespace AerolineaFrba.Abm_Ruta
                 }
                 catch (System.Data.SqlClient.SqlException exc)
                 {
-                    MessageBox.Show(exc.Message);
+                    MessageBox.Show("Ya existe una ruta igual a la que esta intentando ingresar");
                     new ABM_RUTA().Show();
                     this.Close();
                     return;
